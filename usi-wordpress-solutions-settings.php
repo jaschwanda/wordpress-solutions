@@ -25,13 +25,14 @@ require_once('usi-wordpress-solutions-versions.php');
 
 class USI_WordPress_Solutions_Settings {
 
-   const VERSION = '2.11.15 (2021-07-14)';
+   const VERSION = '2.11.16 (2021-07-23)';
 
    private static $grid         = false;
    private static $label_option = null; // Null means default behavior, label to left of field;
    private static $one_per_line = false;
 
-   protected $active_tab = null;
+   protected $active_tab = null;       // Will be set befor fields_sanitize() call;
+   protected $active_tab_maybe = null; // Could contain a spoofed URL argument, should validate before use;
    protected $capability = 'manage_options';
    protected $capabilities = null;
    protected $datepicker = null;
@@ -106,6 +107,15 @@ class USI_WordPress_Solutions_Settings {
       if (!empty($config['query']))        $this->query        = $config['query'];
       if (!empty($config['roles']))        $this->roles        = $config['roles'];
       if (!empty($config['text_domain']))  $this->text_domain  = $config['text_domain'];
+
+      if ($this->is_tabbed) {
+         $this->active_tab_maybe = $_POST[$this->prefix . '-tab'] ?? $_GET['tab'] ?? null;
+         if (empty($this->active_tab_maybe) && !empty($_REQUEST['_wp_http_referer'])) {
+            // Need to get the part from the referre because of the way WordPress double loads the page;
+            parse_str(parse_url($_REQUEST['_wp_http_referer'] ?? null, PHP_URL_QUERY), $this->query);
+            $this->active_tab_maybe = $this->query['tab'] ?? null;
+         }
+      }
 
       if ('plugins.php' == $pagenow) {
 
