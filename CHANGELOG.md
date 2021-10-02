@@ -2,6 +2,9 @@
 
 WordPress-Solutions plugin changes are logged here using <a href="http://semver.org/">Semantic Versioning</a>.
 
+## 2.11.17 (2021-10-01) ##
+* Added USI_WordPress_Solutions_PDF class.
+
 ## 2.11.16 (2021-07-23) ##
 * Added $active_tab_maybe variable.
 
