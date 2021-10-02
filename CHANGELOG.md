@@ -4,6 +4,7 @@ WordPress-Solutions plugin changes are logged here using <a href="http://semver.
 
 ## 2.11.17 (2021-10-01) ##
 * Added USI_WordPress_Solutions_PDF class.
+* Fixed some PHP warning messages.
 
 ## 2.11.16 (2021-07-23) ##
 * Added $active_tab_maybe variable.

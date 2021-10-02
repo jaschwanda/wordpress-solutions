@@ -212,13 +212,13 @@ class USI_WordPress_Solutions_Update_GitHub extends USI_WordPress_Solutions_Upda
 
          if (is_array($data)) $data = current($data);
 
-         if ($this->access_token) $data['zipball_url'] .= '?access_token=' . $this->access_token;
+         if ($this->access_token) $data['zipball_url'] = ($data['zipball_url'] ?? null) . '?access_token=' . $this->access_token;
 
          $this->repository  = array(
-            'body'          => $data['body'],
-            'download_link' => $data['zipball_url'],
-            'published_at'  => $data['published_at'],
-            'tag_name'      => $data['tag_name'],
+            'body'          => $data['body'] ?? null,
+            'download_link' => $data['zipball_url'] ?? null,
+            'published_at'  => $data['published_at'] ?? null,
+            'tag_name'      => $data['tag_name'] ?? null,
          );
 
          if ($this->log) usi::log('$request_uri=', $request_uri, '\n$data=', $data, '\$repository=', $this->repository);
