@@ -19,20 +19,27 @@ class USI_WordPress_Solutions_PDF {
 
    const VERSION = '2.11.17 (2021-10-01)';
 
-   protected static $css_buffer  = null;
+   public static $css_buffer  = null;
 
-   protected static $html_buffer = null;
+   public static $html_buffer = null;
 
-   protected static $mode        = null;
+   public static $mode        = null;
 
-   protected static $options     = array();
+   public static $options     = array();
 
    public static function init($options = array()) {
 
       self::$options = $options;
 
       self::$mode    = $options['mode'] ?? null;
+usi::log('self::$options=', self::$options);
+      if ('oldline' == self::$mode) {
 
+         ob_start(array(__CLASS__, 'ob_start_callback'));
+
+ //        add_action('shutdown', array(__CLASS__, 'action_shutdown'));
+
+      }
       if ('inline' == self::$mode) {
 
          ob_start(array(__CLASS__, 'ob_start_callback'));
@@ -43,19 +50,28 @@ class USI_WordPress_Solutions_PDF {
 
    } // init();
 
+   public static function action_shutdown_guts() { 
+
+      require_once(__DIR__ . '/mPDF/vendor/autoload.php');
+
+      $mpdf = new \Mpdf\Mpdf();
+
+      if (!empty(self::$options['header'])) $mpdf->SetHTMLHeader(self::$options['header']);
+
+      if (!empty(self::$options['footer'])) $mpdf->SetHTMLFooter(self::$options['footer']);
+
+      return($mpdf);
+
+   } // action_shutdown_guts();
+
    public static function action_shutdown() { 
+usi::log();
 
       $reporting_options = error_reporting(0);
 
       try {
 
-         require_once(__DIR__ . '/mPDF/vendor/autoload.php');
-
-         $mpdf = new \Mpdf\Mpdf();
-
-         if (!empty(self::$options['header'])) $mpdf->SetHTMLHeader(self::$options['header']);
-
-         if (!empty(self::$options['footer'])) $mpdf->SetHTMLFooter(self::$options['footer']);
+         $mpdf = USI_WordPress_Solutions_PDF::action_shutdown_guts();
 
          if (!empty(self::$css_buffer)) $mpdf->WriteHTML(self::$css_buffer, \Mpdf\HTMLParserMode::HEADER_CSS);
 
@@ -77,9 +93,11 @@ class USI_WordPress_Solutions_PDF {
 
    public static function ob_start_callback(string $buffer, int $phase) {
 
-      if (empty(self::$html_buffer)) self::$html_buffer = $buffer;
+      if (!self::$html_buffer) self::$html_buffer = $buffer;
 
-      return(null); // Return nothing otherwise the mPDF functions won't write out the PDF;
+      // Return nothing otherwise the mPDF functions won't write out the PDF;
+      // But we may want to return buffer for logging or debugging;
+      return(empty(self::$options['ob_start_return']) ? null : $buffer); 
 
    } // ob_start_callback();
 
