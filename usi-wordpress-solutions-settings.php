@@ -44,7 +44,6 @@ class USI_WordPress_Solutions_Settings {
    protected $icon_url = null;
    protected $is_all = false;
    protected $is_page = false;
-   protected $is_pdf = false;
    protected $is_options = false;
    protected $is_tabbed = false;
    protected $jquery = null;
@@ -56,9 +55,6 @@ class USI_WordPress_Solutions_Settings {
    protected $override_do_settings_sections = true;
    protected $page = null;
    protected $page_slug = null;
-   protected $pdf_footer = null;
-   protected $pdf_file = null;
-   protected $pdf_header = null;
    protected $position = null;
    protected $prefix = null;
    protected $query = null;
@@ -881,13 +877,12 @@ class USI_WordPress_Solutions_Settings {
 
       echo '' 
       . $n . '<div class="wrap">' . $n
-      . ($this->is_pdf ? '' : $i . $this->title . $n)
       . $i . USI_WordPress_Solutions_Static::divider(2)
-      . $i . USI_WordPress_Solutions_Static::divider(2, $this->name)
+      . $i . USI_WordPress_Solutions_Static::divider(2, $this->name . ' BEGIN')
       . $i . USI_WordPress_Solutions_Static::divider(2)
+      . $i . $this->title . $n
       . $i . '<form id="myForm" action="options.php"' . $this->enctype . ' method="post">' . $n
       . str_replace('<input', $n . $i2 . '<input', $settings_fields) . $n
-      . ($this->is_pdf ? '<!-- PDF-BEG -->' . $n . $this->title : '')
       ;
 
       global $wp_settings_sections, $wp_settings_fields;
@@ -905,10 +900,9 @@ class USI_WordPress_Solutions_Settings {
 
       echo ''
       . $n
-      . ($this->is_pdf ? '<!-- PDF-END -->' . $n : '')
       . $i . '</form>' . $n
       . $i . USI_WordPress_Solutions_Static::divider(2)
-      . $i . USI_WordPress_Solutions_Static::divider(2, $this->name)
+      . $i . USI_WordPress_Solutions_Static::divider(2, $this->name . ' END')
       . $i . USI_WordPress_Solutions_Static::divider(2)
       . '</div><!-- wrap -->' . $n
       ;
@@ -979,10 +973,10 @@ class USI_WordPress_Solutions_Settings {
       . $n . '<div class="wrap">' . $n
       . $i . '<h1>' . ($page_header ? $page_header : __($this->name . ' Settings', $this->text_domain)) . $title_buttons . '</h1>' . $n
       . $i . USI_WordPress_Solutions_Static::divider(2)
-      . $i . USI_WordPress_Solutions_Static::divider(2, $this->name)
+      . $i . USI_WordPress_Solutions_Static::divider(2, $this->name . ' BEGIN')
       . $i . USI_WordPress_Solutions_Static::divider(2)
       . $i . '<form id="myForm" action="options.php"' . $this->enctype . ' method="post">' . $n
-      . ($this->is_pdf ? '<!-- PDF-BEG -->' . $n . $this->title : '')
+      . $i . $this->title . $n
       ;
 
       if ($this->is_tabbed) {
@@ -1066,10 +1060,9 @@ class USI_WordPress_Solutions_Settings {
 
       echo ''
       . $n
-      . ($this->is_pdf ? '<!-- PDF-END -->' . $n : '')
       . $i . '</form>' . $n
       . $i . USI_WordPress_Solutions_Static::divider(2)
-      . $i . USI_WordPress_Solutions_Static::divider(2, $this->name)
+      . $i . USI_WordPress_Solutions_Static::divider(2, $this->name . ' END')
       . $i . USI_WordPress_Solutions_Static::divider(2)
       . $trailing_code
       ;

@@ -32,14 +32,7 @@ class USI_WordPress_Solutions_PDF {
       self::$options = $options;
 
       self::$mode    = $options['mode'] ?? null;
-usi::log('self::$options=', self::$options);
-      if ('oldline' == self::$mode) {
 
-         ob_start(array(__CLASS__, 'ob_start_callback'));
-
- //        add_action('shutdown', array(__CLASS__, 'action_shutdown'));
-
-      }
       if ('inline' == self::$mode) {
 
          ob_start(array(__CLASS__, 'ob_start_callback'));
@@ -50,30 +43,39 @@ usi::log('self::$options=', self::$options);
 
    } // init();
 
-   public static function action_shutdown_guts() { 
+   public static function action_shutdown() { 
 
       require_once(__DIR__ . '/mPDF/vendor/autoload.php');
-
-      $mpdf = new \Mpdf\Mpdf();
-
-      if (!empty(self::$options['header'])) $mpdf->SetHTMLHeader(self::$options['header']);
-
-      if (!empty(self::$options['footer'])) $mpdf->SetHTMLFooter(self::$options['footer']);
-
-      return($mpdf);
-
-   } // action_shutdown_guts();
-
-   public static function action_shutdown() { 
-usi::log();
 
       $reporting_options = error_reporting(0);
 
       try {
 
-         $mpdf = USI_WordPress_Solutions_PDF::action_shutdown_guts();
+         $mpdf = new \Mpdf\Mpdf();
+
+         if (!empty(self::$options['header'])) $mpdf->SetHTMLHeader(self::$options['header']);
+
+         if (!empty(self::$options['footer'])) $mpdf->SetHTMLFooter(self::$options['footer']);
+
+         if (empty(self::$css_buffer)) self::$css_buffer = apply_filters('usi_wordpress_pdf_css', null);
 
          if (!empty(self::$css_buffer)) $mpdf->WriteHTML(self::$css_buffer, \Mpdf\HTMLParserMode::HEADER_CSS);
+
+         if (!empty(self::$options['mark_beg']) && !empty(self::$options['mark_end'])) {
+
+            $beg_html = strpos(self::$html_buffer, self::$options['mark_beg']);
+            $beg_size = strlen(self::$options['mark_beg']);
+
+            $end_html = strpos(self::$html_buffer, self::$options['mark_end']);
+            $end_size = strlen(self::$options['mark_end']);
+
+            if ($beg_html && $end_html) {
+               self::$html_buffer = substr(self::$html_buffer, $beg_html + $beg_size, $end_html - $beg_html - $end_size);
+            } else {
+               self::$html_buffer = '<p>Could not find PDF markers in given page.</p>';
+            }
+
+         }
 
          $mpdf->WriteHTML(self::$html_buffer, \Mpdf\HTMLParserMode::HTML_BODY);
 
