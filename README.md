@@ -16,11 +16,11 @@ to get the latest version of mpdf.
 Go to the /extractions/tinymce_5.7.1/tinymce/js/tinymce folder and copy everything to the tinyMCE folder.
 
 ## Debugging ##
-Some notes to help debugging some WordPress issues.
+Notes to help debug some WordPress issues.
 
 ### Admin menu gap when debug mode is enabled issue
-Sometimes when debug mode is enabled, there is a 2em gap between WordPress admin menu and the bar.
-That CSS gap will show when there is a "Hidden" error if the following conditions are true:
+Sometimes when debug mode is enabled there is a 2em gap between WordPress admin menu and the bar.
+This CSS gap will show when there is a "Hidden" error if the following conditions are true:
 ```
 if ($error && WP_DEBUG && WP_DEBUG_DISPLAY && ini_get('display_errors'))
 ```
@@ -29,9 +29,9 @@ To show the "Hidden" error do the following...
 wp-admin/admin-header.php on line 201
 
 $error = error_get_last();
-error_log('=== This is the hidden error =================');
+error_log('=== This is the "Hidden" error =================');
 error_log(print_r($error, true));
-error_log('=== Error Setting display ====================');
+error_log('=== Error Setting display ======================');
 error_log('WP_DEBUG');
 error_log(print_r(WP_DEBUG, true));
 error_log('WP_DEBUG_DISPLAY');
@@ -39,7 +39,7 @@ error_log(print_r(WP_DEBUG_DISPLAY, true));
 error_log('display_errors ini setting');
 error_log(print_r(ini_get('display_errors'), true));
 ```
-The debug log file can be found in the wp-content folder.
+The default loaction of the debug.log file is the wp-content folder.
 
 ## License ##
 > WordPress-Solutions is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License 
