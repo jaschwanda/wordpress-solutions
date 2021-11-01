@@ -44,7 +44,6 @@ class USI_WordPress_Solutions_Settings {
    protected $icon_url = null;
    protected $is_all = false;
    protected $is_page = false;
-   protected $is_pdf = false;
    protected $is_options = false;
    protected $is_tabbed = false;
    protected $jquery = null;
@@ -56,10 +55,6 @@ class USI_WordPress_Solutions_Settings {
    protected $override_do_settings_sections = true;
    protected $page = null;
    protected $page_slug = null;
-   protected $pdf_buffer = null;
-   protected $pdf_footer = null;
-   protected $pdf_file = null;
-   protected $pdf_header = null;
    protected $position = null;
    protected $prefix = null;
    protected $query = null;
@@ -154,11 +149,6 @@ class USI_WordPress_Solutions_Settings {
       if ($this->impersonate || $this->remove_rest) {
          if ($this->impersonate) add_action('init', array(__CLASS__, 'action_init'));
          add_filter('user_row_actions', array($this, 'filter_user_row_actions'), 10, 2);
-      }
-
-      if ($this->is_pdf) {
-         ob_start(array($this, 'ob_start_callback'));
-         if (!$this->is_all) add_action('shutdown', array($this, 'action_shutdown'));
       }
 
       if (!empty(USI_WordPress_Solutions::$options['preferences']['menu-sort'])) {
@@ -405,56 +395,6 @@ class USI_WordPress_Solutions_Settings {
       }
 
    } // action_init();
-
-   function action_shutdown() { 
-
-      $reporting_options = error_reporting(0);
-
-      try {
-
-         require_once(__DIR__ . '/mPDF/vendor/autoload.php');
-
-         $mpdf = new \Mpdf\Mpdf();
-
-         $beg  = strpos($this->pdf_buffer, '<!-- PDF-BEG -->');
-
-         $end  = strpos($this->pdf_buffer, '<!-- PDF-END -->');
-
-         if ($this->pdf_header) $mpdf->SetHTMLHeader($this->pdf_header);
-
-         if ($this->pdf_footer) $mpdf->SetHTMLFooter($this->pdf_footer);
-
-         if ($beg && $end) {
-
-            $buf = substr($this->pdf_buffer, $beg + 16, $end - $beg - 16);
-
-            $css = apply_filters('usi_wordpress_pdf_css', null);
-
-            $mpdf->WriteHTML($css, \Mpdf\HTMLParserMode::HEADER_CSS);
-
-         } else {
-
-            $buf = '<p>Could not find PDF markers in given page.</p>';
-
-         }
-
-         $mpdf->WriteHTML($buf, \Mpdf\HTMLParserMode::HTML_BODY);
-
-         $mpdf->Output($this->pdf_file, \Mpdf\Output\Destination::INLINE);
-
-      } catch (\Mpdf\MpdfException $e) {
-
-         $error = 'PDF conversion failed:' . $e->getMessage();
-
-         usi::log('mPDF:', $error);
-
-         echo '<br/>' . $error;
-
-      }
-
-      error_reporting($reporting_options);
-
-   } // action_shutdown();
 
    public function capabilities() { 
 
@@ -937,13 +877,12 @@ class USI_WordPress_Solutions_Settings {
 
       echo '' 
       . $n . '<div class="wrap">' . $n
-      . ($this->is_pdf ? '' : $i . $this->title . $n)
       . $i . USI_WordPress_Solutions_Static::divider(2)
-      . $i . USI_WordPress_Solutions_Static::divider(2, $this->name)
+      . $i . USI_WordPress_Solutions_Static::divider(2, $this->name . ' BEGIN')
       . $i . USI_WordPress_Solutions_Static::divider(2)
+      . $i . $this->title . $n
       . $i . '<form id="myForm" action="options.php"' . $this->enctype . ' method="post">' . $n
       . str_replace('<input', $n . $i2 . '<input', $settings_fields) . $n
-      . ($this->is_pdf ? '<!-- PDF-BEG -->' . $n . $this->title : '')
       ;
 
       global $wp_settings_sections, $wp_settings_fields;
@@ -961,10 +900,9 @@ class USI_WordPress_Solutions_Settings {
 
       echo ''
       . $n
-      . ($this->is_pdf ? '<!-- PDF-END -->' . $n : '')
       . $i . '</form>' . $n
       . $i . USI_WordPress_Solutions_Static::divider(2)
-      . $i . USI_WordPress_Solutions_Static::divider(2, $this->name)
+      . $i . USI_WordPress_Solutions_Static::divider(2, $this->name . ' END')
       . $i . USI_WordPress_Solutions_Static::divider(2)
       . '</div><!-- wrap -->' . $n
       ;
@@ -1004,14 +942,6 @@ class USI_WordPress_Solutions_Settings {
 
    } // name();
 
-   function ob_start_callback(string $buffer, int $phase) {
-
-      $this->pdf_buffer = $buffer;
-
-      return($this->is_all ? $buffer : null); // Return nothing otherwise the mPDF functions won't write out the PDF;
-
-   } // ob_start_callback();
-
    public function options() { 
 
       return($this->options); 
@@ -1043,10 +973,10 @@ class USI_WordPress_Solutions_Settings {
       . $n . '<div class="wrap">' . $n
       . $i . '<h1>' . ($page_header ? $page_header : __($this->name . ' Settings', $this->text_domain)) . $title_buttons . '</h1>' . $n
       . $i . USI_WordPress_Solutions_Static::divider(2)
-      . $i . USI_WordPress_Solutions_Static::divider(2, $this->name)
+      . $i . USI_WordPress_Solutions_Static::divider(2, $this->name . ' BEGIN')
       . $i . USI_WordPress_Solutions_Static::divider(2)
       . $i . '<form id="myForm" action="options.php"' . $this->enctype . ' method="post">' . $n
-      . ($this->is_pdf ? '<!-- PDF-BEG -->' . $n . $this->title : '')
+      . $i . $this->title . $n
       ;
 
       if ($this->is_tabbed) {
@@ -1130,10 +1060,9 @@ class USI_WordPress_Solutions_Settings {
 
       echo ''
       . $n
-      . ($this->is_pdf ? '<!-- PDF-END -->' . $n : '')
       . $i . '</form>' . $n
       . $i . USI_WordPress_Solutions_Static::divider(2)
-      . $i . USI_WordPress_Solutions_Static::divider(2, $this->name)
+      . $i . USI_WordPress_Solutions_Static::divider(2, $this->name . ' END')
       . $i . USI_WordPress_Solutions_Static::divider(2)
       . $trailing_code
       ;

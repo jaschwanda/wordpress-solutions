@@ -19,13 +19,13 @@ class USI_WordPress_Solutions_PDF {
 
    const VERSION = '2.11.17 (2021-10-01)';
 
-   protected static $css_buffer  = null;
+   public static $css_buffer  = null;
 
-   protected static $html_buffer = null;
+   public static $html_buffer = null;
 
-   protected static $mode        = null;
+   public static $mode        = null;
 
-   protected static $options     = array();
+   public static $options     = array();
 
    public static function init($options = array()) {
 
@@ -45,11 +45,11 @@ class USI_WordPress_Solutions_PDF {
 
    public static function action_shutdown() { 
 
+      require_once(__DIR__ . '/mPDF/vendor/autoload.php');
+
       $reporting_options = error_reporting(0);
 
       try {
-
-         require_once(__DIR__ . '/mPDF/vendor/autoload.php');
 
          $mpdf = new \Mpdf\Mpdf();
 
@@ -57,7 +57,25 @@ class USI_WordPress_Solutions_PDF {
 
          if (!empty(self::$options['footer'])) $mpdf->SetHTMLFooter(self::$options['footer']);
 
+         if (empty(self::$css_buffer)) self::$css_buffer = apply_filters('usi_wordpress_pdf_css', null);
+
          if (!empty(self::$css_buffer)) $mpdf->WriteHTML(self::$css_buffer, \Mpdf\HTMLParserMode::HEADER_CSS);
+
+         if (!empty(self::$options['mark_beg']) && !empty(self::$options['mark_end'])) {
+
+            $beg_html = strpos(self::$html_buffer, self::$options['mark_beg']);
+            $beg_size = strlen(self::$options['mark_beg']);
+
+            $end_html = strpos(self::$html_buffer, self::$options['mark_end']);
+            $end_size = strlen(self::$options['mark_end']);
+
+            if ($beg_html && $end_html) {
+               self::$html_buffer = substr(self::$html_buffer, $beg_html + $beg_size, $end_html - $beg_html - $end_size);
+            } else {
+               self::$html_buffer = '<p>Could not find PDF markers in given page.</p>';
+            }
+
+         }
 
          $mpdf->WriteHTML(self::$html_buffer, \Mpdf\HTMLParserMode::HTML_BODY);
 
@@ -77,9 +95,11 @@ class USI_WordPress_Solutions_PDF {
 
    public static function ob_start_callback(string $buffer, int $phase) {
 
-      if (empty(self::$html_buffer)) self::$html_buffer = $buffer;
+      if (!self::$html_buffer) self::$html_buffer = $buffer;
 
-      return(null); // Return nothing otherwise the mPDF functions won't write out the PDF;
+      // Return nothing otherwise the mPDF functions won't write out the PDF;
+      // But we may want to return buffer for logging or debugging;
+      return(empty(self::$options['ob_start_return']) ? null : $buffer); 
 
    } // ob_start_callback();
 
