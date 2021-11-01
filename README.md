@@ -29,7 +29,7 @@ To show the "Hidden" error do the following...
 in the wp-config.php file:
 
 define('WP_DEBUG', true);
-define('WP_DEBUG_DISPLAY', false);
+define('WP_DEBUG_DISPLAY', false|true);
 define('WP_DEBUG_LOG', true); // Or give the desired log file path; 
 
 in the wp-admin/admin-header.php file around line 201:
