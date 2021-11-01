@@ -18,15 +18,21 @@ Go to the /extractions/tinymce_5.7.1/tinymce/js/tinymce folder and copy everythi
 ## Debugging ##
 Notes to help debug some WordPress issues.
 
-### Admin menu gap when debug mode is enabled issue
+### Admin menu gap issue when debug mode is enabled
 Sometimes when debug mode is enabled there is a 2em gap between WordPress admin menu and the bar.
-This CSS gap will show when there is a "Hidden" error if the following conditions are true:
+This gap will show when there is a "Hidden" error if the following conditions are true:
 ```
 if ($error && WP_DEBUG && WP_DEBUG_DISPLAY && ini_get('display_errors'))
 ```
 To show the "Hidden" error do the following...
 ```
-wp-admin/admin-header.php on line 201
+in the wp-config.php file:
+
+define('WP_DEBUG', true);
+define('WP_DEBUG_DISPLAY', false);
+define('WP_DEBUG_LOG', true); // Or give the desired log file path; 
+
+in the wp-admin/admin-header.php file around line 201:
 
 $error = error_get_last();
 error_log('=== This is the "Hidden" error =================');
@@ -39,7 +45,7 @@ error_log(print_r(WP_DEBUG_DISPLAY, true));
 error_log('display_errors ini setting');
 error_log(print_r(ini_get('display_errors'), true));
 ```
-The default loaction of the debug.log file is the wp-content folder.
+The default loaction of the debug.log file is in the wp-content folder.
 
 ## License ##
 > WordPress-Solutions is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License 
