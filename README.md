@@ -45,7 +45,7 @@ error_log(print_r(WP_DEBUG_DISPLAY, true));
 error_log('display_errors ini setting');
 error_log(print_r(ini_get('display_errors'), true));
 ```
-The default loaction of the debug.log file is in the wp-content folder.
+The default location of the debug.log file is in the wp-content folder.
 
 ## License ##
 > WordPress-Solutions is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License 
