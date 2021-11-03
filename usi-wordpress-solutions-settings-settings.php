@@ -24,7 +24,7 @@ require_once('usi-wordpress-solutions-versions.php');
 
 class USI_WordPress_Solutions_Settings_Settings extends USI_WordPress_Solutions_Settings {
 
-   const VERSION = '2.11.7 (2021-05-25)';
+   const VERSION = '2.12.0 (2021-11-03)';
 
    protected $debug     = 0;
    protected $is_tabbed = true;

@@ -1,1 +1,1 @@
-<?php const VERSION = '2.11.3 (2021-04-20)'; session_start(); echo session_id(); ?>
+<?php const VERSION = '2.12.0 (2021-11-03)'; session_start(); echo session_id(); ?>

@@ -14,7 +14,7 @@ require_once('usi-wordpress-solutions-static.php');
 
 class USI_WordPress_Solutions_User_Sessions extends WP_List_Table {
 
-   const VERSION = '2.11.8 (2021-05-29)';
+   const VERSION = '2.12.0 (2021-11-03)';
 
    public static function action_admin_head() {
 

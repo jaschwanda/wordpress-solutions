@@ -2,6 +2,9 @@
 
 WordPress-Solutions plugin changes are logged here using <a href="http://semver.org/">Semantic Versioning</a>.
 
+## 2.12.0 (2021-11-03) ##
+* Set all versions numbers to same version.
+
 ## 2.11.17 (2021-10-01) ##
 * Added USI_WordPress_Solutions_PDF class.
 * Fixed some PHP warning messages.

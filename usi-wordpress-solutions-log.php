@@ -17,7 +17,7 @@ Copyright (c) 2020 by Jim Schwanda.
 
 if (!class_exists('USI')) { final class USI {
 
-   const VERSION = '2.11.11 (2021-06-11)';
+   const VERSION = '2.12.0 (2021-11-03)';
 
    private static $info   = null;
    private static $mysqli = null;
