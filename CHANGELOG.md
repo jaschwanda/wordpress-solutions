@@ -2,6 +2,9 @@
 
 WordPress-Solutions plugin changes are logged here using <a href="http://semver.org/">Semantic Versioning</a>.
 
+## 2.12.1 (2021-11-16) ##
+* Used ?? operator in get_value() function.
+
 ## 2.12.0 (2021-11-03) ##
 * Set all versions numbers to same version.
 

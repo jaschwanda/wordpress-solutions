@@ -25,7 +25,7 @@ require_once('usi-wordpress-solutions-versions.php');
 
 class USI_WordPress_Solutions_Settings {
 
-   const VERSION = '2.12.0 (2021-11-03)';
+   const VERSION = '2.12.1 (2021-11-16)';
 
    private static $grid         = false;
    private static $label_option = null; // Null means default behavior, label to left of field;
@@ -911,8 +911,11 @@ class USI_WordPress_Solutions_Settings {
 
    private static function get_value($args) {
 
+      // IF value not empty then return it;
       if (!empty($args['value'])) return($args['value']);
-      $type = !empty($args['type']) ? $args['type']  : 'text';
+
+      // Now we have to decide to return a "zero" or a "null";
+      $type = $args['type'] ?? 'text';
       if ('hidden' == $type) return(isset($args['value']) ? $args['value'] : null);
       if ('money'  == $type) return(0);
       if ('number' == $type) return(0);
