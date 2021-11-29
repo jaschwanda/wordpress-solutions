@@ -17,7 +17,7 @@ Copyright (c) 2020 by Jim Schwanda.
 
 class USI_WordPress_Solutions_Diagnostics {
 
-   const VERSION = '2.12.0 (2021-11-03)';
+   const VERSION = '2.12.2 (2021-11-29)';
 
    private $options     = null;
    private $text_domain = null;
@@ -30,7 +30,7 @@ class USI_WordPress_Solutions_Diagnostics {
 
       $this->section     = array(
          'fields_sanitize' => array($this, 'fields_sanitize'),
-         'header_callback' => array($this, 'section_header'),
+         'header_callback' => array($parent, 'sections_header', '      <p>' . sprintf(__(' Send this link: <b>%s</b> to the user to get the user\'s diagnostic session.', $this->text_domain), plugin_dir_url(__FILE__) . 'diagnostics.php') . '</p>' . PHP_EOL),
          'label' => 'Diagnostics',
          'localize_labels' => 'yes',
          'localize_notes' => 3, // <p class="description">__()</p>;
@@ -87,11 +87,6 @@ class USI_WordPress_Solutions_Diagnostics {
       if ($log_log) usi::log2('$log=', $log);
       return($log);
    } // get_log();
-
-   function section_header() {
-      echo '<p>' . sprintf(__(' Send this link: <b>%s</b> to the user to get the user\'s diagnostic session.',
-         $this->text_domain), plugin_dir_url(__FILE__) . 'diagnostics.php') . '</p>' . PHP_EOL;
-   } // section_header();
 
 } // Class USI_WordPress_Solutions_Diagnostics;
 

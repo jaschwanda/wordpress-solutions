@@ -17,7 +17,7 @@ Copyright (c) 2020 by Jim Schwanda.
 
 class USI_WordPress_Solutions_Updates {
 
-   const VERSION = '2.12.0 (2021-11-03)';
+   const VERSION = '2.12.2 (2021-11-29)';
 
    public $section = null;
 
@@ -29,7 +29,7 @@ class USI_WordPress_Solutions_Updates {
 
       $this->section      = array(
          'fields_sanitize' => array($this, 'fields_sanitize'),
-         'header_callback' => array($this, 'section_header'),
+         'header_callback' => array($parent, 'sections_header', '      <p>' . __('GitHub and GitLab are code hosting platforms for version control and collaboration. Thay are used to publish updates for this WordPress plugin.', $this->text_domain) . '</p>' . PHP_EOL),
          'label' => 'Updates',
          'settings' => array(
             'git-update' => array(
@@ -56,10 +56,6 @@ class USI_WordPress_Solutions_Updates {
       }
       return($input);
    } // fields_sanitize();
-
-   function section_header() {
-      echo '<p>' . __('GitHub and GitLab are code hosting platforms for version control and collaboration. Thay are used to publish updates for this WordPress plugin.', $this->text_domain) . '</p>' . PHP_EOL;
-   } // section_header();
 
 } // Class USI_WordPress_Solutions_Updates;
 

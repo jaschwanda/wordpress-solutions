@@ -25,7 +25,7 @@ require_once('usi-wordpress-solutions-versions.php');
 
 class USI_WordPress_Solutions_Settings {
 
-   const VERSION = '2.12.1 (2021-11-16)';
+   const VERSION = '2.12.2 (2021-11-29)';
 
    private static $grid         = false;
    private static $label_option = null; // Null means default behavior, label to left of field;
@@ -1044,7 +1044,7 @@ class USI_WordPress_Solutions_Settings {
                if (!empty($section['footer_callback'])) {
                   $object = $section['footer_callback'][0];
                   $method = $section['footer_callback'][1];
-                  $params = !empty($section['footer_callback'][2]) ? $section['footer_callback'][2] : null;
+                  $params = $section['footer_callback'][2] ?? null;
                   if (method_exists($object, $method)) $submit_text = $object->$method($params);
                   break;
                }
@@ -1052,6 +1052,8 @@ class USI_WordPress_Solutions_Settings {
          } // ENDIF sections exist;
 
       }
+
+      echo '    '; // Add spacer to line things up;
 
       if ($wrap_submit) echo '<p class="submit">';
 
@@ -1208,6 +1210,12 @@ class USI_WordPress_Solutions_Settings {
    function sections() { // Should be over ridden by extending class;
       return(null);
    } // sections();
+
+   function sections_footer($params) {
+      echo '    '; // Add spacer to line things up;
+      submit_button(__($params, $this->text_domain), 'primary', 'submit', true); 
+      return(null);
+   } // sections_footer();
 
    function sections_header($html) {
       echo $html;
