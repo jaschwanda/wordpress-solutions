@@ -5,8 +5,22 @@ The WordPress-Solutions plugin is a helper class used by various WordPress plugi
 ## Installation ##
 This module should be installed in the usi-wordpress-solutions folder under the main WordPress plugins folder.
 
+### PHPSpreadsheet Installation
+If you want to create and download Microsoft Excel documents then you have to install PHPOffice/PHPSpreadsheet which is a pure PHP library for reading and writing spreadsheet files. Go to the /extractions/mypdf folder and enter:
+```
+composer require mpdf/mpdf
+```
+to get the latest version of PHPSpreadsheet.
+
+### PHPWord Installation
+If you want to create and download Microsoft Word documents then you have to install PHPOffice/PHPWord which is pure PHP library for reading and writing word processing documents. Go to the /extractions/mypdf folder and enter:
+```
+composer require mpdf/mpdf
+```
+to get the latest version of PHPSpreadsheet.
+
 ### mPDF Installation
-Go to the /extractions/mypdf folder and enter:
+If you want to create and download PDF documents then you have to install mPDF. Go to the /extractions/mypdf folder and enter:
 ```
 composer require mpdf/mpdf
 ```
