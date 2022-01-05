@@ -4,7 +4,7 @@ The WordPress-Solutions plugin is a helper class used by various WordPress plugi
 
 ## Installation ##
 This module should be installed in the usi-wordpress-solutions folder under the main WordPress plugins folder. 
-There are some third party packages that must be installed if you use the features associated with the package, most users do not need to install these additional packages.
+There are some third party packages that must be installed if you use the features associated with these package, however, most users do not need to install these additional packages.
 
 ### PHPSpreadsheet Installation
 If you want to create and download Microsoft Excel documents then you have to install PHPOffice/PHPSpreadsheet which is a pure PHP library for reading and writing spreadsheet files. Go to the /extractions/mypdf folder and enter:
