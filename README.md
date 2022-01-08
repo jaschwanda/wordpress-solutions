@@ -5,7 +5,7 @@ Universal Solutions.
 
 ## Installation ##
 This module should be installed in the usi-wordpress-solutions folder under the main WordPress plugins folder. 
-There are some third party packages that must be installed if you use them:
+There are also some third party packages that must be installed if you use them:
 
 ### PHPSpreadsheet Installation
 If you want to create and download Microsoft Excel documents then you have to install PHPOffice/PHPSpreadsheet 
@@ -14,8 +14,8 @@ folder and enter:
 ```
 composer require phpoffice/phpspreadsheet
 ```
-to get the latest version of PHPSpreadsheet. See <a href="https://phpspreadsheet.readthedocs.io" target="_blank">https://phpspreadsheet.readthedocs.io</a> 
-for more information.
+to get the latest version of PHPSpreadsheet. 
+See [https://phpspreadsheet.readthedocs.io](https://phpspreadsheet.readthedocs.io) for more information.
 
 ### PHPWord Installation
 If you want to create and download Microsoft Word documents then you have to install PHPOffice/PHPWord which is pure PHP library for reading and writing word processing documents. Go to the /extractions/mypdf folder and enter:
