@@ -18,25 +18,14 @@ to get the latest version of PHPSpreadsheet.
 See [https://phpspreadsheet.readthedocs.io](https://phpspreadsheet.readthedocs.io) for more information.
 
 ### PHPWord Installation
-If you want to create and download Microsoft Word documents then you have to install PHPOffice/PHPWord which is pure PHP library for reading and writing word processing documents. Go to the /extractions/mypdf folder and enter:
+If you want to create and download Microsoft Word documents then you have to install PHPOffice/PHPWord 
+which is pure PHP library for reading and writing word processing documents. 
+Go to the /extractions/phpword folder and enter:
 ```
-composer require mpdf/mpdf
+composer require phpoffice/phpword
 ```
-to get the latest version of PHPSpreadsheet.
-
-### PHPSpreadsheet Installation
-If you want to create and download Microsoft Excel documents then you have to install PHPOffice/PHPSpreadsheet which is a pure PHP library for reading and writing spreadsheet files. Go to the /extractions/mypdf folder and enter:
-```
-composer require mpdf/mpdf
-```
-to get the latest version of PHPSpreadsheet.
-
-### PHPWord Installation
-If you want to create and download Microsoft Word documents then you have to install PHPOffice/PHPWord which is pure PHP library for reading and writing word processing documents. Go to the /extractions/mypdf folder and enter:
-```
-composer require mpdf/mpdf
-```
-to get the latest version of PHPSpreadsheet.
+to get the latest version of PHPWordt. 
+See [https://phpword.readthedocs.io](https://phpword.readthedocs.io) for more information.
 
 ### mPDF Installation
 If you want to create and download PDF documents then you have to install mPDF. Go to the /extractions/mypdf folder and enter:
