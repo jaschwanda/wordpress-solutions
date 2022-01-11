@@ -17,7 +17,6 @@ composer require phpoffice/phpspreadsheet
 to get the latest version of PHPSpreadsheet. 
 See [https://phpspreadsheet.readthedocs.io](https://phpspreadsheet.readthedocs.io) for more information.
 
-<<<<<<< HEAD
 PHPSpreadsheet is the next version of PHPExcel. 
 It breaks compatibility to dramatically improve the code base quality 
 (namespaces, PSR compliance, use of latest PHP language features, etc.).
