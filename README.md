@@ -25,13 +25,7 @@ Because all efforts have shifted to PhpSpreadsheet, PHPExcel will no longer be m
 ### PHPWord Installation
 If you want to create and download Microsoft Word documents then you have to install PHPOffice/PHPWord 
 which is a pure PHP library for reading and writing word processing documents. 
-Go to the /PHPWord folder and enter:
-=======
-### PHPWord Installation
-If you want to create and download Microsoft Word documents then you have to install PHPOffice/PHPWord 
-which is pure PHP library for reading and writing word processing documents. 
 Go to the /extractions/phpword folder and enter:
->>>>>>> b35965888eb6d26884f0a488c91c05c64e3f36f0
 ```
 composer require phpoffice/phpword
 ```
