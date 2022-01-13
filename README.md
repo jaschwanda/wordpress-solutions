@@ -15,7 +15,7 @@ folder and enter:
 composer require phpoffice/phpspreadsheet
 ```
 to get the latest version of PHPSpreadsheet. 
-See [https://phpspreadsheet.readthedocs.io](https://phpspreadsheet.readthedocs.io) for more information.
+See [https://github.com/PHPOffice/PhpSpreadsheet](https://github.com/PHPOffice/PhpSpreadsheet) and [https://phpspreadsheet.readthedocs.io](https://phpspreadsheet.readthedocs.io) for more information.
 
 PHPSpreadsheet is the next version of PHPExcel. 
 It breaks compatibility to dramatically improve the code base quality 
@@ -30,7 +30,7 @@ Go to the /extractions/phpword folder and enter:
 composer require phpoffice/phpword
 ```
 to get the latest version of PHPWordt. 
-See [https://phpword.readthedocs.io](https://phpword.readthedocs.io) for more information.
+See [https://github.com/PHPOffice/PHPWord](https://github.com/PHPOffice/PHPWord) and [https://phpword.readthedocs.io](https://phpword.readthedocs.io) for more information.
 
 ### mPDF Installation
 If you want to create and download PDF documents then you have to install mPDF. Go to the /extractions/mypdf folder and enter:
