@@ -2,6 +2,9 @@
 
 WordPress-Solutions plugin changes are logged here using <a href="http://semver.org/">Semantic Versioning</a>.
 
+## 2.12.3 (2022-01-14) ##
+* Added bootstrap to load WordPress functions from an external .PHP file.
+
 ## 2.12.2 (2021-11-29) ##
 * Apdated settings functions.
 
