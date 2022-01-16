@@ -2,6 +2,9 @@
 
 WordPress-Solutions plugin changes are logged here using <a href="http://semver.org/">Semantic Versioning</a>.
 
+## 2.12.5 (2022-01-16) ##
+* phpinfo() scan now requires administrator privileges.
+
 ## 2.12.4 (2022-01-15) ##
 * Added USI_WordPress_Solutions_Logged_In class which uses cookies to verify if user is logged in.
 
