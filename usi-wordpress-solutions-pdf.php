@@ -83,9 +83,23 @@ class USI_WordPress_Solutions_PDF {
 
       } catch (\Mpdf\MpdfException $e) {
 
-         $error = 'PDF conversion failed:' . $e->getMessage();
+         $error = 'For ' . self::$options['file'] . ' the PDF conversion failed:' . $e->getMessage();
 
          usi::log('mPDF:', $error);
+
+         try {
+
+            $mpdf->WriteHTML($error, \Mpdf\HTMLParserMode::HTML_BODY);
+
+            if ('inline' == self::$mode) $mpdf->Output(self::$options['file'] ?? null, \Mpdf\Output\Destination::INLINE);
+
+         } catch (\Mpdf\MpdfException $e) {
+
+            $error = 'For ' . self::$options['file'] . ' the PDF error log failed:' . $e->getMessage();
+
+            usi::log('mPDF:', $error);
+
+         }
 
       }
 
