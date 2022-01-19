@@ -24,7 +24,7 @@ require_once('usi-wordpress-solutions-versions.php');
 
 class USI_WordPress_Solutions_Settings_Settings extends USI_WordPress_Solutions_Settings {
 
-   const VERSION = '2.12.2 (2021-11-29)';
+   const VERSION = '2.12.7 (2022-01-19)';
 
    protected $debug     = 0;
    protected $is_tabbed = true;
@@ -64,6 +64,10 @@ class USI_WordPress_Solutions_Settings_Settings extends USI_WordPress_Solutions_
    function fields_sanitize($input) {
 
       $input = parent::fields_sanitize($input);
+
+      $pcre_backtrack_limit = ini_get('pcre.backtrack_limit');
+
+      if ($input['admin-limits']['mpdf-pcre-limit'] < $pcre_backtrack_limit) $input['admin-limits']['mpdf-pcre-limit'] = $pcre_backtrack_limit;;
 
       unset($input['versions']['export']);
 
@@ -183,6 +187,10 @@ class USI_WordPress_Solutions_Settings_Settings extends USI_WordPress_Solutions_
          }
       }
 
+      $pcre_backtrack_limit = ini_get('pcre.backtrack_limit');
+
+      $mpdf_pcre_limit      = (int)(USI_WordPress_Solutions::$options['admin-limits']['mpdf-pcre-limit'] ?? $pcre_backtrack_limit);
+
       $diagnostics = new USI_WordPress_Solutions_Diagnostics($this, 
          array(
             'DEBUG_INIT' => array(
@@ -278,6 +286,20 @@ class USI_WordPress_Solutions_Settings_Settings extends USI_WordPress_Solutions_
                ),
             ),
          ), // admin-options;
+
+         'admin-limits' => array(
+            'title' => __('Other Options and Limits', USI_WordPress_Solutions::TEXTDOMAIN),
+            'not_tabbed' => 'preferences',
+            'settings' => array(
+               'mpdf-pcre-limit' => array(
+                  'f-class' => 'regular-text', 
+                  'label' => 'pcre.backtrack_limit',
+                  'notes' => 'This option only affects the <i>pcre.backtrack_limit</i> when doing a PDF download, the current system wide limit is ' . $pcre_backtrack_limit . '.',
+                  'type' => 'number', 
+                  'value' => $mpdf_pcre_limit, 
+               ),
+            ),
+         ), // admin-limits;
 
          'capabilities' => new USI_WordPress_Solutions_Capabilities($this),
 

@@ -17,7 +17,7 @@ Copyright (c) 2020 by Jim Schwanda.
 
 class USI_WordPress_Solutions_PDF {
 
-   const VERSION = '2.12.0 (2021-11-03)';
+   const VERSION = '2.12.6 (2022-01-18)';
 
    public static $css_buffer  = null;
 

@@ -2,7 +2,10 @@
 
 WordPress-Solutions plugin changes are logged here using <a href="http://semver.org/">Semantic Versioning</a>.
 
-## 2.12.6 (2022-01-17) ##
+## 2.12.7 (2022-01-19) ##
+* Added setting to set the pcre.backtrack_limit value.
+
+## 2.12.6 (2022-01-18) ##
 * Updated to print error message in the PDF file when PDF creation fails.
 
 ## 2.12.5 (2022-01-16) ##
