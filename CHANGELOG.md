@@ -3,7 +3,7 @@
 WordPress-Solutions plugin changes are logged here using <a href="http://semver.org/">Semantic Versioning</a>.
 
 ## 2.12.4 (2022-01-15) ##
-* Added USI_WordPress_Solutions_Logged_In class which uses cookies to verify if any user logged in.
+* Added USI_WordPress_Solutions_Logged_In class which uses cookies to verify if user is logged in.
 
 ## 2.12.3 (2022-01-14) ##
 * Added bootstrap to load WordPress functions from an external .PHP file.
