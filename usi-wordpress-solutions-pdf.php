@@ -17,7 +17,7 @@ Copyright (c) 2020 by Jim Schwanda.
 
 class USI_WordPress_Solutions_PDF {
 
-   const VERSION = '2.12.6 (2022-01-18)';
+   const VERSION = '2.12.8 (2022-01-21)';
 
    public static $css_buffer  = null;
 
@@ -75,6 +75,12 @@ class USI_WordPress_Solutions_PDF {
                self::$html_buffer = '<p>Could not find PDF markers in given page.</p>';
             }
 
+         }
+
+         $pcre_backtrack_limit = ini_get('pcre.backtrack_limit');
+
+         if (USI_WordPress_Solutions::$options['admin-limits']['mpdf-pcre-limit'] > $pcre_backtrack_limit) {
+            ini_set('pcre.backtrack_limit', USI_WordPress_Solutions::$options['admin-limits']['mpdf-pcre-limit']);
          }
 
          $mpdf->WriteHTML(self::$html_buffer, \Mpdf\HTMLParserMode::HTML_BODY);
