@@ -2,6 +2,12 @@
 
 WordPress-Solutions plugin changes are logged here using <a href="http://semver.org/">Semantic Versioning</a>.
 
+## 2.12.9 (2022-01-23) ##
+* Modified so that bad folder does not give errors.
+
+## 2.12.8 (2022-01-21) ##
+* Modified so that setting changes the pcre.backtrack_limit value for PDF downloads.
+
 ## 2.12.7 (2022-01-19) ##
 * Added setting to set the pcre.backtrack_limit value.
 

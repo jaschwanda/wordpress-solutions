@@ -15,24 +15,26 @@ Copyright (c) 2020 by Jim Schwanda.
 
 final class USI_WordPress_Solutions_Versions_Scan {
 
-   const VERSION = '2.12.0 (2021-11-03)';
+   const VERSION = '2.12.9 (2022-01-23)';
 
    private function __construct() {
    } // __construct();
 
    private static function scan($path) {
-      $files = scandir($path);
+      @ $files = scandir($path);
       $html  = '';
-      foreach ($files as $file) {
-         if ('.usi-ignore' == $file) break;
-         $full_path = $path . DIRECTORY_SEPARATOR . $file;
-         if (('.' == $file) || ('..' == $file)) {
-         } else if (is_dir($full_path)) {
-            $html .= self::scan($full_path);
-         } else {
-            $contents = file_get_contents($full_path);
-            $status   = preg_match('/(V|v)(E|e)(R|r)(S|s)(I|i)(O|o)(N|n)\s*(=|:)\s*(\')?([(0-9\.\s\-\)]*)/', $contents, $matches);
-            if (!empty($matches[10])) $html .= '<tr><td>' . $file . ' &nbsp; &nbsp; </td><td>' . $matches[10] . '</td></tr>';
+      if (!empty($files)) {
+         foreach ($files as $file) {
+            if ('.usi-ignore' == $file) break;
+            $full_path = $path . DIRECTORY_SEPARATOR . $file;
+            if (('.' == $file) || ('..' == $file)) {
+            } else if (is_dir($full_path)) {
+               $html .= self::scan($full_path);
+            } else {
+               $contents = file_get_contents($full_path);
+               $status   = preg_match('/(V|v)(E|e)(R|r)(S|s)(I|i)(O|o)(N|n)\s*(=|:)\s*(\')?([(0-9\.\s\-\)]*)/', $contents, $matches);
+               if (!empty($matches[10])) $html .= '<tr><td>' . $file . ' &nbsp; &nbsp; </td><td>' . $matches[10] . '</td></tr>';
+            }
          }
       }
       return($html);
