@@ -13,9 +13,13 @@ https://github.com/jaschwanda/wordpress-solutions/blob/master/LICENSE.md
 Copyright (c) 2020 by Jim Schwanda.
 */
 
+require_once('usi-wordpress-solutions-bootstrap.php');
+
+if (!in_array('administrator', wp_get_current_user()->roles)) die('Accesss not allowed.');
+
 final class USI_WordPress_Solutions_Versions_Scan {
 
-   const VERSION = '2.12.9 (2022-01-23)';
+   const VERSION = '2.12.10 (2022-01-24)';
 
    private function __construct() {
    } // __construct();
@@ -41,14 +45,12 @@ final class USI_WordPress_Solutions_Versions_Scan {
    } // scan();
 
    public static function versions() {
+
       $style = '<style>td{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Oxygen-Sans,Ubuntu,Cantarell,' .
          '"Helvetica Neue",sans-serif; font-size: 13px;}</style>';
-      foreach ($_COOKIE as $key => $value) {
-         if (substr($key, 0, 20) == 'wordpress_logged_in_') {
-            die($style . '<table>' . self::scan(explode('?', urldecode($_SERVER['QUERY_STRING']))[0]) . '</table>');
-         }
-      }
-      die('Accesss not allowed.');
+
+      die($style . '<table>' . self::scan(explode('?', urldecode($_SERVER['QUERY_STRING']))[0]) . '</table>');
+
    } // versions();
 
 } // Class USI_WordPress_Solutions_Versions_Scan;

@@ -2,6 +2,9 @@
 
 WordPress-Solutions plugin changes are logged here using <a href="http://semver.org/">Semantic Versioning</a>.
 
+## 2.12.10 (2022-01-24) ##
+* Enhanced security.
+
 ## 2.12.9 (2022-01-23) ##
 * Modified so that bad folder does not give errors.
 
