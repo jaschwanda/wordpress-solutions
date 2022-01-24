@@ -15,7 +15,11 @@ Requires at least: 5.0
 Requires PHP:      7.0.0
 Tested up to:      5.3.2
 Text Domain:       usi-wordpress-solutions
+<<<<<<< HEAD
 Version:           2.12.9
+=======
+Version:           2.12.8
+>>>>>>> 3bd81038d84322c076ca09f156b386a08e3836e1
 */
 
 /*
