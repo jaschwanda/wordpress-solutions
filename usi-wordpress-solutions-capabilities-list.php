@@ -13,6 +13,10 @@ https://github.com/jaschwanda/wordpress-solutions/blob/master/LICENSE.md
 Copyright (c) 2020 by Jim Schwanda.
 */
 
+require_once('usi-wordpress-solutions-bootstrap.php');
+
+if (!in_array('administrator', wp_get_current_user()->roles)) die('Accesss not allowed.');
+
 final class USI_WordPress_Solutions_Capabilities_List {
 
    const VERSION = '2.12.0 (2021-11-03)';
@@ -21,13 +25,11 @@ final class USI_WordPress_Solutions_Capabilities_List {
    } // __construct();
 
    public static function list() {
-      foreach ($_COOKIE as $key => $value) {
-         if (substr($key, 0, 20) == 'wordpress_logged_in_') {
-            $query = $_SERVER['QUERY_STRING'];
-            die('<table>' . '<tr><td>' . $query . '</td></tr>' . '</table>');
-         }
-      }
-      die('Accesss not allowed.');
+
+      $query = $_SERVER['QUERY_STRING'];
+
+      die('<table>' . '<tr><td>' . $query . '</td></tr>' . '</table>');
+
    } // versions();
 
 } // Class USI_WordPress_Solutions_Capabilities_List;
