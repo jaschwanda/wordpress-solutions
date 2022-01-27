@@ -15,7 +15,11 @@ Requires at least: 5.0
 Requires PHP:      7.0.0
 Tested up to:      5.3.2
 Text Domain:       usi-wordpress-solutions
+<<<<<<< HEAD
 Version:           2.12.12
+=======
+Version:           2.12.11
+>>>>>>> 8df2edc4528352292eba342689a19f341e63e722
 */
 
 /*
@@ -40,7 +44,11 @@ require_once('usi-wordpress-solutions-log.php');
 
 final class USI_WordPress_Solutions {
 
+<<<<<<< HEAD
    const VERSION = '2.12.12 (2022-01-26)';
+=======
+   const VERSION = '2.12.11 (2022-01-25)';
+>>>>>>> 8df2edc4528352292eba342689a19f341e63e722
 
    const NAME       = 'WordPress-Solutions';
    const PREFIX     = 'usi-wordpress';
