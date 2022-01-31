@@ -338,11 +338,14 @@ class USI_WordPress_Solutions_Settings_Settings extends USI_WordPress_Solutions_
                   'label' => 'PHP memory_limit',
                   'type' => 'html', 
                ),
+<<<<<<< HEAD
                'wp-debug' => array(
                   'html' => defined('WP_DEBUG') ? 'TRUE' : 'false',
                   'label' => 'WP_DEBUG',
                   'type' => 'html', 
                ),
+=======
+>>>>>>> 938c45c29c1e44ab7713d15a7509b3435a95c093
                'wp-memory-limit' => array(
                   'html' => defined('WP_MEMORY_LIMIT') ? WP_MEMORY_LIMIT : 'undefined',
                   'label' => 'WP_MEMORY_LIMIT',
