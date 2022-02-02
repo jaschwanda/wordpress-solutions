@@ -24,7 +24,7 @@ require_once('usi-wordpress-solutions-versions.php');
 
 class USI_WordPress_Solutions_Settings_Settings extends USI_WordPress_Solutions_Settings {
 
-   const VERSION = '2.12.13 (2022-01-25)';
+   const VERSION = '2.12.14 (2022-01-26)';
 
    protected $debug     = 0;
    protected $is_tabbed = true;
@@ -332,6 +332,11 @@ class USI_WordPress_Solutions_Settings_Settings extends USI_WordPress_Solutions_
                'visible-grid' => array(
                   'type' => 'checkbox', 
                   'label' => 'Visable Grid Borders',
+               ),
+               'php-memory-limit' => array(
+                  'html' => ini_get('memory_limit'),
+                  'label' => 'PHP memory_limit',
+                  'type' => 'html', 
                ),
                'wp-memory-limit' => array(
                   'html' => defined('WP_MEMORY_LIMIT') ? WP_MEMORY_LIMIT : 'undefined',
