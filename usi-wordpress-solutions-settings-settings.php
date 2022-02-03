@@ -24,7 +24,7 @@ require_once('usi-wordpress-solutions-versions.php');
 
 class USI_WordPress_Solutions_Settings_Settings extends USI_WordPress_Solutions_Settings {
 
-   const VERSION = '2.12.14 (2022-02-01)';
+   const VERSION = '2.12.15 (2022-02-03)';
 
    protected $debug     = 0;
    protected $is_tabbed = true;
@@ -346,6 +346,11 @@ class USI_WordPress_Solutions_Settings_Settings extends USI_WordPress_Solutions_
                'wp-debug-log' => array(
                   'html' => defined('WP_DEBUG_LOG') ? 'TRUE' : 'false',
                   'label' => 'WP_DEBUG_LOG',
+                  'type' => 'html', 
+               ),
+               'wp-debug-display' => array(
+                  'html' => defined('WP_DEBUG_DISPLAY') ? 'TRUE' : 'false',
+                  'label' => 'WP_DEBUG_DISPLAY',
                   'type' => 'html', 
                ),
                'wp-memory-limit' => array(
