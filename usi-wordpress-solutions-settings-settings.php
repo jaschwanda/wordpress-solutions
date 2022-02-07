@@ -408,22 +408,6 @@ class USI_WordPress_Solutions_Settings_Settings extends USI_WordPress_Solutions_
             ),
          ), // xport;
 
-         'builder' => array(
-            'label' => __('Builder', USI_WordPress_Solutions::TEXTDOMAIN), 
-            'header_callback' => array($this, 'sections_header', '    <p>' . __('Form Layout Designer.', USI_WordPress_Solutions::TEXTDOMAIN) . '</p>' . PHP_EOL),
-            'footer_callback' => array($this, 'sections_footer', 'View Layout'),
-            'localize_labels' => 'yes',
-            'localize_notes' => 3, // <p class="description">__()</p>;
-            'settings' => array(
-               'content' => array(
-                  'f-class' => 'large-text', 
-                  'rows' => 6,
-                  'type' => 'textarea', 
-                  'label' => 'Layout',
-               ),
-            ),
-         ), // builder;
-
       );
 
       if (empty($this->options['versions']['mode'])) {
