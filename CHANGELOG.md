@@ -2,6 +2,9 @@
 
 WordPress-Solutions plugin changes are logged here using <a href="http://semver.org/">Semantic Versioning</a>.
 
+## 2.12.13 (2022-01-30) ##
+* Added more illumination variables.
+
 ## 2.12.12 (2022-01-26) ##
 * Added more illumination variables.
 
