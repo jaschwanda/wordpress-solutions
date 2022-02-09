@@ -324,11 +324,6 @@ class USI_WordPress_Solutions_Settings_Settings extends USI_WordPress_Solutions_
                   'html' => '<a href="admin.php?page=usi-wordpress-solutions-user-sessions">Users Logged In</a>',
                   'label' => 'Users Currently Logged In',
                ),
-               'versions' => array(
-                  'type' => 'html', 
-                  'html' => '<a href="admin.php?page=usi-wordpress-solutions-versions-show">Version Comparison</a>',
-                  'label' => 'Version Comparision',
-               ),
                'visible-grid' => array(
                   'type' => 'checkbox', 
                   'label' => 'Visable Grid Borders',
