@@ -40,21 +40,14 @@ class USI_WordPress_Solutions_User_Sessions extends WP_List_Table {
 
    public static function action_admin_menu() {
 
-      add_options_page(
-         'user-sessions', 
-         'user-sessions', 
-         'manage_options', 
-         'usi-wordpress-solutions-user-sessions', 
-         array('USI_WordPress_Solutions_User_Sessions', 'render_list')
+      add_submenu_page(
+         'admin.php', // Parent slug;
+         'user-sessions', // Page title;
+         'user-sessions',  // Menu title;
+         'manage_options',  // Required capability;
+         'usi-wordpress-solutions-user-sessions', // Menu slug;
+         array('USI_WordPress_Solutions_User_Sessions', 'render_list') // Invoking function;
       );
-
-      global $menu;
-      foreach ($menu as $key => $values) {
-         if ('usi-wordpress-solutions-user-sessions' == $values[2]) {
-            unset($menu[$key]);
-            break;
-         }
-      }
 
    } // action_admin_menu();
 
