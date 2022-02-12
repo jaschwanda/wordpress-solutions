@@ -339,7 +339,7 @@ class USI_WordPress_Solutions_Settings_Settings extends USI_WordPress_Solutions_
                   'type' => 'html', 
                ),
                'wp-debug-log' => array(
-                  'html' => defined('WP_DEBUG_LOG') ? 'TRUE' : 'false',
+                  'html' => defined('WP_DEBUG_LOG') ? (WP_DEBUG_LOG ? 'TRUE' : 'false') : 'undefined',
                   'label' => 'WP_DEBUG_LOG',
                   'type' => 'html', 
                ),
