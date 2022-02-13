@@ -344,7 +344,7 @@ class USI_WordPress_Solutions_Settings_Settings extends USI_WordPress_Solutions_
                   'type' => 'html', 
                ),
                'wp-debug-display' => array(
-                  'html' => defined('WP_DEBUG_DISPLAY') ? 'TRUE' : 'false',
+                  'html' => defined('WP_DEBUG_DISPLAY') ? (WP_DEBUG_DISPLAY ? 'TRUE' : 'false') : 'undefined',
                   'label' => 'WP_DEBUG_DISPLAY',
                   'type' => 'html', 
                ),
