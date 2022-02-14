@@ -333,6 +333,11 @@ class USI_WordPress_Solutions_Settings_Settings extends USI_WordPress_Solutions_
                   'label' => 'PHP memory_limit',
                   'type' => 'html', 
                ),
+               'disable-wp-cron' => array(
+                  'html' => defined('DISABLE_WP_CRON') ? (DISABLE_WP_CRON ? 'TRUE' : 'false') : 'undefined',
+                  'label' => 'DISABLE_WP_CRON',
+                  'type' => 'html', 
+               ),
                'wp-debug' => array(
                   'html' => defined('WP_DEBUG') ? (WP_DEBUG ? 'TRUE' : 'false') : 'undefined',
                   'label' => 'WP_DEBUG',
