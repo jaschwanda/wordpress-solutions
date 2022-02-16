@@ -406,7 +406,7 @@ class USI_WordPress_Solutions_Settings_Settings extends USI_WordPress_Solutions_
                   'label' => 'Post Content',
                ),
             ),
-         ), // versions;
+         ), // xport;
 
       );
 
