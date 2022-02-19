@@ -451,10 +451,10 @@ new USI_WordPress_Solutions_Settings_Settings();
 
 function my_admin_menu() {
    add_menu_page(
-      __( 'Sample page', 'my-textdomain' ),
-      __( 'Sample menu', 'my-textdomain' ),
+      __('Form Layout', USI_WordPress_Solutions::TEXTDOMAIN),
+      __('Form Layout', USI_WordPress_Solutions::TEXTDOMAIN),
       'manage_options',
-      'sample-page',
+      'form-layout',
       'my_admin_page_contents',
       'dashicons-schedule',
       3
@@ -466,7 +466,7 @@ add_action( 'admin_menu', 'my_admin_menu' );
 function my_admin_page_contents() {
 ?>
 <h1>
-<?php esc_html_e( 'Welcome to my custom admin page.', 'my-plugin-textdomain' ); ?>
+<?php esc_html_e('Form Layout', USI_WordPress_Solutions::TEXTDOMAIN); ?>
 </h1>
 <?php
 }
