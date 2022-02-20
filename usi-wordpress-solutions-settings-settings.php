@@ -468,6 +468,41 @@ function my_admin_page_contents() {
 <h1>
 <?php esc_html_e('Form Layout', USI_WordPress_Solutions::TEXTDOMAIN); ?>
 </h1>
+
+      <div class="ru-form-box">
+        <h2>Bold header</h2>
+        <p>Paragraph</p>
+
+        <div class="ru-form-input-row">
+          <p>Label or description:</p>
+          <input type="text" style="width:100%;" readonly value="6568" />
+        </div>
+
+      </div><!-- ru-form-box -->
+
+      <div class="ru-form-box">
+        <h2>Bold header</h2>
+        <div class="ru-form-input-row"><input type="checkbox" style="background-color:#eee; border:solid 1px #7e8993;" disabled checked='checked' />&nbsp;Option 1</div>
+        <div class="ru-form-input-row"><input type="checkbox" style="background-color:#eee; border:solid 1px #7e8993;" disabled checked='checked' />&nbsp;Option 2</div>
+      </div><!-- ru-form-box -->
+
+      <div class="ru-form-box">
+        <h2>Bold header</h2>
+        <div class="ru-form-input-row">
+          <p>Label or description:</p>
+          <select class="ru-form-select-view" disabled>
+          <option selected value="">-- Please select YES or NO --</option>
+          <option value="yes">YES</option>
+          <option value="no">NO</option>
+          </select>
+        </div>
+        <div class="ru-form-input-row-hide">
+          <p>Label or description:</p>
+          <div style="overflow:hidden;" class="ru-form-input-text ru-form-input-miss"></div>
+        </div>
+      </div><!-- ru-form-box -->
+
+
 <?php
 }
 
