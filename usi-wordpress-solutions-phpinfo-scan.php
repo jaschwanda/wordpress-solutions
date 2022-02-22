@@ -15,7 +15,7 @@ Copyright (c) 2020 by Jim Schwanda.
 
 require_once('usi-wordpress-solutions-bootstrap.php');
 
-/* const VERSION = '2.12.5 (2022-01-16)'; */
+/* const VERSION = '2.13.0 (2022-02-22)'; */
 
 if (!in_array('administrator', wp_get_current_user()->roles)) die('Accesss not allowed.');
 

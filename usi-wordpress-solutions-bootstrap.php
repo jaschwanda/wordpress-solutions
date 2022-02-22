@@ -13,7 +13,7 @@ https://github.com/jaschwanda/wordpress-solutions/blob/master/LICENSE.md
 Copyright (c) 2020 by Jim Schwanda.
 */
 
-/* const VERSION = '2.12.5 (2022-01-16)'; */
+/* const VERSION = '2.13.0 (2022-02-22)'; */
 
 require_once(explode('wp-content', $_SERVER['SCRIPT_FILENAME'])[0] . 'wp-load.php');
 

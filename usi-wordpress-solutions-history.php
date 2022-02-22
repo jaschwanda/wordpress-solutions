@@ -19,7 +19,7 @@ require_once('usi-wordpress-solutions.php');
 
 final class USI_WordPress_Solutions_History {
 
-   const VERSION = '2.12.0 (2021-11-03)';
+   const VERSION = '2.13.0 (2022-02-22)';
 
    private static $pre_post_update_data = null;
    private static $pre_post_update_id   = 0;
