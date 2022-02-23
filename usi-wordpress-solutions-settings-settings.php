@@ -315,10 +315,15 @@ class USI_WordPress_Solutions_Settings_Settings extends USI_WordPress_Solutions_
                   'html' => $php_reporting,
                   'label' => 'Error Reporting',
                ),
-               'php-info' => array(
+               'info-php' => array(
                   'type' => 'html', 
                   'html' => $phpinfo_anchor,
-                  'label' => 'Information',
+                  'label' => 'Information - PHP',
+               ),
+               'info-site' => array(
+                  'type' => 'html', 
+                  'html' => '<a href="' . admin_url('site-health.php?tab=debug') . '">Site Health - Info</a>',
+                  'label' => 'Information - Site',
                ),
                'active-users' => array(
                   'type' => 'html', 
