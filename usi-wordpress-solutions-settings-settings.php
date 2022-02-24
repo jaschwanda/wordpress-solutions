@@ -347,6 +347,7 @@ class USI_WordPress_Solutions_Settings_Settings extends USI_WordPress_Solutions_
                'wp-debug' => array(
                   'html' => defined('WP_DEBUG') ? (WP_DEBUG ? 'TRUE' : 'false') : 'undefined',
                   'label' => 'WP_DEBUG',
+                  'notes' => 'Triggers "debug" mode throughout Wordpress.',
                   'type' => 'html', 
                ),
                'wp-debug-log' => array(
