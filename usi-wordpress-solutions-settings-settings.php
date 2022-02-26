@@ -353,6 +353,7 @@ class USI_WordPress_Solutions_Settings_Settings extends USI_WordPress_Solutions_
                'wp-debug-log' => array(
                   'html' => defined('WP_DEBUG_LOG') ? (WP_DEBUG_LOG ? 'TRUE' : 'false') : 'undefined',
                   'label' => 'WP_DEBUG_LOG',
+                  'notes' => 'When true and when WP_DEBUG_DISPLAY is false, writes errors to the <i>debug.log</i> file inside the <i>wp-content</i> folder.',
                   'type' => 'html', 
                ),
                'wp-debug-display' => array(
