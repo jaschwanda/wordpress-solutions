@@ -347,18 +347,19 @@ class USI_WordPress_Solutions_Settings_Settings extends USI_WordPress_Solutions_
                'wp-debug' => array(
                   'html' => defined('WP_DEBUG') ? (WP_DEBUG ? 'TRUE' : 'false') : 'undefined',
                   'label' => 'WP_DEBUG',
-                  'notes' => 'When true triggers "debug" mode throughout Wordpress.',
+                  'notes' => 'When true triggers "debug" mode throughout WordPress.',
                   'type' => 'html', 
                ),
                'wp-debug-log' => array(
                   'html' => defined('WP_DEBUG_LOG') ? (WP_DEBUG_LOG ? 'TRUE' : 'false') : 'undefined',
                   'label' => 'WP_DEBUG_LOG',
-                  'notes' => 'When true and when WP_DEBUG_DISPLAY is false, writes errors to the <i>debug.log</i> file inside the <i>wp-content</i> folder.',
+                  'notes' => 'When true and when WP_DEBUG_DISPLAY is false, WordPress writes errors to the <i>debug.log</i> file inside the <i>wp-content</i> folder.',
                   'type' => 'html', 
                ),
                'wp-debug-display' => array(
                   'html' => defined('WP_DEBUG_DISPLAY') ? (WP_DEBUG_DISPLAY ? 'TRUE' : 'false') : 'undefined',
                   'label' => 'WP_DEBUG_DISPLAY',
+                  'notes' => 'When true WordPress shows errors and warnings on the page as they are generated.',
                   'type' => 'html', 
                ),
                'wp-memory-limit' => array(
