@@ -342,6 +342,7 @@ class USI_WordPress_Solutions_Settings_Settings extends USI_WordPress_Solutions_
                'disable-wp-cron' => array(
                   'html' => defined('DISABLE_WP_CRON') ? (DISABLE_WP_CRON ? 'TRUE' : 'false') : 'undefined',
                   'label' => 'DISABLE_WP_CRON',
+                  'notes' => 'When true the standard WordPress cron handling is disabled.',
                   'type' => 'html', 
                ),
                'wp-debug' => array(
