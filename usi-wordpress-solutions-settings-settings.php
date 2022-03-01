@@ -366,6 +366,7 @@ class USI_WordPress_Solutions_Settings_Settings extends USI_WordPress_Solutions_
                'wp-memory-limit' => array(
                   'html' => defined('WP_MEMORY_LIMIT') ? WP_MEMORY_LIMIT : 'undefined',
                   'label' => 'WP_MEMORY_LIMIT',
+                  'notes' => 'The maximum amount of memory that can be consumed by PHP.',
                   'type' => 'html', 
                ),
             ),
