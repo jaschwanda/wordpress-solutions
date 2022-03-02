@@ -334,6 +334,13 @@ class USI_WordPress_Solutions_Settings_Settings extends USI_WordPress_Solutions_
                   'type' => 'checkbox', 
                   'label' => 'Visable Grid Borders',
                ),
+            ),
+         ), // illumination;
+
+         'limits-values' => array(
+            'title' => 'Limits and Values',
+            'not_tabbed' => 'diagnostics',
+            'settings' => array(
                'php-memory-limit' => array(
                   'html' => ini_get('memory_limit'),
                   'label' => 'PHP memory_limit',
@@ -370,7 +377,7 @@ class USI_WordPress_Solutions_Settings_Settings extends USI_WordPress_Solutions_
                   'type' => 'html', 
                ),
             ),
-         ), // illumination;
+         ), // limits-values;
 
          'updates' => new USI_WordPress_Solutions_Updates($this),
 
