@@ -25,7 +25,7 @@ require_once('usi-wordpress-solutions-versions.php');
 
 class USI_WordPress_Solutions_Settings_Settings extends USI_WordPress_Solutions_Settings {
 
-   const VERSION = '2.13.0 (2022-02-22)';
+   const VERSION = '2.13.1 (2022-03-17)';
 
    protected $debug     = 0;
    protected $is_tabbed = true;
@@ -344,6 +344,7 @@ class USI_WordPress_Solutions_Settings_Settings extends USI_WordPress_Solutions_
                'php-memory-limit' => array(
                   'html' => ini_get('memory_limit'),
                   'label' => 'PHP memory_limit',
+                  'notes' => 'The maximum amount of memory in bytes that an individual script is allowed to allocate.',
                   'type' => 'html', 
                ),
                'disable-wp-cron' => array(
