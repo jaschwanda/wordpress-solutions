@@ -31,7 +31,7 @@ ru-work.php
 
 class USI_WordPress_Solutions_Popup_Action {
 
-   const VERSION = '2.13.0 (2022-02-22)';
+   const VERSION = '2.14.0 (2022-06-19)';
 
    const HEIGHT_HEAD_FOOT = 93;
 

@@ -22,7 +22,7 @@ require_once('usi-wordpress-solutions.php');
 
 final class USI_WordPress_Solutions_Uninstall_Uninstall {
 
-   const VERSION = '2.13.0 (2022-02-22)';
+   const VERSION = '2.14.0 (2022-06-19)';
 
    private function __construct() {
    } // __construct();
