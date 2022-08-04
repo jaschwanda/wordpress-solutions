@@ -189,6 +189,7 @@ class USI_WordPress_Solutions_Settings {
          . '            changeYear  : true,' . PHP_EOL
          . '            closeText   : "Clear",' . PHP_EOL
          . '            dateFormat  : "yy-mm-dd",' . PHP_EOL
+      // . '            maxDate     : 0 or "yyy-mm-dd",' . PHP_EOL - sets maximum date
          . '            onClose     : function (dateText, inst) {' . PHP_EOL
          . '               if ($(window.event.srcElement).hasClass("ui-datepicker-close")) {' . PHP_EOL
          . '                  document.getElementById(this.id).value = "";' . PHP_EOL
@@ -680,7 +681,7 @@ class USI_WordPress_Solutions_Settings {
          if (empty($value)) $value = 0;
          if ($readonly) {
             $decimal = !empty($args['decimal']) ? (int)$args['decimal'] : 0;
-            echo $prefix . '<input type="text"' . $attributes . ' value="' . '$ ' . number_format($value, $decimal) . '" />' . $suffix;
+            echo $prefix . '<input type="text"' . $attributes . ' value="' . '$ ' . @number_format($value, $decimal) . '" />' . $suffix;
          } else {
             echo $prefix . '<input type="number"' . $attributes . ' value="' . $value . '" />' . $suffix;
          }
