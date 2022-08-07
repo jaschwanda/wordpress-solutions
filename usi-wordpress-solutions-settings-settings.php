@@ -130,7 +130,23 @@ class USI_WordPress_Solutions_Settings_Settings extends USI_WordPress_Solutions_
             }
 
          }
+
       }
+
+         if (!empty($input['php-mailer-test']['to-email'])) {
+            $mail = new USI_WordPress_Solutions_Mailer();
+            $mail->AddAddress($input['php-mailer-test']['to-email']);
+            $mail->Body      = 'This is a test e-mail from the USI WordPress Solutions Plugin version ' . USI_WordPress_Solutions::VERSION . '.';
+            $mail->SMTPDebug = $input['php-mailer-test']['debug'];
+            $mail->Subject   = 'USI WordPress Solutions E-mail Plugin Test';
+            $mail->queue();
+            unset($input['php-mailer-test']['to-email']);
+         }
+
+         if (empty($input['php-mailer']['smtp-auth'])) {
+            unset($input['php-mailer']['username']);
+            unset($input['php-mailer']['password']);
+         }
 
       return($input);
 
@@ -190,37 +206,14 @@ class USI_WordPress_Solutions_Settings_Settings extends USI_WordPress_Solutions_
 
       $pcre_backtrack_limit = ini_get('pcre.backtrack_limit');
 
-      $mpdf_pcre_limit      = (int)(USI_WordPress_Solutions::$options['admin-limits']['mpdf-pcre-limit'] ?? $pcre_backtrack_limit);
+      $mpdf_pcre_limit      = (int)($this->options['admin-limits']['mpdf-pcre-limit'] ?? $pcre_backtrack_limit);
 
-      $diagnostics = new USI_WordPress_Solutions_Diagnostics($this, 
-         array(
-            'DEBUG_INIT' => array(
-               'value' => USI_WordPress_Solutions::DEBUG_INIT,
-               'notes' => 'Log USI_WordPress_Solutions_Settings::action_admin_init() method.',
-            ),
-            'DEBUG_OPTIONS' => array(
-               'value' => USI_WordPress_Solutions::DEBUG_OPTIONS,
-               'notes' => 'Log USI_WordPress_Solutions::$options.',
-            ),
-            'DEBUG_RENDER' => array(
-               'value' => USI_WordPress_Solutions::DEBUG_RENDER,
-               'notes' => 'Log USI_WordPress_Solutions_Settings::fields_render() method.',
-            ),
-            'DEBUG_UPDATE' => array(
-               'value' => USI_WordPress_Solutions::DEBUG_UPDATE,
-               'notes' => 'Log USI_WordPress_Solutions_Update methods.',
-            ),
-            'DEBUG_XPORT' => array(
-               'value' => USI_WordPress_Solutions::DEBUG_XPORT,
-               'notes' => 'Log USI_WordPress_Solutions xport functionality.',
-            ),
-         )
-      );
+      $skip_phpmailer       = empty($this->options['admin-options']['mailer']);
 
       $sections = array(
 
          'preferences' => array(
-            'header_callback' => array($this, 'sections_header', '    <p>' . __('The WordPress-Solutions plugin is used by many Universal Solutions plugins and themes to simplify the ' .
+         'header_callback' => array($this, 'sections_header', '    <p>' . __('The WordPress-Solutions plugin is used by many Universal Solutions plugins and themes to simplify the ' .
          'implementation of WordPress functionality. Additionally, you can place all of the Universal Solutions settings pages ' .
          'at the end of the Settings sub-menu, or you can sort the Settings sub-menu alphabetically or not at all.', 
           USI_WordPress_Solutions::TEXTDOMAIN) . '</p>' . PHP_EOL),
@@ -270,6 +263,11 @@ class USI_WordPress_Solutions_Settings_Settings extends USI_WordPress_Solutions_
                   'label' => 'Enable Historian',
                   'notes' => 'The system historian records user, configuration and update events in the system database.',
                ),
+               'mailer' => array(
+                  'type' => 'checkbox', 
+                  'label' => 'Enable PHPMailer',
+                  'notes' => 'Enables the PHPMailer functionality included with WordPress, a new tab will appear if checked.',
+               ),
                'impersonate' => array(
                   'type' => 'checkbox', 
                   'label' => 'Enable User Switching',
@@ -304,7 +302,45 @@ class USI_WordPress_Solutions_Settings_Settings extends USI_WordPress_Solutions_
 
          'capabilities' => new USI_WordPress_Solutions_Capabilities($this),
 
-         'diagnostics' => $diagnostics,
+         'diagnostics' => new USI_WordPress_Solutions_Diagnostics($this, 
+            array(
+               'DEBUG_INIT' => array(
+                  'value' => USI_WordPress_Solutions::DEBUG_INIT,
+                  'notes' => 'Log USI_WordPress_Solutions_Settings::action_admin_init() method.',
+               ),
+               'DEBUG_MAILDEQU' => array(
+                  'value' => USI_WordPress_Solutions::DEBUG_MAILDEQU,
+                  'notes' => 'Log USI_WordPress_Solutions_Mailer::dequeu() method.',
+                  'skip'  => $skip_phpmailer,
+               ),
+               'DEBUG_MAILINIT' => array(
+                  'value' => USI_WordPress_Solutions::DEBUG_MAILINIT,
+                  'notes' => 'Log USI_WordPress_Solutions_Mailer::__construct() method.',
+                  'skip'  => $skip_phpmailer,
+               ),
+               'DEBUG_OPTIONS' => array(
+                  'value' => USI_WordPress_Solutions::DEBUG_OPTIONS,
+                  'notes' => 'Log USI_WordPress_Solutions::$options.',
+               ),
+               'DEBUG_RENDER' => array(
+                  'value' => USI_WordPress_Solutions::DEBUG_RENDER,
+                  'notes' => 'Log USI_WordPress_Solutions_Settings::fields_render() method.',
+               ),
+               'DEBUG_SMTP' => array(
+                  'value' => USI_WordPress_Solutions::DEBUG_SMTP,
+                  'notes' => 'Log DEBUG_SMTP smtp operations.',
+                  'skip'  => $skip_phpmailer,
+               ),
+               'DEBUG_UPDATE' => array(
+                  'value' => USI_WordPress_Solutions::DEBUG_UPDATE,
+                  'notes' => 'Log USI_WordPress_Solutions_Update methods.',
+               ),
+               'DEBUG_XPORT' => array(
+                  'value' => USI_WordPress_Solutions::DEBUG_XPORT,
+                  'notes' => 'Log USI_WordPress_Solutions xport functionality.',
+               ),
+            )
+         ),
 
          'illumination' => array(
             'title' => 'Illumination',
@@ -380,6 +416,10 @@ class USI_WordPress_Solutions_Settings_Settings extends USI_WordPress_Solutions_
             ),
          ), // limits-values;
 
+         'php-mailer' => 'placeholder',
+
+         'php-mailer-test' => 'placeholder',
+
          'updates' => new USI_WordPress_Solutions_Updates($this),
 
          'versions' => array(
@@ -428,6 +468,14 @@ class USI_WordPress_Solutions_Settings_Settings extends USI_WordPress_Solutions_
          ), // xport;
 
       );
+
+      if ($skip_phpmailer) {
+         unset($sections['php-mailer']);
+         unset($sections['php-mailer-test']);
+      } else {
+         $sections['php-mailer'] = USI_WordPress_Solutions_Mailer::settings($this);
+         $sections['php-mailer-test'] = USI_WordPress_Solutions_Mailer::test();
+      }
 
       if (empty($this->options['versions']['mode'])) {
       } else if ('compare' == $this->options['versions']['mode']) {
