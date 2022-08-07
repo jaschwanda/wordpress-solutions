@@ -52,6 +52,7 @@ class USI_WordPress_Solutions_Diagnostics {
       );
 
       foreach ($options as $key => $values) {
+         if (!empty($values['skip'])) continue;
          $this->section['settings'][$key]['label'] = $key;
          $this->section['settings'][$key]['notes'] = $values['notes'];
          $this->section['settings'][$key]['type'] = 'checkbox';
