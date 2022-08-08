@@ -46,12 +46,15 @@ final class USI_WordPress_Solutions {
    const PREFIX     = 'usi-wordpress';
    const TEXTDOMAIN = 'usi-wordpress-solutions';
 
-   const DEBUG_OFF     = 0x17000000;
-   const DEBUG_INIT    = 0x17000001;
-   const DEBUG_OPTIONS = 0x17000002;
-   const DEBUG_RENDER  = 0x17000004;
-   const DEBUG_UPDATE  = 0x17000008;
-   const DEBUG_XPORT   = 0x17000010;
+   const DEBUG_OFF      = 0x17000000;
+   const DEBUG_INIT     = 0x17000001;
+   const DEBUG_MAILINIT = 0x17000002;
+   const DEBUG_MAILDEQU = 0x17000004;
+   const DEBUG_OPTIONS  = 0x17000008;
+   const DEBUG_RENDER   = 0x17000010;
+   const DEBUG_SMTP     = 0x17000020;
+   const DEBUG_UPDATE   = 0x17000040;
+   const DEBUG_XPORT    = 0x17000080;
 
    private static $scripts = null;
 
@@ -65,12 +68,16 @@ final class USI_WordPress_Solutions {
 
       if (empty(self::$options)) {
          $defaults['admin-options']['history']     = false;
+         $defaults['admin-options']['mailer']      = false;
          $defaults['preferences']['menu-sort']     = 'no';
          $defaults['illumination']['visible-grid'] = false;
          self::$options = get_option(self::PREFIX . '-options', $defaults);
       }
       if (!empty(self::$options['admin-options']['history'])) {
          require_once('usi-wordpress-solutions-history.php');
+      }
+      if (!empty(self::$options['admin-options']['mailer'])) {
+         require_once('usi-wordpress-solutions-mailer.php');
       }
 
       $log  = USI_WordPress_Solutions_Diagnostics::get_log(self::$options);
