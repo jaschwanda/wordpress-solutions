@@ -71,8 +71,10 @@ class USI_WordPress_Solutions_Settings {
 
       global $pagenow;
 
-      if (!empty($config['prefix'])) $this->prefix = $config['prefix'];
+      if ('admin-ajax.php' == $pagenow) return;
 
+      if (!empty($config['prefix'])) $this->prefix = $config['prefix'];
+usi::log('$pagenow=', $pagenow, ' $this->prefix=', $this->prefix);
       $this->impersonate = !empty(USI_WordPress_Solutions::$options['admin-options']['impersonate']);
 
       $this->remove_rest = !empty(USI_WordPress_Solutions::$options['admin-options']['pass-reset']);
@@ -106,7 +108,7 @@ class USI_WordPress_Solutions_Settings {
       if ($this->is_tabbed) {
          $this->active_tab_maybe = $_POST[$this->prefix . '-tab'] ?? $_GET['tab'] ?? null;
          if (empty($this->active_tab_maybe) && !empty($_REQUEST['_wp_http_referer'])) {
-            // Need to get the part from the referre because of the way WordPress double loads the page;
+            // Need to get the part from the referer because of the way WordPress double loads the page;
             parse_str(parse_url($_REQUEST['_wp_http_referer'] ?? null, PHP_URL_QUERY), $this->query);
             $this->active_tab_maybe = $this->query['tab'] ?? null;
          }
@@ -175,12 +177,15 @@ class USI_WordPress_Solutions_Settings {
       // https://trentrichardson.com/examples/timepicker/
 
       if ($this->datepicker) {
+usi::log('$this->prefix=', $this->prefix, ' $this->datepicker=', $this->datepicker);
 
          wp_enqueue_script('jquery');
          wp_enqueue_script('jquery-ui-core');
          wp_enqueue_script('jquery-ui-datepicker');
 
          wp_enqueue_style('jquery-ui-css', 'https://ajax.googleapis.com/ajax/libs/jqueryui/1.8.2/themes/smoothness/jquery-ui.css');
+
+         $datepicker_option = (true === $this->datepicker) ? PHP_EOL : ',' . $this->datepicker . PHP_EOL;
 
          $this->jquery .= ''
          . "      $('.datepicker').datepicker(" . PHP_EOL
@@ -189,19 +194,21 @@ class USI_WordPress_Solutions_Settings {
          . '            changeYear  : true,' . PHP_EOL
          . '            closeText   : "Clear",' . PHP_EOL
          . '            dateFormat  : "yy-mm-dd",' . PHP_EOL
-      // . '            maxDate     : 0 or "yyy-mm-dd",' . PHP_EOL - sets maximum date
          . '            onClose     : function (dateText, inst) {' . PHP_EOL
          . '               if ($(window.event.srcElement).hasClass("ui-datepicker-close")) {' . PHP_EOL
          . '                  document.getElementById(this.id).value = "";' . PHP_EOL
          . '               }' . PHP_EOL
          . '            },' . PHP_EOL
          . '            showButtonPanel    : true,' . PHP_EOL 
-         . '            showMonthAfterYear : true' . PHP_EOL 
+         . '            showMonthAfterYear : true' . $datepicker_option
          . '         }' . PHP_EOL
          . '      );' . PHP_EOL
          . "      $('.datepicker').keydown(function(event) {event.preventDefault();});" . PHP_EOL
          . "      $('.datepicker').keypress(function(event) {event.preventDefault();});" . PHP_EOL
          ;
+
+         $this->datepicker = false;
+      wp_add_inline_script('jim', '<!-- jim ' .  $this->prefix . ' -->');
 
       }
 
@@ -224,9 +231,10 @@ class USI_WordPress_Solutions_Settings {
 
    // Child classes should call this at the tail to handle all child echos;
    function action_admin_footer(){ 
-
       if ($this->jquery) {
+usi::log('$this->prefix=', $this->prefix, ' $this->jquery=', $this->jquery);
          echo ''
+         . '<!-- ' . $this->prefix . ' -->' . PHP_EOL
          . '<script>' . PHP_EOL
          . 'jQuery(document).ready(' . PHP_EOL
          . '   function($) {' . PHP_EOL
@@ -235,6 +243,7 @@ class USI_WordPress_Solutions_Settings {
          . ');' . PHP_EOL
          . '</script>' . PHP_EOL
          ;
+         $this->jquery = null;
       }
 
    } // action_admin_footer();
