@@ -74,7 +74,7 @@ class USI_WordPress_Solutions_Settings {
       if ('admin-ajax.php' == $pagenow) return;
 
       if (!empty($config['prefix'])) $this->prefix = $config['prefix'];
-usi::log('$pagenow=', $pagenow, ' $this->prefix=', $this->prefix);
+
       $this->impersonate = !empty(USI_WordPress_Solutions::$options['admin-options']['impersonate']);
 
       $this->remove_rest = !empty(USI_WordPress_Solutions::$options['admin-options']['pass-reset']);
@@ -125,8 +125,9 @@ usi::log('$pagenow=', $pagenow, ' $this->prefix=', $this->prefix);
       } else if ($this->is_page || $this->is_options) {
 
          add_action('admin_head', array($this, 'action_admin_head'));
-
          add_action('admin_init', array($this, 'action_admin_init'));
+         add_action('admin_enqueue_scripts', array($this, 'action_admin_enqueue_scripts'));
+         add_action('admin_footer', array($this, 'action_admin_footer'));
 
       } else if (!empty(USI_WordPress_Solutions::$options['illumination']['visible-grid'])) {
 
@@ -141,8 +142,6 @@ usi::log('$pagenow=', $pagenow, ' $this->prefix=', $this->prefix);
 
       }
 
-      add_action('admin_enqueue_scripts', array($this, 'action_admin_enqueue_scripts'));
-      add_action('admin_footer', array($this, 'action_admin_footer'));
       add_action('admin_menu', array($this, 'action_admin_menu'));
 
       // Add notices for custom options pages, WordPress does settings pages automatically;
@@ -177,7 +176,6 @@ usi::log('$pagenow=', $pagenow, ' $this->prefix=', $this->prefix);
       // https://trentrichardson.com/examples/timepicker/
 
       if ($this->datepicker) {
-usi::log('$this->prefix=', $this->prefix, ' $this->datepicker=', $this->datepicker);
 
          wp_enqueue_script('jquery');
          wp_enqueue_script('jquery-ui-core');
@@ -208,7 +206,6 @@ usi::log('$this->prefix=', $this->prefix, ' $this->datepicker=', $this->datepick
          ;
 
          $this->datepicker = false;
-      wp_add_inline_script('jim', '<!-- jim ' .  $this->prefix . ' -->');
 
       }
 
@@ -232,7 +229,6 @@ usi::log('$this->prefix=', $this->prefix, ' $this->datepicker=', $this->datepick
    // Child classes should call this at the tail to handle all child echos;
    function action_admin_footer(){ 
       if ($this->jquery) {
-usi::log('$this->prefix=', $this->prefix, ' $this->jquery=', $this->jquery);
          echo ''
          . '<!-- ' . $this->prefix . ' -->' . PHP_EOL
          . '<script>' . PHP_EOL
