@@ -105,15 +105,6 @@ class USI_WordPress_Solutions_Settings {
       if (!empty($config['roles']))        $this->roles        = $config['roles'];
       if (!empty($config['text_domain']))  $this->text_domain  = $config['text_domain'];
 
-      if ($this->is_tabbed) {
-         $this->active_tab_maybe = $_POST[$this->prefix . '-tab'] ?? $_GET['tab'] ?? null;
-         if (empty($this->active_tab_maybe) && !empty($_REQUEST['_wp_http_referer'])) {
-            // Need to get the part from the referer because of the way WordPress double loads the page;
-            parse_str(parse_url($_REQUEST['_wp_http_referer'] ?? null, PHP_URL_QUERY), $this->query);
-            $this->active_tab_maybe = $this->query['tab'] ?? null;
-         }
-      }
-
       if ('plugins.php' == $pagenow) {
 
          if ($add_settings_link) add_filter('plugin_action_links', array($this, 'filter_plugin_action_links'), 10, 2);
@@ -123,6 +114,15 @@ class USI_WordPress_Solutions_Settings {
          if (is_callable($filter_plugin_row_meta)) add_filter('plugin_row_meta', $filter_plugin_row_meta, 10, 2);
 
       } else if ($this->is_page || $this->is_options) {
+
+         if ($this->is_tabbed) {
+            $this->active_tab_maybe = $_POST[$this->prefix . '-tab'] ?? $_GET['tab'] ?? null;
+            if (empty($this->active_tab_maybe) && !empty($_REQUEST['_wp_http_referer'])) {
+               // Need to get the part from the referer because of the way WordPress double loads the page;
+               parse_str(parse_url($_REQUEST['_wp_http_referer'] ?? null, PHP_URL_QUERY), $this->query);
+               $this->active_tab_maybe = $this->query['tab'] ?? null;
+            }
+         }
 
          add_action('admin_head', array($this, 'action_admin_head'));
          add_action('admin_init', array($this, 'action_admin_init'));
