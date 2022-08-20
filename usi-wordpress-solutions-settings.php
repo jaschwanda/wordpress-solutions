@@ -89,8 +89,6 @@ class USI_WordPress_Solutions_Settings {
 
       $this->is_options  = !empty($_POST['option_page']) && ($_POST['option_page'] == $this->page_slug) && ('options.php' == $pagenow);
 
-      $add_settings_link = empty($config['no_settings_link']);
-
       if (!empty($config['capability']))   $this->capability   = $config['capability'];
       if (!empty($config['capabilities'])) $this->capabilities = $config['capabilities'];
       if (!empty($config['datepicker']))   $this->datepicker   = $config['datepicker'];
@@ -107,7 +105,7 @@ class USI_WordPress_Solutions_Settings {
 
       if ('plugins.php' == $pagenow) {
 
-         if ($add_settings_link) add_filter('plugin_action_links', array($this, 'filter_plugin_action_links'), 10, 2);
+         if (empty($config['no_settings_link'])) add_filter('plugin_action_links', array($this, 'filter_plugin_action_links'), 10, 2);
 
          $filter_plugin_row_meta = array($this, 'filter_plugin_row_meta');
 
