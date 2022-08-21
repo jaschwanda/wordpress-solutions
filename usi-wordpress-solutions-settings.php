@@ -27,9 +27,12 @@ class USI_WordPress_Solutions_Settings {
 
    const VERSION = '2.14.0 (2022-06-19)';
 
-   private static $grid         = false;
-   private static $label_option = null; // Null means default behavior, label to left of field;
-   private static $one_per_line = false;
+   private static $current_user_id = -1; 
+   private static $grid            = false;
+   private static $impersonate     = false; // Allow user impersonation;
+   private static $label_option    = null;  // Null means default behavior, label to left of field;
+   private static $one_per_line    = false;
+   private static $remove_password = false; // Remove password reset;
 
    protected $active_tab = null;       // Will be set befor fields_sanitize() call;
    protected $active_tab_maybe = null; // Could contain a spoofed URL argument, should validate before use;
@@ -88,10 +91,6 @@ class USI_WordPress_Solutions_Settings {
       if (!empty($config['roles']))        $this->roles        = $config['roles'];
       if (!empty($config['text_domain']))  $this->text_domain  = $config['text_domain'];
 
-      $this->impersonate = !empty(USI_WordPress_Solutions::$options['admin-options']['impersonate']);
-
-      $this->remove_rest = !empty(USI_WordPress_Solutions::$options['admin-options']['pass-reset']);
-
       $this->debug       = USI_WordPress_Solutions_Diagnostics::get_log(USI_WordPress_Solutions::$options);
 
       $this->option_name = $this->prefix . '-options' . (!empty($config['suffix']) ? $config['suffix'] : '');
@@ -140,24 +139,10 @@ class USI_WordPress_Solutions_Settings {
       }
 
       add_action('admin_menu', array($this, 'action_admin_menu'));
+      add_action('init', array(__CLASS__, 'action_init'));
 
       // Add notices for custom options pages, WordPress does settings pages automatically;
       if ('menu' == $this->page) add_action('admin_notices', array($this, 'action_admin_notices'));
-
-      if ($this->impersonate || $this->remove_rest) {
-         if ($this->impersonate) add_action('init', array(__CLASS__, 'action_init'));
-         add_filter('user_row_actions', array($this, 'filter_user_row_actions'), 10, 2);
-      }
-
-      if (!empty(USI_WordPress_Solutions::$options['preferences']['menu-sort'])) {
-         switch (USI_WordPress_Solutions::$options['preferences']['menu-sort']) {
-         case 'alpha':
-         case 'usi':
-            add_filter('custom_menu_order' , '__return_true');
-            add_filter('menu_order' , array($this, 'filter_menu_order'));
-            break;
-         }
-      }
 
       if (!empty($config['file'])) register_activation_hook($config['file'], array($this, 'hook_activation'));
 
@@ -224,7 +209,7 @@ class USI_WordPress_Solutions_Settings {
    } // action_admin_enqueue_scripts();
 
    // Child classes should call this at the tail to handle all child echos;
-   function action_admin_footer(){ 
+   function action_admin_footer() { 
       if ($this->jquery) {
          echo ''
          . '<!-- ' . $this->prefix . ' -->' . PHP_EOL
@@ -379,7 +364,16 @@ class USI_WordPress_Solutions_Settings {
 
    public static function action_init() { 
 
-      if (!empty(USI_WordPress_Solutions::$options['admin-options']['impersonate'])) {
+      self::$impersonate     = !empty(USI_WordPress_Solutions::$options['admin-options']['impersonate']) && current_user_can('usi_wordpress_impersonate_user');
+
+      self::$remove_password = !empty(USI_WordPress_Solutions::$options['admin-options']['pass-reset']);
+
+      if (self::$impersonate || self::$remove_password) {
+         self::$current_user_id = wp_get_current_user()->ID ?? -1;
+         add_filter('user_row_actions', array(__CLASS__, 'filter_user_row_actions'), 10, 2);
+      }
+
+      if (self::$impersonate) {
          if (!empty($_REQUEST['action']) && !empty( $_REQUEST['user_id']) && ('impersonate' == $_REQUEST['action'])) {
             if ($user = get_userdata($user_id = $_REQUEST['user_id'])) {
                if (wp_verify_nonce($_REQUEST['_wpnonce'], "impersonate_$user_id")) {
@@ -394,6 +388,16 @@ class USI_WordPress_Solutions_Settings {
                   do_action('wp_login', $user->user_login, $user);
                }
             }
+         }
+      }
+
+      if (!empty(USI_WordPress_Solutions::$options['preferences']['menu-sort'])) {
+         switch (USI_WordPress_Solutions::$options['preferences']['menu-sort']) {
+         case 'alpha':
+         case 'usi':
+            add_filter('custom_menu_order' , '__return_true');
+            add_filter('menu_order' , array(__CLASS__, 'filter_menu_order'));
+            break;
          }
       }
 
@@ -794,7 +798,7 @@ class USI_WordPress_Solutions_Settings {
 
    } // fields_sanitize();
 
-   function filter_menu_order($menu_order) {
+   public static function filter_menu_order($menu_order) {
       global $submenu;
       $keys = array();
       $names = array();
@@ -828,13 +832,11 @@ class USI_WordPress_Solutions_Settings {
       return($links);
    } // filter_plugin_action_links();
 
-   function filter_user_row_actions(array $actions, WP_User $user) {
+   public static function filter_user_row_actions(array $actions, WP_User $user) {
 
-      if ($this->impersonate) {
+      if (self::$impersonate) {
 
-         $current_user = wp_get_current_user();
-
-         if (($user->ID != $current_user->ID) && current_user_can('usi_wordpress_impersonate_user')) {
+         if (($user->ID != self::$current_user_id)) {
             $actions['impersonate'] = sprintf(
                '<a href="%s">%s</a>',
                esc_url(
@@ -855,7 +857,7 @@ class USI_WordPress_Solutions_Settings {
 
       }
 
-      if ($this->remove_rest) unset($actions['resetpassword']);
+      if (self::$remove_password) unset($actions['resetpassword']);
 
       return($actions);
 
