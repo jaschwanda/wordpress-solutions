@@ -91,6 +91,8 @@ class USI_WordPress_Solutions_Settings {
       if (!empty($config['roles']))        $this->roles        = $config['roles'];
       if (!empty($config['text_domain']))  $this->text_domain  = $config['text_domain'];
 
+      if (!empty($config['file'])) register_activation_hook($config['file'], array($this, 'hook_activation'));
+
       $this->debug       = USI_WordPress_Solutions_Diagnostics::get_log(USI_WordPress_Solutions::$options);
 
       $this->option_name = $this->prefix . '-options' . (!empty($config['suffix']) ? $config['suffix'] : '');
@@ -142,9 +144,8 @@ class USI_WordPress_Solutions_Settings {
       add_action('init', array(__CLASS__, 'action_init'));
 
       // Add notices for custom options pages, WordPress does settings pages automatically;
+      if ('menu' == $this->page) usi::log('prefix=', $this->prefix);
       if ('menu' == $this->page) add_action('admin_notices', array($this, 'action_admin_notices'));
-
-      if (!empty($config['file'])) register_activation_hook($config['file'], array($this, 'hook_activation'));
 
       // In case you get the "options page not found" error, fiddle with this;
       // add_filter('whitelist_options', array($this, 'filter_whitelist_options'), 11, 1);
