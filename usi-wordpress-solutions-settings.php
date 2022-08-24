@@ -288,14 +288,14 @@ class USI_WordPress_Solutions_Settings {
                      add_settings_field(
                         $option_id, // Option name;
                         !empty($attributes['label']) ? $attributes['label'] : null, // Field title; 
-                        array($this, !empty($attributes['callback']) ? $attributes['callback'] : 'fields_render'), // Render field callback;
+                        [ $this, !empty($attributes['callback']) ? $attributes['callback'] : 'fields_render' ], // Render field callback;
                         $this->page_slug, // Settings page menu slug;
                         $section_id, // Section id;
                         array_merge($attributes, 
-                           array(
+                           [
                               'name'  => $option_name,
                               'value' => $option_value
-                           )
+                           ]
                         )
                      );
                   }
@@ -307,7 +307,7 @@ class USI_WordPress_Solutions_Settings {
       register_setting(
          $this->page_slug, // Settings group name, must match the group name in settings_fields();
          $this->option_name, // Option name;
-         array($this, 'fields_sanitize') // Sanitize field callback;
+         [ $this, 'fields_sanitize' ] // Sanitize field callback;
       );
 
    } // action_admin_init();
@@ -322,7 +322,7 @@ class USI_WordPress_Solutions_Settings {
             __($this->name, $this->text_domain), // Sidebar menu text; 
             $this->capability, // Capability required to enable page;
             $this->page_slug, // Menu page slug name;
-            array($this, $this->render), // Render page callback;
+            [ $this, $this->render ], // Render page callback;
             $this->icon_url, // URL of icon for menu item;
             $this->position // Position in menu order;
          );
@@ -334,12 +334,12 @@ class USI_WordPress_Solutions_Settings {
             __($this->name, $this->text_domain), // Sidebar menu text; 
             $this->capability, // Capability required to enable page;
             $this->page_slug, // Menu page slug name;
-            array($this, $this->render) // Render page callback;
+            [ $this, $this->render ] // Render page callback;
          );
 
       } // ENDIF standard settings page;
 
-      $action_load_help_tab = array($this, 'action_load_help_tab');
+      $action_load_help_tab = [ $this, 'action_load_help_tab' ];
 
       if (is_callable($action_load_help_tab)) add_action('load-'. $slug, $action_load_help_tab);
 
@@ -370,7 +370,7 @@ class USI_WordPress_Solutions_Settings {
 
       if (self::$impersonate || self::$remove_password) {
          self::$current_user_id = wp_get_current_user()->ID ?? -1;
-         add_filter('user_row_actions', array(__CLASS__, 'filter_user_row_actions'), 10, 2);
+         add_filter('user_row_actions', [ __CLASS__, 'filter_user_row_actions' ], 10, 2);
       }
 
       if (self::$impersonate) {
@@ -396,7 +396,7 @@ class USI_WordPress_Solutions_Settings {
          case 'alpha':
          case 'usi':
             add_filter('custom_menu_order' , '__return_true');
-            add_filter('menu_order' , array(__CLASS__, 'filter_menu_order'));
+            add_filter('menu_order' , [ __CLASS__, 'filter_menu_order' ]);
             break;
          }
       }
@@ -558,14 +558,14 @@ class USI_WordPress_Solutions_Settings {
 
    public static function esc_tiny($value) {
 
-      return(str_replace(array('&lt;', '&gt;', '&quot;'), array('<', '>', '"'), $value));
+      return(str_replace([ '&lt;', '&gt;', '&quot;' ], [ '<', '>', '"' ], $value));
 
    } // esc_tiny();
 
    function fields_render($args) {
       if (USI_WordPress_Solutions::DEBUG_RENDER == (USI_WordPress_Solutions::DEBUG_RENDER & $this->debug)) {
          if ($this->field) {
-            $temp = array();
+            $temp = [];
             foreach ($this->field as $key => $value) {
                if ('callback' != $key) $temp[$key] = $value;
             }
@@ -683,7 +683,7 @@ class USI_WordPress_Solutions_Settings {
          break;
 
       case 'money':
-         $value = str_replace(array('$', ' ', ','), '', $value);
+         $value = str_replace([ '$', ' ', ',' ], '', $value);
          if (empty($value)) $value = 0;
          if ($readonly) {
             $decimal = !empty($args['decimal']) ? (int)$args['decimal'] : 0;
@@ -771,7 +771,7 @@ class USI_WordPress_Solutions_Settings {
                   break;
 
                case 'tiny': 
-                  $value = str_replace(array('<', '>', '"'), array('&lt;', '&gt;', '&quot;'), $value);
+                  $value = str_replace([ '<', '>', '"' ], [ '&lt;', '&gt;', '&quot;' ], $value);
                case 'textarea': 
                   $input[$key] = sanitize_textarea_field($value); 
                   break;
@@ -800,9 +800,9 @@ class USI_WordPress_Solutions_Settings {
 
    public static function filter_menu_order($menu_order) {
       global $submenu;
-      $keys = array();
-      $names = array();
-      $options = array();
+      $keys = [];
+      $names = [];
+      $options = [] ;
       if (!empty($submenu['options-general.php'])) {
          switch (USI_WordPress_Solutions::$options['preferences']['menu-sort']) {
          case 'alpha': $match = '/./'; break;
