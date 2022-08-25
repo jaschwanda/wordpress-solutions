@@ -842,10 +842,10 @@ class USI_WordPress_Solutions_Settings {
                esc_url(
                   wp_nonce_url( 
                      add_query_arg( 
-                        array(
+                        [
                            'action'  => 'impersonate',
                            'user_id' => $user->ID,
-                        ), 
+                        ], 
                         get_admin_url() . 'user-edit.php?user_id=' . $user->ID
                      ), 
                      'impersonate_' . $user->ID
