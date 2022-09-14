@@ -22,7 +22,7 @@ usi-media-solutions-manage.php
 */
 class USI_WordPress_Solutions_Popup_Iframe3 {
 
-   const VERSION = '2.14.0 (2022-06-19)';
+   const VERSION = '2.14.1 (2022-08-10)';
 
    private static $scripts = array();
 

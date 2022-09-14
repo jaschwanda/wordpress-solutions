@@ -25,7 +25,7 @@ require_once('usi-wordpress-solutions-versions.php');
 
 class USI_WordPress_Solutions_Settings {
 
-   const VERSION = '2.14.0 (2022-06-19)';
+   const VERSION = '2.14.1 (2022-08-10)';
 
    private static $current_user_id = -1; 
    private static $grid            = false;

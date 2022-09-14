@@ -19,7 +19,7 @@ if (!in_array('administrator', wp_get_current_user()->roles)) die('Accesss not a
 
 final class USI_WordPress_Solutions_Versions_Scan {
 
-   const VERSION = '2.14.0 (2022-06-19)';
+   const VERSION = '2.14.1 (2022-08-10)';
 
    private function __construct() {
    } // __construct();

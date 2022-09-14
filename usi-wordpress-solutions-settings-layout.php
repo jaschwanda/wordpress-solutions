@@ -25,7 +25,7 @@ require_once('usi-wordpress-solutions-log.php');
 
 class USI_WordPress_Solutions_Settings_Layout {
 
-   const VERSION = '2.14.0 (2022-06-19)';
+   const VERSION = '2.14.1 (2022-08-10)';
 
    const FILE_ID = 'usi-wordpress-settings-layout';
 

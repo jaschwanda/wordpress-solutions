@@ -26,7 +26,7 @@ usi-wordpress-solutions-settings-settings.php
 
 class USI_WordPress_Solutions_Popup_Iframe {
 
-   const VERSION = '2.14.0 (2022-06-19)';
+   const VERSION = '2.14.1 (2022-08-10)';
 
    private static $attributes = array();
    private static $scripts    = array();
