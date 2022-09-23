@@ -15,7 +15,7 @@ Requires at least: 5.0
 Requires PHP:      7.0.0
 Tested up to:      5.3.2
 Text Domain:       usi-wordpress-solutions
-Version:           2.14.1
+Version:           2.14.2
 */
 
 /*
@@ -40,7 +40,7 @@ require_once('usi-wordpress-solutions-log.php');
 
 final class USI_WordPress_Solutions {
 
-   const VERSION = '2.14.1 (2022-08-10)';
+   const VERSION = '2.14.2 (2022-09-23)';
 
    const NAME       = 'WordPress-Solutions';
    const PREFIX     = 'usi-wordpress';
@@ -54,7 +54,7 @@ final class USI_WordPress_Solutions {
    const DEBUG_RENDER   = 0x17000010;
    const DEBUG_SMTP     = 0x17000020;
    const DEBUG_UPDATE   = 0x17000040;
-   const DEBUG_XPORT    = 0x17000080;
+   const DEBUG_XFER     = 0x17000080;
 
    private static $scripts = null;
 

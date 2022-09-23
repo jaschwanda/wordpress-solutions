@@ -2,6 +2,9 @@
 
 WordPress-Solutions plugin changes are logged here using <a href="http://semver.org/">Semantic Versioning</a>.
 
+## 2.14.2 (2022-09-23) ##
+* Improved xPorter functionality to Transfer.
+
 ## 2.14.1 (2022-08-10) ##
 * Adding PHPMailer support.
 * Set all versions numbers to same version.

@@ -25,7 +25,7 @@ require_once('usi-wordpress-solutions-versions.php');
 
 class USI_WordPress_Solutions_Settings_Settings extends USI_WordPress_Solutions_Settings {
 
-   const VERSION = '2.14.1 (2022-08-10)';
+   const VERSION = '2.14.2 (2022-09-23)';
 
    protected $debug     = 0;
    protected $is_tabbed = true;
@@ -64,7 +64,11 @@ class USI_WordPress_Solutions_Settings_Settings extends USI_WordPress_Solutions_
 
    function fields_sanitize($input) {
 
+      $transfer_label = __('Transfer', USI_WordPress_Solutions::TEXTDOMAIN);
+
       $input = parent::fields_sanitize($input);
+
+      $log   = (USI_WordPress_Solutions::DEBUG_XFER == (USI_WordPress_Solutions::DEBUG_XFER & $this->debug));
 
       $pcre_backtrack_limit = ini_get('pcre.backtrack_limit');
 
@@ -83,18 +87,22 @@ class USI_WordPress_Solutions_Settings_Settings extends USI_WordPress_Solutions_
          }
       }
 
-      if (!empty($_REQUEST['submit']) && ('eXport Posts' == $_REQUEST['submit'])) {
+      if (!empty($_REQUEST['submit']) && ($transfer_label == $_REQUEST['submit'])) {
 
-         if (!empty($input['xport']['parent-post']) && !empty($input['xport']['post-type'])) {
+         $content = $title = $type = null;
 
-            $log = (USI_WordPress_Solutions::DEBUG_XPORT == (USI_WordPress_Solutions::DEBUG_XPORT & $this->debug));
+         if (!empty($input['xfer']['parent-title']) && !empty($input['xfer']['post-type'])) {
+
+            $title = $input['xfer']['parent-title'];
+
+            $type  = $input['xfer']['post-type'];
 
             $parent_post = get_posts(
                $args = array(
                   'numberposts' => 1,
                   'post_status' => 'publish',
-                  'post_type' => $input['xport']['post-type'],
-                  'title' => $input['xport']['parent-post'],
+                  'post_type' => $type,
+                  'title' => $title,
                )
             );
 
@@ -107,52 +115,122 @@ class USI_WordPress_Solutions_Settings_Settings extends USI_WordPress_Solutions_
                      'numberposts' => -1,
                      'post_parent' => $parent_post[0]->ID,
                      'post_status' => 'publish',
-                     'post_type' => $input['xport']['post-type'],
+                     'post_type' => $type,
                   )
                );
 
                if ($log) usi::log('$args=', $args, '\n$posts=', $posts);
 
-               $text = null;
-
                foreach ($posts as $post) {
 
-                  $text .= '"' . $post->post_title . '":' . PHP_EOL . '{' . PHP_EOL;
+                  $content .= '"' . $post->post_title . '":' . PHP_EOL . '{' . PHP_EOL;
 
-                  $text .= str_replace('","', '",' . PHP_EOL . '"', trim(trim($post->post_content, '}'), '{'));
+                  $content .= str_replace('","', '",' . PHP_EOL . '"', trim(trim($post->post_content, '}'), '{'));
 
-                  $text .= PHP_EOL . '}' . PHP_EOL;
+                  $content .= PHP_EOL . '}' . PHP_EOL;
 
                }
-
-               $input['xport']['content'] = $text;
 
             }
 
          }
 
+         $input['xfer']['content']      = $content;
+
+         $input['xfer']['parent-title'] = $title;
+
+         $input['xfer']['post-type']    = $type;
+
+         if (!empty($input['xfer']['options'])) {
+
+            $array = json_decode($input['xfer']['options'], true);
+
+            if (!empty($input['xfer']['export-import'])) {
+
+               if ('export' == $input['xfer']['export-import']) {
+
+                  if ($log) usi::log('$array=', $array);
+
+                  foreach ($array as $plugin => $temp1) {
+
+                     $options = get_option($plugin);
+
+                     foreach ($temp1 as $section => $temp2) {
+
+                        foreach ($temp2 as $setting => $value) {
+
+                           if ($log) usi::log($plugin . '[' . $section . '][' . $setting . ']=', $value);
+
+                           $array[$plugin][$section][$setting] = $options[$section][$setting] ?? null;
+
+                        }
+
+                     }
+
+                  }
+
+               } else if ('import' == $input['xfer']['export-import']) {
+
+                  if ($log) usi::log('$array=', $array);
+
+                  foreach ($array as $plugin => $temp1) {
+
+                     $options = get_option($plugin);
+
+                     foreach ($temp1 as $section => $temp2) {
+
+                        foreach ($temp2 as $setting => $value) {
+
+                           if ($log) usi::log($plugin . '[' . $section . '][' . $setting . ']=', $value);
+
+                           $options[$section][$setting] = $array[$plugin][$section][$setting] ?? null;
+
+                        }
+
+                     }
+
+                     update_option($plugin, $options);
+
+                     if ($log) usi::log('$options=', $options);
+
+                  }
+
+               }
+
+            }
+
+            $input['xfer']['options'] = json_encode($array, JSON_UNESCAPED_SLASHES | (!empty($input['xfer']['pretty-print']) ? JSON_PRETTY_PRINT : 0));
+
+         }
+
+         add_settings_error($this->page_slug, 'notice-success', __('Transfer complete.', USI_WordPress_Solutions::TEXTDOMAIN), 'notice-success');
+
       }
 
-         if (!empty($input['php-mailer-test']['to-email'])) {
-            $mail = new USI_WordPress_Solutions_Mailer();
-            $mail->AddAddress($input['php-mailer-test']['to-email']);
-            $mail->Body      = 'This is a test e-mail from the USI WordPress Solutions Plugin version ' . USI_WordPress_Solutions::VERSION . '.';
-            $mail->SMTPDebug = $input['php-mailer-test']['debug'];
-            $mail->Subject   = 'USI WordPress Solutions E-mail Plugin Test';
-            $mail->queue();
-            unset($input['php-mailer-test']['to-email']);
-         }
+      if (!empty($input['php-mailer-test']['to-email'])) {
+         $mail = new USI_WordPress_Solutions_Mailer();
+         $mail->AddAddress($input['php-mailer-test']['to-email']);
+         $mail->Body      = 'This is a test e-mail from the USI WordPress Solutions Plugin version ' . USI_WordPress_Solutions::VERSION . '.';
+         $mail->SMTPDebug = $input['php-mailer-test']['debug'];
+         $mail->Subject   = 'USI WordPress Solutions E-mail Plugin Test';
+         $mail->queue();
+         unset($input['php-mailer-test']['to-email']);
+      }
 
-         if (empty($input['php-mailer']['smtp-auth'])) {
-            unset($input['php-mailer']['username']);
-            unset($input['php-mailer']['password']);
-         }
+      if (empty($input['php-mailer']['smtp-auth'])) {
+         unset($input['php-mailer']['username']);
+         unset($input['php-mailer']['password']);
+      }
+
+      unset($input['xfer']['export-import']);
 
       return($input);
 
    } // fields_sanitize();
 
    function sections() {
+
+      $transfer_label = __('Transfer', USI_WordPress_Solutions::TEXTDOMAIN);
 
       USI_WordPress_Solutions_Popup_Iframe::build(
          array(
@@ -335,8 +413,8 @@ class USI_WordPress_Solutions_Settings_Settings extends USI_WordPress_Solutions_
                   'value' => USI_WordPress_Solutions::DEBUG_UPDATE,
                   'notes' => 'Log USI_WordPress_Solutions_Update methods.',
                ),
-               'DEBUG_XPORT' => array(
-                  'value' => USI_WordPress_Solutions::DEBUG_XPORT,
+               'DEBUG_XFER' => array(
+                  'value' => USI_WordPress_Solutions::DEBUG_XFER,
                   'notes' => 'Log USI_WordPress_Solutions xport functionality.',
                ),
             )
@@ -441,10 +519,10 @@ class USI_WordPress_Solutions_Settings_Settings extends USI_WordPress_Solutions_
             ),
          ), // versions;
 
-         'xport' => array(
-            'label' => __('eXporter', USI_WordPress_Solutions::TEXTDOMAIN), 
-            'header_callback' => array($this, 'sections_header', '    <p>' . __('Export custom post content.', USI_WordPress_Solutions::TEXTDOMAIN) . '</p>' . PHP_EOL),
-            'footer_callback' => array($this, 'sections_footer', 'eXport Posts'),
+         'xfer' => array(
+            'label' => $transfer_label, 
+            'header_callback' => array($this, 'sections_header', '    <p>' . __('Transfer and document post content and plugin options.', USI_WordPress_Solutions::TEXTDOMAIN) . '</p>' . PHP_EOL),
+            'footer_callback' => array($this, 'sections_footer', $transfer_label),
             'localize_labels' => 'yes',
             'localize_notes' => 3, // <p class="description">__()</p>;
             'settings' => array(
@@ -453,16 +531,44 @@ class USI_WordPress_Solutions_Settings_Settings extends USI_WordPress_Solutions_
                   'type' => 'text', 
                   'label' => 'Post Type',
                ),
-               'parent-post' => array(
+               'parent-title' => array(
                   'f-class' => 'large-text', 
                   'type' => 'text', 
-                  'label' => 'Parent Post',
+                  'label' => 'Parent Post Title',
                ),
                'content' => array(
                   'f-class' => 'large-text', 
                   'rows' => 6,
                   'type' => 'textarea', 
                   'label' => 'Post Content',
+                  'notes' => 'Both the above <b>Post Type</b> and <b>Parent Post Title</b> fields must be given to transfer post content.',
+               ),
+               'options' => array(
+                  'f-class' => 'large-text', 
+                  'rows' => 6,
+                  'type' => 'textarea', 
+                  'label' => 'Plugin Options',
+               ),
+               'export-import' => array(
+                  'type' => 'radio', 
+                  'choices' => array(
+                     array(
+                        'value' => 'export', 
+                        'label' => true, 
+                        'notes' => __('Extract the values for the keys listed in the above <b>Plugin Options</b> box.', USI_WordPress_Solutions::TEXTDOMAIN), 
+                        'suffix' => '<br/>',
+                     ),
+                     array(
+                        'value' => 'import', 
+                        'label' => true, 
+                        'notes' => __('Insert the values for the keys listed in the above <b>Plugin Options</b> box.', USI_WordPress_Solutions::TEXTDOMAIN), 
+                     ),
+                  ),
+               ),
+               'pretty-print' => array(
+                  'type' => 'checkbox', 
+                  'prefix' => '<label>',
+                  'suffix' => 'Pretty print the JSON string in the above <b>Plugin Options</b> box.</label>',
                ),
             ),
          ), // xport;
