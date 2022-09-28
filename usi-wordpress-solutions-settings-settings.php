@@ -155,6 +155,8 @@ class USI_WordPress_Solutions_Settings_Settings extends USI_WordPress_Solutions_
 
                      $options = get_option($plugin);
 
+                     if ($log) usi::log('$options=', $options);
+
                      foreach ($temp1 as $section => $temp2) {
 
                         foreach ($temp2 as $setting => $value) {
@@ -177,6 +179,10 @@ class USI_WordPress_Solutions_Settings_Settings extends USI_WordPress_Solutions_
 
                      $options = get_option($plugin);
 
+                     if ($log) usi::log('$plugin=', $plugin, '\n$options=', $options);
+
+                     $is_this = ('usi-wordpress-options' == $plugin);
+
                      foreach ($temp1 as $section => $temp2) {
 
                         foreach ($temp2 as $setting => $value) {
@@ -185,25 +191,27 @@ class USI_WordPress_Solutions_Settings_Settings extends USI_WordPress_Solutions_
 
                            $options[$section][$setting] = $array[$plugin][$section][$setting] ?? null;
 
+                           if ($is_this) $input[$section][$setting] = $options[$section][$setting];
+
                         }
 
                      }
 
-                     update_option($plugin, $options);
+                     if ($log) usi::log('$plugin=', $plugin, '\n$options=', $options);
 
-                     if ($log) usi::log('$options=', $options);
+                     update_option($plugin, $options);
 
                   }
 
                }
+
+               add_settings_error($this->page_slug, 'notice-success', __('Transfer complete.', USI_WordPress_Solutions::TEXTDOMAIN), 'notice-success');
 
             }
 
             $input['xfer']['options'] = json_encode($array, JSON_UNESCAPED_SLASHES | (!empty($input['xfer']['pretty-print']) ? JSON_PRETTY_PRINT : 0));
 
          }
-
-         add_settings_error($this->page_slug, 'notice-success', __('Transfer complete.', USI_WordPress_Solutions::TEXTDOMAIN), 'notice-success');
 
       }
 
