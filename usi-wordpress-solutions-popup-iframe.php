@@ -15,18 +15,9 @@ https://github.com/jaschwanda/wordpress-solutions/blob/master/LICENSE.md
 Copyright (c) 2020 by Jim Schwanda.
 */
 
-/*
-class USI_WordPress_Solutions_Popup_Iframe is used in:
-
-ru-email-inbox.php
-usi-test-solutions-settings.php
-usi-wordpress-solutions-versions.php
-usi-wordpress-solutions-settings-settings.php
-*/
-
 class USI_WordPress_Solutions_Popup_Iframe {
 
-   const VERSION = '2.14.1 (2022-08-10)';
+   const VERSION = '2.14.3 (2022-10-05)';
 
    private static $attributes = array();
    private static $scripts    = array();
@@ -79,52 +70,46 @@ class USI_WordPress_Solutions_Popup_Iframe {
             $divider = USI_WordPress_Solutions_Static::divider(0, $id);
 
             self::$scripts[0] = <<<EOD
-$divider<script> 
-jQuery(document).ready(
-   function($) {
-
-   // Close Popup with cancel/close/delete/ok button;
-   $('[usi-popup-close]').click(
-      function() {
-         var id = $(this).attr('usi-popup-close');
-         $('#' + id).fadeOut(300);
-      }
-   );
-
-   // Close with outside click;
-   $('[usi-popup-close-outside]').click(
-      function() {
-         var id = $(this).find('[usi-popup-close]').attr('usi-popup-close');
-         $('#' + id).fadeOut(300);
-      }
-   )
-   .children()
-   .click(
-      function() {
-         return(false);
-      }
-   );
-
-   // Invoke popup
-   $('[usi-popup-open]').click(
-      function() {
-         var id     = $(this).attr('usi-popup-open');
-         var height = $(this).attr('usi-popup-height');
-         var iframe = $(this).attr('usi-popup-iframe');
-         var title  = $(this).attr('usi-popup-title');
-         $('#' + id + '-title').html(title);
-         $('#' + id + '-body').html('<iframe src="' + iframe + '" height="' + height + '" width="100%"></iframe>');
-         $('#' + id).fadeIn(300);
-      }
-   );
-
-   } // function();
+// BEGIN - {$id}
+// Close Popup with cancel/close/delete/ok button;
+$('[usi-popup-close]').click(
+   function() {
+      var id = $(this).attr('usi-popup-close');
+      $('#' + id).fadeOut(300);
+   }
 );
-</script>
-$divider
+
+// Close with outside click;
+$('[usi-popup-close-outside]').click(
+   function() {
+      var id = $(this).find('[usi-popup-close]').attr('usi-popup-close');
+      $('#' + id).fadeOut(300);
+   }
+)
+.children()
+.click(
+   function() {
+      return(false);
+   }
+);
+
+// Invoke popup
+$('[usi-popup-open]').click(
+   function() {
+      var id     = $(this).attr('usi-popup-open');
+      var height = $(this).attr('usi-popup-height');
+      var iframe = $(this).attr('usi-popup-iframe');
+      var title  = $(this).attr('usi-popup-title');
+      $('#' + id + '-title').html(title);
+      $('#' + id + '-body').html('<iframe src="' + iframe + '" height="' + height + '" width="100%"></iframe>');
+      $('#' + id).fadeIn(300);
+   }
+);
+// END - {$id}
+
 EOD;
 
-            USI_WordPress_Solutions::admin_footer_script(self::$scripts[0]);
+            USI_WordPress_Solutions::admin_footer_jquery(self::$scripts[0]);
 
          } // ENDIF popup javaascript not set;
 

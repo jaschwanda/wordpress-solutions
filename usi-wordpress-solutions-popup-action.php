@@ -20,18 +20,10 @@ Copyright (c) 2020 by Jim Schwanda.
 This popup displays a confirmation message for a list of items in a WordPress table.
 
 */
-/*
-class USI_WordPress_Solutions_Popup_Action is used in:
-
-ru-application.php
-ru-docusign.php
-ru-form.php
-ru-work.php
-*/
 
 class USI_WordPress_Solutions_Popup_Action {
 
-   const VERSION = '2.14.1 (2022-08-10)';
+   const VERSION = '2.14.3 (2022-10-05)';
 
    const HEIGHT_HEAD_FOOT = 93;
 
@@ -109,134 +101,128 @@ class USI_WordPress_Solutions_Popup_Action {
             $height_head_foot = 'const height_head_foot = ' . self::HEIGHT_HEAD_FOOT . ';';
 
             self::$scripts[0] = <<<EOD
-$divider<script> 
-jQuery(document).ready(
-   function($) {
+// BEGIN - {$id}
+{$foot}
+{$head}
+{$work}
 
-      {$foot}
-      {$head}
-      {$work}
+{$select_bulk}
+{$select_item}
 
-      {$select_bulk}
-      {$select_item}
+{$height_head_foot}
 
-      {$height_head_foot}
+var confirmed = false;
 
-      var confirmed = false;
+function close() {
+   $('#{$id}').fadeOut(300);
+} // close();
 
-      function close() {
-         $('#{$id}').fadeOut(300);
-      } // close();
+function info(action, body) {
+   return('<p>' + head[action] + '</p>' + body + '<p>' + foot[action] + '</p>');
+} // info();
 
-      function info(action, body) {
-         return('<p>' + head[action] + '</p>' + body + '<p>' + foot[action] + '</p>');
-      } // info();
+function show(action, body, invoke) {
 
-      function show(action, body, invoke) {
+   $('#{$id}-title').html('{$title}');
 
-         $('#{$id}-title').html('{$title}');
+   $('#{$id}-body').html('<div style="padding:0 15px 0 15px;">' + body + '</div>');
 
-         $('#{$id}-body').html('<div style="padding:0 15px 0 15px;">' + body + '</div>');
+   if ('error' === action) {
+      $('#{$id}-work').html('').hide();
+   } else {
+      $('#{$id}-work').html(work[action]).show().attr('usi-popup-invoke', invoke);
+      $('#{$id}-close').html('{$cancel}');
+   }
 
-         if ('error' === action) {
-            $('#{$id}-work').html('').hide();
-         } else {
-            $('#{$id}-work').html(work[action]).show().attr('usi-popup-invoke', invoke);
-            $('#{$id}-close').html('{$cancel}');
-         }
+   $('#{$id}').fadeIn(300);
 
-         $('#{$id}').fadeIn(300);
+   var height = $('#{$id}-body').height();
 
-         var height = $('#{$id}-body').height();
+   if (height <= ${max_body}) $('#{$id}-wrap').height((height + height_head_foot) + 'px');
 
-         if (height <= ${max_body}) $('#{$id}-wrap').height((height + height_head_foot) + 'px');
+   return(false);
 
-         return(false);
+} // show();
 
-      } // show();
+// Close Popup with cancel/close/delete/ok button;
+$('[usi-popup-close]').click(() => close());
 
-      // Close Popup with cancel/close/delete/ok button;
-      $('[usi-popup-close]').click(() => close());
+// Close with outside click;
+$('[usi-popup-close-outside]').click(() => close())
+.children()
+.click(() => { return(false); });
 
-      // Close with outside click;
-      $('[usi-popup-close-outside]').click(() => close())
-      .children()
-      .click(() => { return(false); });
+// Invoke popup via row action;
+$('[usi-popup-open]').click(
+   function() {
+      if (confirmed) { confirmed = false; return(true); }
+      var action = $(this).attr('usi-popup-action');
+      var body   = $(this).attr('usi-popup-info');
+      var id     = $(this).attr('id');
+      return(show(action, info(action, body), id));
+   }
+); // Invoke popup via row action;
 
-      // Invoke popup via row action;
-      $('[usi-popup-open]').click(
-         function() {
-            if (confirmed) { confirmed = false; return(true); }
-            var action = $(this).attr('usi-popup-action');
-            var body   = $(this).attr('usi-popup-info');
-            var id     = $(this).attr('id');
-            return(show(action, info(action, body), id));
-         }
-      ); // Invoke popup via row action;
-
-      // Invoke popup via bulk action;
-      $('#doaction,#doaction2').click(
-         () => {
-            if (confirmed) { confirmed = false; return(true); }
-            var action = null;
-            var bot    = $('#bulk-action-selector-bottom').val();
-            var top    = $('#bulk-action-selector-top').val();
-            if (-1 != top) {
-               action = top;
-            } else if (-1 != bot) {
-               action = bot;
-            } else {
-               return(show('error', '<p>' + select_bulk + '</p>'));
-            }
-            var ids  = $('.usi-popup-checkbox');
-            var list = '';
-            var text = '';
-            var delete_count = 0;
-            if (ids.length) {
-               for (var i = 0; i < ids.length; i++) {
-                  if (ids[i].checked) {
-                     list += (list.length ? ',' : '') + ids[i].getAttribute('usi-popup-id');
-                     text += (delete_count++ ? '<br/>' : '') + ids[i].getAttribute('usi-popup-info');
-                  }
-               }
-            } else {
-               var ids  = $('input[name="post[]"]');
-               for (var i = 0; i < ids.length; i++) {
-                  if (ids[i].checked) {
-                     var id = ids[i].getAttribute('id').substr(10);
-                     list += (list.length ? ',' : '') + id;
-                     text += (delete_count++ ? '<br/>' : '') + $('#usi-popup-delete-' + id).attr('usi-popup-info');
-                  }
-               }
-            }
-            if (!delete_count) {
-               return(show('error', '<p>' + select_item + '</p>'));
-            } else {
-               return(show(action, info(action, text), 'doaction'));
+// Invoke popup via bulk action;
+$('#doaction,#doaction2').click(
+   () => {
+      if (confirmed) { confirmed = false; return(true); }
+      var action = null;
+      var bot    = $('#bulk-action-selector-bottom').val();
+      var top    = $('#bulk-action-selector-top').val();
+      if (-1 != top) {
+         action = top;
+      } else if (-1 != bot) {
+         action = bot;
+      } else {
+         return(show('error', '<p>' + select_bulk + '</p>'));
+      }
+      var ids  = $('.usi-popup-checkbox');
+      var list = '';
+      var text = '';
+      var delete_count = 0;
+      if (ids.length) {
+         for (var i = 0; i < ids.length; i++) {
+            if (ids[i].checked) {
+               list += (list.length ? ',' : '') + ids[i].getAttribute('usi-popup-id');
+               text += (delete_count++ ? '<br/>' : '') + ids[i].getAttribute('usi-popup-info');
             }
          }
-      ); // Invoke popup via bulk action;
-
-      // Execute action;
-      $('#{$id}-work').click(
-         function() {
-            var invoke = '#' + $(this).attr('usi-popup-invoke');
-            confirmed  = true;
-            if ('#doaction' == invoke) {
-               $(invoke).trigger('click');
-            } else {
-               location.href = $(invoke).attr('href');
+      } else {
+         var ids  = $('input[name="post[]"]');
+         for (var i = 0; i < ids.length; i++) {
+            if (ids[i].checked) {
+               var id = ids[i].getAttribute('id').substr(10);
+               list += (list.length ? ',' : '') + id;
+               text += (delete_count++ ? '<br/>' : '') + $('#usi-popup-delete-' + id).attr('usi-popup-info');
             }
          }
-      ); // Execute action;
+      }
+      if (!delete_count) {
+         return(show('error', '<p>' + select_item + '</p>'));
+      } else {
+         return(show(action, info(action, text), 'doaction'));
+      }
+   }
+); // Invoke popup via bulk action;
 
-   } // function();
-);
-</script>
-$divider
+// Execute action;
+$('#{$id}-work').click(
+   function() {
+      var invoke = '#' + $(this).attr('usi-popup-invoke');
+      confirmed  = true;
+      if ('#doaction' == invoke) {
+         $(invoke).trigger('click');
+      } else {
+         location.href = $(invoke).attr('href');
+      }
+   }
+); // Execute action;
+// END - {$id}
+
 EOD;
 
-            USI_WordPress_Solutions::admin_footer_script(self::$scripts[0]);
+            USI_WordPress_Solutions::admin_footer_jquery(self::$scripts[0]);
 
          } // ENDIF popup javaascript not set;
 

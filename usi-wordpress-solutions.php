@@ -15,7 +15,7 @@ Requires at least: 5.0
 Requires PHP:      7.0.0
 Tested up to:      5.3.2
 Text Domain:       usi-wordpress-solutions
-Version:           2.14.2
+Version:           2.14.3
 */
 
 /*
@@ -40,7 +40,7 @@ require_once('usi-wordpress-solutions-log.php');
 
 final class USI_WordPress_Solutions {
 
-   const VERSION = '2.14.2 (2022-09-23)';
+   const VERSION = '2.14.3 (2022-10-05)';
 
    const NAME       = 'WordPress-Solutions';
    const PREFIX     = 'usi-wordpress';
@@ -56,7 +56,8 @@ final class USI_WordPress_Solutions {
    const DEBUG_UPDATE   = 0x17000040;
    const DEBUG_XFER     = 0x17000080;
 
-   private static $scripts = null;
+   private static $jquery = null;
+   private static $script = null;
 
    public static $capabilities = array(
       'impersonate-user' => 'Impersonate User|administrator',
@@ -109,13 +110,33 @@ final class USI_WordPress_Solutions {
 
    public function action_admin_print_footer_scripts() {
 
-      if (self::$scripts) echo self::$scripts;
+      if (self::$script) echo self::$script;
+
+      if (self::$jquery) {
+
+         echo PHP_EOL
+         . '<script> ' . PHP_EOL
+         . 'jQuery(document).ready(' . PHP_EOL
+         . '   function($) {' . PHP_EOL
+         . str_replace(PHP_EOL, PHP_EOL . '      ', self::$jquery) . PHP_EOL
+         . '   } // function($);' . PHP_EOL
+         . '); // jQuery(document).ready(' . PHP_EOL
+         . '</script>' . PHP_EOL
+         ;
+
+      }
 
    } // action_admin_print_footer_scripts();
 
+   public static function admin_footer_jquery($jquery) {
+
+      self::$jquery .= PHP_EOL . $jquery;
+
+   } // admin_footer_jquery();
+
    public static function admin_footer_script($script) {
 
-      self::$scripts .= PHP_EOL . $script;
+      self::$script .= PHP_EOL . $script;
 
    } // admin_footer_script();
 

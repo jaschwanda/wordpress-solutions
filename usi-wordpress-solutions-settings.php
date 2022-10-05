@@ -25,7 +25,7 @@ require_once('usi-wordpress-solutions-versions.php');
 
 class USI_WordPress_Solutions_Settings {
 
-   const VERSION = '2.14.1 (2022-08-10)';
+   const VERSION = '2.14.3 (2022-10-05)';
 
    private static $current_user_id = -1; 
    private static $grid            = false;
@@ -125,7 +125,6 @@ class USI_WordPress_Solutions_Settings {
          add_action('admin_head', array($this, 'action_admin_head'));
          add_action('admin_init', array($this, 'action_admin_init'));
          add_action('admin_enqueue_scripts', array($this, 'action_admin_enqueue_scripts'));
-         add_action('admin_footer', array($this, 'action_admin_footer'));
 
       } else if (!empty(USI_WordPress_Solutions::$options['illumination']['visible-grid'])) {
 
@@ -168,27 +167,36 @@ class USI_WordPress_Solutions_Settings {
          $datepicker_option = (true === $this->datepicker) ? PHP_EOL : ',' . $this->datepicker . PHP_EOL;
 
          $this->jquery .= ''
-         . "      $('.datepicker').datepicker(" . PHP_EOL
-         . '         {' . PHP_EOL
-         . '            changeMonth : true,' . PHP_EOL
-         . '            changeYear  : true,' . PHP_EOL
-         . '            closeText   : "Clear",' . PHP_EOL
-         . '            dateFormat  : "yy-mm-dd",' . PHP_EOL
-         . '            onClose     : function (dateText, inst) {' . PHP_EOL
-         . '               if ($(window.event.srcElement).hasClass("ui-datepicker-close")) {' . PHP_EOL
-         . '                  document.getElementById(this.id).value = "";' . PHP_EOL
-         . '               }' . PHP_EOL
-         . '            },' . PHP_EOL
-         . '            showButtonPanel    : true,' . PHP_EOL 
-         . '            showMonthAfterYear : true' . $datepicker_option
+         . '// BEGIN usi-wordpress-solutions-settings' . PHP_EOL
+         . "$('.datepicker').datepicker(" . PHP_EOL
+         . '   {' . PHP_EOL
+         . '      changeMonth : true,' . PHP_EOL
+         . '      changeYear  : true,' . PHP_EOL
+         . '      closeText   : "Clear",' . PHP_EOL
+         . '      dateFormat  : "yy-mm-dd",' . PHP_EOL
+         . '      onClose     : function (dateText, inst) {' . PHP_EOL
+         . '         if ($(window.event.srcElement).hasClass("ui-datepicker-close")) {' . PHP_EOL
+         . '            document.getElementById(this.id).value = "";' . PHP_EOL
          . '         }' . PHP_EOL
-         . '      );' . PHP_EOL
-         . "      $('.datepicker').keydown(function(event) {event.preventDefault();});" . PHP_EOL
-         . "      $('.datepicker').keypress(function(event) {event.preventDefault();});" . PHP_EOL
+         . '      },' . PHP_EOL
+         . '      showButtonPanel    : true,' . PHP_EOL 
+         . '      showMonthAfterYear : true' . $datepicker_option
+         . '   }' . PHP_EOL
+         . ');' . PHP_EOL
+         . "$('.datepicker').keydown(function(event) {event.preventDefault();});" . PHP_EOL
+         . "$('.datepicker').keypress(function(event) {event.preventDefault();});" . PHP_EOL
+         . '// END usi-wordpress-solutions-settings' . PHP_EOL
          ;
 
          $this->datepicker = false;
 
+      }
+
+      if ($this->jquery) {
+
+         USI_WordPress_Solutions::admin_footer_jquery($this->jquery);
+
+         $this->jquery = null;
       }
 
       if ($this->editor) {
@@ -207,24 +215,6 @@ class USI_WordPress_Solutions_Settings {
       }
 
    } // action_admin_enqueue_scripts();
-
-   // Child classes should call this at the tail to handle all child echos;
-   function action_admin_footer() { 
-      if ($this->jquery) {
-         echo ''
-         . '<!-- ' . $this->prefix . ' -->' . PHP_EOL
-         . '<script>' . PHP_EOL
-         . 'jQuery(document).ready(' . PHP_EOL
-         . '   function($) {' . PHP_EOL
-         . $this->jquery
-         . '   }' . PHP_EOL
-         . ');' . PHP_EOL
-         . '</script>' . PHP_EOL
-         ;
-         $this->jquery = null;
-      }
-
-   } // action_admin_footer();
 
    function action_admin_head($css = null) {
 
@@ -1093,7 +1083,17 @@ class USI_WordPress_Solutions_Settings {
 
    function sections_load() {
 
+      $jquery_save    = $this->jquery;
+      $jquery_head    = '// BEGIN ' .$this->page_slug . PHP_EOL;
+      $this->jquery  .= $jquery_head;
+
       $this->sections = $this->sections();
+
+      if ($this->jquery == $jquery_save . $jquery_head) {
+         $this->jquery  = $jquery_save;
+      } else {
+         $this->jquery .= '// END ' .$this->page_slug . PHP_EOL;
+      }
 
       // Convert capabilities object to array();
       if (!empty($this->sections['capabilities']) && is_object($this->sections['capabilities'])) {
