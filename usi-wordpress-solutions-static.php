@@ -24,7 +24,7 @@ class USI_WordPress_Solutions_Static {
    private function __construct() {
    } // __construct();
 
-   public static function action_admin_head($css = null) {
+   public static function action_admin_head($css = '') {
       if (self::$calls_action_admin_head++) {
          if ($css) echo '<style>' . PHP_EOL . $css . '</style>' . PHP_EOL;
       } else {
@@ -44,7 +44,7 @@ class USI_WordPress_Solutions_Static {
    } // action_admin_head();
 
    // Make sure you have the get_hidden_columns() function in your WP_List_Table;
-   public static function column_style($columns, $style = null) {
+   public static function column_style($columns, $style = '') {
 
       $border = !empty(USI_WordPress_Solutions::$options['illumination']['visible-grid']) ? 'border:solid 1px yellow; ' : '';
 
