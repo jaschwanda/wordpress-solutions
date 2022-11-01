@@ -73,7 +73,7 @@ class USI_WordPress_Solutions_Static {
 
    } // column_style();
 
-   public static function divider($indent, $text = null) {
+   public static function divider($indent, $text = '') {
       if ($length = strlen($text)) {
          $text    = ' ' . $text . ' ';
          $length += 2;
