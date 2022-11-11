@@ -1203,10 +1203,11 @@ class USI_WordPress_Solutions_Settings {
       if (isset($this->sections[$section_id]['grid'])) self::set_grid($this->sections[$section_id]['grid']);
 
       $section_callback = $this->section_callbacks[$this->section_callback_offset];
-      $object = $section_callback[0] ?? null;
-      $method = $section_callback[1] ?? null;
-      $params = $section_callback[2] ?? null;
-      if (method_exists($object, $method)) $object->$method($params);
+      if (!empty($section_callback[0]) && !empty($section_callback[1])) {
+         $object = $section_callback[0];
+         $method = $section_callback[1];
+         if (method_exists($object, $method)) $object->$method($section_callback[2] ?? null);
+      }
 
       $this->section_callback_offset++;
 

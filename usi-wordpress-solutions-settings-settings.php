@@ -290,6 +290,12 @@ class USI_WordPress_Solutions_Settings_Settings extends USI_WordPress_Solutions_
          }
       }
 
+      $php_version = phpversion();
+
+      if ('8' == $php_version[0]) {
+         $php_reporting    .= "<br/><br/>Some versions of WordPress running on PHP " . $php_version . " give a large number of deprecated errors, to surpess these errors and still enable debugging, add the following line to the wp-config.php file after the <span style=\"font-family:monospace;\">\"define( 'WP_DEBUG', false );\"</span> statement:<p style=\"font-family:monospace; padding-top:10px;\">error_reporting(E_ALL&~(E_DEPRECATED|E_USER_DEPRECATED));\$GLOBALS['wp_filter']=['enable_wp_debug_mode_checks'=>[10=>[['accepted_args'=>0,'function'=>function(){return(false);}]]]];</p>";
+      }
+
       $pcre_backtrack_limit = ini_get('pcre.backtrack_limit');
 
       $mpdf_pcre_limit      = (int)($this->options['admin-limits']['mpdf-pcre-limit'] ?? $pcre_backtrack_limit);
@@ -432,11 +438,6 @@ class USI_WordPress_Solutions_Settings_Settings extends USI_WordPress_Solutions_
             'title' => 'Illumination',
             'not_tabbed' => 'diagnostics',
             'settings' => array(
-               'php-report' => array(
-                  'type' => 'html', 
-                  'html' => $php_reporting,
-                  'label' => 'Error Reporting',
-               ),
                'info-php' => array(
                   'type' => 'html', 
                   'html' => $phpinfo_anchor,
@@ -475,6 +476,19 @@ class USI_WordPress_Solutions_Settings_Settings extends USI_WordPress_Solutions_
                   'notes' => 'When true the standard WordPress cron handling is disabled.',
                   'type' => 'html', 
                ),
+               'wp-memory-limit' => array(
+                  'html' => defined('WP_MEMORY_LIMIT') ? WP_MEMORY_LIMIT : 'undefined',
+                  'label' => 'WP_MEMORY_LIMIT',
+                  'notes' => 'The maximum amount of memory that can be consumed by PHP.',
+                  'type' => 'html', 
+               ),
+            ),
+         ), // limits-values;
+
+         'debug-values' => array(
+            'title' => 'Debuging Options',
+            'not_tabbed' => 'diagnostics',
+            'settings' => array(
                'wp-debug' => array(
                   'html' => defined('WP_DEBUG') ? (WP_DEBUG ? 'TRUE' : 'false') : 'undefined',
                   'label' => 'WP_DEBUG',
@@ -493,11 +507,16 @@ class USI_WordPress_Solutions_Settings_Settings extends USI_WordPress_Solutions_
                   'notes' => 'When true WordPress shows errors and warnings on the page as they are generated.',
                   'type' => 'html', 
                ),
-               'wp-memory-limit' => array(
-                  'html' => defined('WP_MEMORY_LIMIT') ? WP_MEMORY_LIMIT : 'undefined',
-                  'label' => 'WP_MEMORY_LIMIT',
-                  'notes' => 'The maximum amount of memory that can be consumed by PHP.',
+               'wp-script-debug' => array(
+                  'html' => defined('SCRIPT_DEBUG') ? (SCRIPT_DEBUG ? 'TRUE' : 'false') : 'undefined',
+                  'label' => 'SCRIPT_DEBUG',
+                  'notes' => 'When true WordPress loads the full version of .CSS and .JS files, otherwise the minified versions are loaded.',
                   'type' => 'html', 
+               ),
+               'php-report' => array(
+                  'type' => 'html', 
+                  'html' => $php_reporting,
+                  'label' => 'Error Reporting',
                ),
             ),
          ), // limits-values;
