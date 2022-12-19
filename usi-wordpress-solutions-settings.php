@@ -25,7 +25,7 @@ require_once('usi-wordpress-solutions-versions.php');
 
 class USI_WordPress_Solutions_Settings {
 
-   const VERSION = '2.14.3 (2022-10-05)';
+   const VERSION = '2.14.5 (2022-12-19)';
 
    private static $current_user_id = -1; 
    private static $grid            = false;
@@ -674,6 +674,7 @@ class USI_WordPress_Solutions_Settings {
 
       case 'money':
          $value = str_replace([ '$', ' ', ',' ], '', $value);
+         if ('double' !== gettype($value)) $value = (float)$value;
          if (empty($value)) $value = 0;
          if ($readonly) {
             $decimal = !empty($args['decimal']) ? (int)$args['decimal'] : 0;

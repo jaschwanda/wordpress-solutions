@@ -2,6 +2,9 @@
 
 WordPress-Solutions plugin changes are logged here using <a href="http://semver.org/">Semantic Versioning</a>.
 
+## 2.14.5 (2022-12-19) ##
+* Modifications made for PHP 8.1 compatibility.
+
 ## 2.14.4 (2022-11-01) ##
 * Modifications made for PHP 8.1 compatibility.
 
