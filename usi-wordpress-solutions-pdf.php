@@ -15,43 +15,76 @@ https://github.com/jaschwanda/wordpress-solutions/blob/master/LICENSE.md
 Copyright (c) 2020 by Jim Schwanda.
 */
 
+// https://mpdf.github.io/
+
 class USI_WordPress_Solutions_PDF {
 
-   const VERSION = '2.14.1 (2022-08-10)';
+   const VERSION = '2.14.6 (2023-02-07)';
 
    public static $css_buffer  = null;
 
+   public static $file        = null;
+
    public static $html_buffer = null;
+
+   public static $inline      = null;
+
+   public static $log         = false;
 
    public static $mode        = null;
 
-   public static $options     = array();
+   public static $options     = [];
 
-   public static function init($options = array()) {
+   private static $version    = '8.0.0';
 
-      self::$options = $options;
+   public static function init($options = []) {
+
+      $log           = USI_WordPress_Solutions_Diagnostics::get_log(USI_WordPress_Solutions::$options);
+
+      self::$log     = !empty($options['log']) || (USI_WordPress_Solutions::DEBUG_PDF == (USI_WordPress_Solutions::DEBUG_PDF & $log));
+
+      self::$file    = $options['file'] ?? null;
 
       self::$mode    = $options['mode'] ?? null;
 
-      if ('inline' == self::$mode) {
+      self::$inline  = ('inline' == self::$mode);
 
-         ob_start(array(__CLASS__, 'ob_start_callback'));
+      self::$options = $options;
 
-         add_action('shutdown', array(__CLASS__, 'action_shutdown'));
+      if (self::$inline) {
+
+         ob_start([__CLASS__, 'ob_start_callback']);
+
+         add_action('shutdown', [__CLASS__, 'action_shutdown']);
 
       }
+
+      if (self::$log) usi::log('$options=', $options);
 
    } // init();
 
    public static function action_shutdown() { 
 
-      require_once(__DIR__ . '/mPDF/vendor/autoload.php');
+      switch ($version = USI_WordPress_Solutions::$options['admin-limits']['mpdf-version'] ?? null) {
+      case '8.1.4': 
+         self::$version = $version;
+         require_once(__DIR__ . '/mPDF-' . $version . '/vendor/autoload.php');
+         break;
+      default:      
+         require_once(__DIR__ . '/mPDF/vendor/autoload.php');
+      }
 
       $reporting_options = error_reporting(0);
 
+      if (self::$log) usi::log('action_shutdown:begin:$version=', self::$version, ' $reporting_options=', $reporting_options);
+
+      $mpdf    = null;
+
       try {
 
-         $mpdf = new \Mpdf\Mpdf();
+        // $mpdf = new \Mpdf\Mpdf();
+
+         if(!$mpdf) throw new Exception('Cannot create PDF object.');
 
          if (!empty(self::$options['header'])) $mpdf->SetHTMLHeader(self::$options['header']);
 
@@ -85,11 +118,13 @@ class USI_WordPress_Solutions_PDF {
 
          $mpdf->WriteHTML(self::$html_buffer, \Mpdf\HTMLParserMode::HTML_BODY);
 
-         if ('inline' == self::$mode) $mpdf->Output(self::$options['file'] ?? null, \Mpdf\Output\Destination::INLINE);
+         self::output($mpdf);
+
+         if (self::$log) usi::log('success');
 
       } catch (\Mpdf\MpdfException $e) {
 
-         $error = 'For ' . self::$options['file'] . ' the PDF conversion failed:' . $e->getMessage();
+         $error = 'For ' . self::$file . ' the PDF conversion failed:' . $e->getMessage();
 
          usi::log('mPDF:', $error);
 
@@ -97,23 +132,33 @@ class USI_WordPress_Solutions_PDF {
 
             $mpdf->WriteHTML($error, \Mpdf\HTMLParserMode::HTML_BODY);
 
-            if ('inline' == self::$mode) $mpdf->Output(self::$options['file'] ?? null, \Mpdf\Output\Destination::INLINE);
+            self::output($mpdf);
 
          } catch (\Mpdf\MpdfException $e) {
 
-            $error = 'For ' . self::$options['file'] . ' the PDF error log failed:' . $e->getMessage();
+            $error = 'For ' . self::$file . ' the PDF error log failed:' . $e->getMessage();
 
-            usi::log('mPDF:', $error);
+            usi::log('mPDF:', $error); echo $error;
 
          }
+
+      } catch (exception $e) {
+
+         $error = 'For ' . self::$file . ':exception:' . $e->getMessage();
+
+         usi::log('mPDF:', $error); echo $error;
 
       }
 
       error_reporting($reporting_options);
 
+      if (self::$log) usi::log('action_shutdown:end');
+
    } // action_shutdown();
 
    public static function ob_start_callback(string $buffer, int $phase) {
+
+      if (self::$log) usi::log('$buffer=', $buffer, '\n$phase=', $phase);
 
       if (!self::$html_buffer) self::$html_buffer = $buffer;
 
@@ -123,13 +168,41 @@ class USI_WordPress_Solutions_PDF {
 
    } // ob_start_callback();
 
+   private static function output($mpdf) {
+
+      switch (self::$version) {
+
+      case '8.1.4': 
+         if (self::$inline) {
+            if ('download' == self::$options['output']) {
+               $mpdf->OutputHttpDownload(self::$file);
+            } else {
+               $mpdf->OutputHttpInline();
+            }
+         }
+         break;
+
+      default:      
+
+         if (self::$inline) $mpdf->Output(self::$file, \Mpdf\Output\Destination::INLINE);
+
+      }
+
+      if (self::$log) usi::log('return');
+
+   } // output();
+
    public static function set_css(string $buffer) {
+
+      if (self::$log) usi::log('$buffer=', $buffer);
 
       self::$css_buffer = $buffer;
 
    } // set_css();
 
    public static function set_html(string $buffer) {
+
+      if (self::$log) usi::log('$buffer=', $buffer);
 
       self::$html_buffer = $buffer;
 

@@ -25,7 +25,7 @@ require_once('usi-wordpress-solutions-versions.php');
 
 class USI_WordPress_Solutions_Settings_Settings extends USI_WordPress_Solutions_Settings {
 
-   const VERSION = '2.14.2 (2022-09-23)';
+   const VERSION = '2.14.6 (2023-02-07)';
 
    protected $debug     = 0;
    protected $is_tabbed = true;
@@ -382,6 +382,12 @@ class USI_WordPress_Solutions_Settings_Settings extends USI_WordPress_Solutions_
             'title' => __('Other Options and Limits', USI_WordPress_Solutions::TEXTDOMAIN),
             'not_tabbed' => 'preferences',
             'settings' => array(
+               'mpdf-version' => array(
+                  'f-class' => 'regular-text', 
+                  'type' => 'text', 
+                  'label' => 'mPDF Version',
+                  'notes' => '8.1.4 or null for default. Repository found at https://github.com/mpdf/mpdf .',
+               ),
                'mpdf-pcre-limit' => array(
                   'f-class' => 'regular-text', 
                   'label' => 'pcre.backtrack_limit',
@@ -413,6 +419,10 @@ class USI_WordPress_Solutions_Settings_Settings extends USI_WordPress_Solutions_
                'DEBUG_OPTIONS' => array(
                   'value' => USI_WordPress_Solutions::DEBUG_OPTIONS,
                   'notes' => 'Log USI_WordPress_Solutions::$options.',
+               ),
+               'DEBUG_PDF' => array(
+                  'value' => USI_WordPress_Solutions::DEBUG_PDF,
+                  'notes' => 'Log USI_WordPress_Solutions_PDF operations.',
                ),
                'DEBUG_RENDER' => array(
                   'value' => USI_WordPress_Solutions::DEBUG_RENDER,

@@ -2,6 +2,9 @@
 
 WordPress-Solutions plugin changes are logged here using <a href="http://semver.org/">Semantic Versioning</a>.
 
+## 2.14.6 (2023-02-07) ##
+* Upgraded the mPDF system to version 8.1.4.
+
 ## 2.14.5 (2022-12-19) ##
 * Modifications made for PHP 8.1 compatibility.
 
