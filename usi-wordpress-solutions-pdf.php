@@ -82,7 +82,7 @@ class USI_WordPress_Solutions_PDF {
 
       try {
 
-        // $mpdf = new \Mpdf\Mpdf();
+         $mpdf = new \Mpdf\Mpdf();
 
          if(!$mpdf) throw new Exception('Cannot create PDF object.');
 
