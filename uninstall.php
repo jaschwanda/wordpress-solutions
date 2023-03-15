@@ -22,7 +22,7 @@ require_once('usi-wordpress-solutions.php');
 
 final class USI_WordPress_Solutions_Uninstall_Uninstall {
 
-   const VERSION = '2.14.1 (2022-08-10)';
+   const VERSION = '2.14.7 (2023-03-15)';
 
    private function __construct() {
    } // __construct();
@@ -37,7 +37,7 @@ final class USI_WordPress_Solutions_Uninstall_Uninstall {
 
    } // uninstall();
 
-} // Class USI_Variable_Solutions_Uninstall_Uninstall;
+} // Class USI_WordPress_Solutions_Uninstall_Uninstall;
 
 USI_WordPress_Solutions_Uninstall::uninstall(USI_WordPress_Solutions::PREFIX);
 

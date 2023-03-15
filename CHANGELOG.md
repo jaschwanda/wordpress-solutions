@@ -2,6 +2,9 @@
 
 WordPress-Solutions plugin changes are logged here using <a href="http://semver.org/">Semantic Versioning</a>.
 
+## 2.14.7 (2023-03-15) ##
+* Added PDF watermark, updated code comments.
+
 ## 2.14.6 (2023-02-07) ##
 * Upgraded the mPDF system to version 8.1.4.
 

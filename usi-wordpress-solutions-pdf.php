@@ -21,21 +21,23 @@ class USI_WordPress_Solutions_PDF {
 
    const VERSION = '2.14.6 (2023-02-07)';
 
-   public static $css_buffer  = null;
+   public static $confidential = false;
 
-   public static $file        = null;
+   public static $css_buffer   = null;
 
-   public static $html_buffer = null;
+   public static $file         = null;
 
-   public static $inline      = null;
+   public static $html_buffer  = null;
 
-   public static $log         = false;
+   public static $inline       = null;
 
-   public static $mode        = null;
+   public static $log          = false;
 
-   public static $options     = [];
+   public static $mode         = null;
 
-   private static $version    = '8.0.0';
+   public static $options      = [];
+
+   private static $version     = '8.0.0';
 
    public static function init($options = []) {
 
@@ -89,7 +91,6 @@ class USI_WordPress_Solutions_PDF {
          if (!empty(self::$options['header'])) $mpdf->SetHTMLHeader(self::$options['header']);
 
          if (!empty(self::$options['footer'])) $mpdf->SetHTMLFooter(self::$options['footer']);
-
          if (empty(self::$css_buffer)) self::$css_buffer = apply_filters('usi_wordpress_pdf_css', null);
 
          if (!empty(self::$css_buffer)) $mpdf->WriteHTML(self::$css_buffer, \Mpdf\HTMLParserMode::HEADER_CSS);
@@ -114,6 +115,11 @@ class USI_WordPress_Solutions_PDF {
 
          if (USI_WordPress_Solutions::$options['admin-limits']['mpdf-pcre-limit'] > $pcre_backtrack_limit) {
             ini_set('pcre.backtrack_limit', USI_WordPress_Solutions::$options['admin-limits']['mpdf-pcre-limit']);
+         }
+
+         if (self::$confidential) {
+            $mpdf->SetWatermarkText('Confidential', 0.2);
+            $mpdf->showWatermarkText = true;
          }
 
          $mpdf->WriteHTML(self::$html_buffer, \Mpdf\HTMLParserMode::HTML_BODY);
