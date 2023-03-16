@@ -25,7 +25,7 @@ require_once('usi-wordpress-solutions-versions.php');
 
 class USI_WordPress_Solutions_Settings {
 
-   const VERSION = '2.14.5 (2022-12-19)';
+   const VERSION = '2.14.8 (2023-03-16)';
 
    private static $current_user_id = -1; 
    private static $grid            = false;
@@ -964,7 +964,7 @@ class USI_WordPress_Solutions_Settings {
 
       $submit_text   = null;
 
-      if ($section = reset($this->sections)) {
+      if (!empty($this->sections) && ($section = reset($this->sections))) {
          if (isset($section['options']['grid'])) self::set_grid($section['options']['grid']);
       }
 
