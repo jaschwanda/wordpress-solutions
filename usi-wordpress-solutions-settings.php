@@ -124,6 +124,7 @@ class USI_WordPress_Solutions_Settings {
 
          add_action('admin_head', array($this, 'action_admin_head'));
          add_action('admin_init', array($this, 'action_admin_init'));
+
          add_action('admin_enqueue_scripts', array($this, 'action_admin_enqueue_scripts'));
 
       } else if (!empty(USI_WordPress_Solutions::$options['illumination']['visible-grid'])) {
@@ -949,6 +950,7 @@ class USI_WordPress_Solutions_Settings {
 
    // To include more options on this page, override this function and call parent::page_render($options);
    function page_render($options = null) {
+usi::log('$options=', $options, '\n$this->sections=', $this->sections);
 
       $i  = '  ';
       $i2 = '    ';
@@ -963,7 +965,9 @@ class USI_WordPress_Solutions_Settings {
       $wrap_submit   = !empty($options['wrap_submit']);
 
       $submit_text   = null;
-
+//usi::log('$this=', $this);
+//$trace = debug_backtrace();
+//usi::log('$trace=', $trace, '\n$options=', $options);
       if (!empty($this->sections) && ($section = reset($this->sections))) {
          if (isset($section['options']['grid'])) self::set_grid($section['options']['grid']);
       }
@@ -1215,6 +1219,7 @@ class USI_WordPress_Solutions_Settings {
    } // section_render();
 
    function sections() { // Should be over ridden by extending class;
+usi::log();
       return(null);
    } // sections();
 
