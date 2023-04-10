@@ -950,7 +950,6 @@ class USI_WordPress_Solutions_Settings {
 
    // To include more options on this page, override this function and call parent::page_render($options);
    function page_render($options = null) {
-usi::log('$options=', $options, '\n$this->sections=', $this->sections);
 
       $i  = '  ';
       $i2 = '    ';
