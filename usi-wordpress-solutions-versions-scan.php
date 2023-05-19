@@ -19,20 +19,21 @@ if (!in_array('administrator', wp_get_current_user()->roles)) die('Accesss not a
 
 final class USI_WordPress_Solutions_Versions_Scan {
 
-   const VERSION = '2.14.1 (2022-08-10)';
+   const VERSION = '2.14.9 (2023-05-19)';
 
    private function __construct() {
    } // __construct();
 
    private static function scan($path) {
       @ $files = scandir($path);
-      $html  = '';
+      $html    = '';
       if (!empty($files)) {
          foreach ($files as $file) {
             if ('.usi-ignore' == $file) break;
             $full_path = $path . DIRECTORY_SEPARATOR . $file;
             if (('.' == $file) || ('..' == $file)) {
             } else if (is_dir($full_path)) {
+               if ('.git' == $file) continue;
                $html .= self::scan($full_path);
             } else {
                $contents = file_get_contents($full_path);

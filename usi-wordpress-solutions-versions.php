@@ -19,7 +19,7 @@ require_once('usi-wordpress-solutions-popup-iframe.php');
 
 class USI_WordPress_Solutions_Versions {
 
-   const VERSION = '2.14.1 (2022-08-10)';
+   const VERSION = '2.14.9 (2023-05-19)';
 
    private static $built = false;
 
@@ -31,12 +31,12 @@ class USI_WordPress_Solutions_Versions {
       if (!self::$built) {
 
          USI_WordPress_Solutions_Popup_Iframe::build(
-            array(
+            [
                'close'   => __('Close', $text_domain),
                'height' => '500px',
                'id'     => 'usi-popup-version',
                'width'  => '500px',
-            )
+            ]
          );
 
          self::$built = true;
@@ -45,17 +45,17 @@ class USI_WordPress_Solutions_Versions {
 
       return(
          USI_WordPress_Solutions_Popup_Iframe::link(
-            array(
+            [
                'id'     => 'usi-popup-version',
                'iframe' => plugins_url(null, __FILE__) . '/usi-wordpress-solutions-versions-scan.php?' . urlencode($file),
                'link'   => array('text' => $link),
                'tip'    => __('Display detailed version information', $text_domain),
                'title'  => $title . ' &nbsp; &nbsp; ' . __('Version', $text_domain) . ' ' . $version,
-            )
+            ]
          )
       );
 
-   } //link();
+   } // link();
 
 } // Class USI_WordPress_Solutions_Versions;
 
