@@ -51,8 +51,13 @@ You can disable these errors but still enable debugging by doing the following:
 
 ```
 in the wp-config.php file:
-define('WP_DEBUG', false);
-error_reporting(E_ALL&~(E_DEPRECATED|E_USER_DEPRECATED));$GLOBALS['wp_filter']=['enable_wp_debug_mode_checks'=>[10=>[['accepted_args'=>0,'function'=>function(){return(false);}]]]];
+
+// Turn off default debugging:
+define('WP_DEBUG', false); 
+
+// Turn back on  debugging options without E_DEPRECATED;
+error_reporting(E_ALL&~(E_DEPRECATED|E_USER_DEPRECATED));
+$GLOBALS['wp_filter']=['enable_wp_debug_mode_checks'=>[10=>[['accepted_args'=>0,'function'=>function(){return(false);}]]]];
 ```
 
 ### Admin menu gap issue when debug mode is enabled
