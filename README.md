@@ -45,6 +45,14 @@ Go to the /extractions/tinymce_5.7.1/tinymce/js/tinymce folder and copy everythi
 ## Debugging ##
 Notes to help debug some WordPress issues.
 
+### PHP versiion 8++ and WordPress deprication errors
+WordPress will given many deprication errors when running PHP version 8+, you can disable these errors but still enable debugging by addint the following 
+
+```
+in the wp-config.php file:
+error_reporting(E_ALL&~(E_DEPRECATED|E_USER_DEPRECATED));$GLOBALS['wp_filter']=['enable_wp_debug_mode_checks'=>[10=>[['accepted_args'=>0,'function'=>function(){return(false);}]]]];
+```
+
 ### Admin menu gap issue when debug mode is enabled
 Sometimes when debug mode is enabled there is a 2em gap between WordPress admin menu and the bar.
 This gap will show when there is a "Hidden" error if the following conditions are true:
