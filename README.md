@@ -77,7 +77,7 @@ The default location of the debug.log file is in the wp-content folder.
 
 ## Pop Up ##
 Notes to help debug some WordPress issues.
-
+```
 class USI_WordPress_Solutions_Popup is used in:
 
 usi-media-solutions-manage.php
@@ -95,6 +95,7 @@ ru-email-inbox.php
 usi-test-solutions-settings.php
 usi-wordpress-solutions-versions.php
 usi-wordpress-solutions-settings-settings.php
+```
 
 
 ## License ##
