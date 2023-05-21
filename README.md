@@ -46,7 +46,7 @@ Go to the /extractions/tinymce_5.7.1/tinymce/js/tinymce folder and copy everythi
 Notes to help debug some WordPress issues.
 
 ### Deprecation errors with PHP version 8+
-WordPress gives many deprecation errors when running WordPress in PHP version 8+ with debugging enebaled. 
+WordPress gives many deprecation errors when running in PHP version 8+ with debugging enabled. 
 You can disable these errors but still enable debugging by doing the following:
 
 ```
@@ -90,8 +90,8 @@ error_log(print_r(ini_get('display_errors'), true));
 The default location of the debug.log file is in the wp-content folder.
 
 
-## Pop Up ##
-Notes to help debug some WordPress issues.
+## Pop Ups ##
+This plugin provides enhanced pop functionality.
 ```
 class USI_WordPress_Solutions_Popup is used in:
  * usi-media-solutions-manage.php
