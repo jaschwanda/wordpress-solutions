@@ -74,6 +74,29 @@ error_log(print_r(ini_get('display_errors'), true));
 ```
 The default location of the debug.log file is in the wp-content folder.
 
+
+## Pop Up ##
+Notes to help debug some WordPress issues.
+
+class USI_WordPress_Solutions_Popup is used in:
+
+usi-media-solutions-manage.php
+
+class USI_WordPress_Solutions_Popup_Action is used in:
+
+ru-application.php
+ru-docusign.php
+ru-form.php
+ru-work.php
+
+class USI_WordPress_Solutions_Popup_Iframe is used in:
+
+ru-email-inbox.php
+usi-test-solutions-settings.php
+usi-wordpress-solutions-versions.php
+usi-wordpress-solutions-settings-settings.php
+
+
 ## License ##
 > WordPress-Solutions is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License 
 as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.

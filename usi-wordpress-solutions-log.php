@@ -97,7 +97,7 @@ if (!class_exists('USI')) { final class USI {
 
    } // log();
 
-   public static function log2() { // call usi::log2('method()~'.__LINE__.':label='... or usi::log2('method():label='...
+   public static function log2() { // call usi::log2(__METHOD__.'()~'.__LINE__.':label='... or usi::log2('method():label='...
       self::$offset = 2;
       self::log();
       self::$offset = 0;
