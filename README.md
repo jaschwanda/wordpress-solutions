@@ -45,7 +45,7 @@ Go to the /extractions/tinymce_5.7.1/tinymce/js/tinymce folder and copy everythi
 ## Debugging ##
 Notes to help debug some WordPress issues.
 
-### PHP version 8+ and WordPress debugging
+### Deprecation errors with PHP version 8+
 WordPress will given many deprecation errors when running WordPress in PHP version 8+ with debugging enebaled. 
 You can disable these errors but still enable debugging by doing the following:
 
