@@ -100,7 +100,7 @@ class USI_WordPress_Solutions_Popup_Action {
                $custom_invoke = PHP_EOL . '// Invoke popup via custom action;' . PHP_EOL;
                foreach ($options['invoke'] as $selector => $action) {
                   usi::log('$selector=', $selector, ' $action=', $action);
-                  $custom_invoke .= "$('$selector').click(function() { return(scan('$action'));});" . PHP_EOL;
+                  $custom_invoke .= "$('$selector').click(function() { return(scan('$action', '$selector')); });" . PHP_EOL;
                }
             }
 
@@ -141,7 +141,8 @@ function info(action, body) {
    return('<p>' + head[action] + '</p>' + body + '<p>' + foot[action] + '</p>');
 } // info();
 
-function scan(action) {
+function scan(action, selector) {
+   if (confirmed) { confirmed = false; return(true); }
    var ids  = $('.usi-popup-checkbox');
    var list = '';
    var text = '';
@@ -167,11 +168,13 @@ function scan(action) {
    if (!action_count) {
       return(show('error', '<p>' + select_item + '</p>'));
    } else {
-      return(show(action, info(action, text), 'doaction'));
+      return(show(action, info(action, text), selector));
    }
 } // scan();
 
 function show(action, body, invoke) {
+
+   selector = invoke; 
 
    $('#{$id}-title').html('{$title}');
 
@@ -196,7 +199,7 @@ function show(action, body, invoke) {
 
 function trace(text) {
 // alert(text);
-// console.log(text);
+   console.log(text);
 } // trace();
 
 // Close Popup with cancel/close/delete/ok button;
@@ -227,7 +230,7 @@ $('#doaction,#doaction2').click(
       if (confirmed) { confirmed = false; return(true); }
       var action = get_bulk_action();
       if ('select_bulk' == action) return(show('error', '<p>' + select_bulk + '</p>'));
-      return(scan(action));
+      return(scan(action, selector));
    }
 ); // Invoke popup via bulk action;
 {$custom_invoke}
@@ -237,10 +240,13 @@ $('#{$id}-work').click(
       label = '$(#{$id}-work).click():';
       trace(label + 'selector=' + selector);
       if ('#doaction,#doaction2' == selector) {
+//      if ('#submit' == selector) {
          confirmed = true;
          $(selector).click();
       } else {
-         location.href = $(selector).attr('href');
+         var href = $(selector).attr('href');
+         trace(label + 'href=' + href);
+         location.href = href;
       }
    }
 ); // Execute action;
