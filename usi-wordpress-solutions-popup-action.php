@@ -214,11 +214,8 @@ $('#doaction,#doaction2').click(
 ); // Invoke popup via bulk action;
 
 // Invoke popup via custom action;
-$('{$invoke}').click(
-   () => {
-      return(multi('delete'));
-   }
-); // Invoke popup via custom action;
+$('#submit').click(() => { return(multi('delete'));});
+$('#testme').click(() => { return(multi('test'));});
 
 // Execute action;
 $('#{$id}-work').click(
