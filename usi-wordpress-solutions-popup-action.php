@@ -161,37 +161,6 @@ function multi(action) {
       }
 } // multi();
 
-function multi2() {
-      if (confirmed) { confirmed = false; return(true); }
-      var action = 'delete';
-      var ids  = $('.usi-popup-checkbox');
-      var list = '';
-      var text = '';
-      var action_count = 0;
-      if (ids.length) {
-         for (var i = 0; i < ids.length; i++) {
-            if (ids[i].checked) {
-               list += (list.length ? ',' : '') + ids[i].getAttribute('usi-popup-id');
-               text += (action_count++ ? '<br/>' : '') + ids[i].getAttribute('usi-popup-info');
-            }
-         }
-      } else {
-         var ids  = $('input[name="post[]"]');
-         for (var i = 0; i < ids.length; i++) {
-            if (ids[i].checked) {
-               var id = ids[i].getAttribute('id').substr(10);
-               list += (list.length ? ',' : '') + id;
-               text += (action_count++ ? '<br/>' : '') + $('#usi-popup-delete-' + id).attr('usi-popup-info');
-            }
-         }
-      }
-      if (!action_count) {
-         return(show('error', '<p>' + select_item + '</p>'));
-      } else {
-         return(show(action, info(action, text), 'doaction'));
-      }
-} // multi2();
-
 function show(action, body, invoke) {
 
    $('#{$id}-title').html('{$title}');
@@ -225,7 +194,7 @@ $('[usi-popup-close-outside]').click(() => close())
 
 // Invoke popup via row action;
 $('[usi-popup-open]').click(
-   function() {
+   () => {
       if (confirmed) { confirmed = false; return(true); }
       var action = $(this).attr('usi-popup-action');
       var body   = $(this).attr('usi-popup-info');
@@ -240,14 +209,14 @@ $('#doaction,#doaction2').click(
       if (confirmed) { confirmed = false; return(true); }
       var action = get_bulk_action();
       if ('select_bulk' == action) return(show('error', '<p>' + select_bulk + '</p>'));
-      return(multi());
+      return(multi(action));
    }
 ); // Invoke popup via bulk action;
 
 // Invoke popup via custom action;
 $('{$invoke}').click(
    () => {
-      return(multi2());
+      return(multi('delete'));
    }
 ); // Invoke popup via custom action;
 
