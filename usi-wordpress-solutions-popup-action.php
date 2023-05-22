@@ -100,7 +100,7 @@ class USI_WordPress_Solutions_Popup_Action {
                $custom_invoke = PHP_EOL . '// Invoke popup via custom action;' . PHP_EOL;
                foreach ($options['invoke'] as $selector => $action) {
                   usi::log('$selector=', $selector, ' $action=', $action);
-                  $custom_invoke .= "$('$selector').click(() => { return(multi('$action'));});" . PHP_EOL;
+                  $custom_invoke .= "$('$selector').click(function() { return(scan('$action'));});" . PHP_EOL;
                }
             }
 
@@ -121,8 +121,10 @@ class USI_WordPress_Solutions_Popup_Action {
 {$height_head_foot}
 
 var confirmed = false;
+var selector  = null;
 
-function close() {
+function close(selector) {
+   trace('close:selector=' + selector);
    $('#{$id}').fadeOut(300);
 } // close();
 
@@ -139,34 +141,35 @@ function info(action, body) {
    return('<p>' + head[action] + '</p>' + body + '<p>' + foot[action] + '</p>');
 } // info();
 
-function multi(action) {
-      var ids  = $('.usi-popup-checkbox');
-      var list = '';
-      var text = '';
-      var action_count = 0;
-      if (ids.length) {
-         for (var i = 0; i < ids.length; i++) {
-            if (ids[i].checked) {
-               list += (list.length ? ',' : '') + ids[i].getAttribute('usi-popup-id');
-               text += (action_count++ ? '<br/>' : '') + ids[i].getAttribute('usi-popup-info');
-            }
-         }
-      } else {
-         var ids  = $('input[name="post[]"]');
-         for (var i = 0; i < ids.length; i++) {
-            if (ids[i].checked) {
-               var id = ids[i].getAttribute('id').substr(10);
-               list += (list.length ? ',' : '') + id;
-               text += (action_count++ ? '<br/>' : '') + $('#usi-popup-delete-' + id).attr('usi-popup-info');
-            }
+function scan(action) {
+   var ids  = $('.usi-popup-checkbox');
+   var list = '';
+   var text = '';
+   var action_count = 0;
+   if (ids.length) {
+      for (var i = 0; i < ids.length; i++) {
+         if (ids[i].checked) {
+            list += (list.length ? ',' : '') + ids[i].getAttribute('usi-popup-id');
+            text += (action_count++ ? '<br/>' : '') + ids[i].getAttribute('usi-popup-info');
          }
       }
-      if (!action_count) {
-         return(show('error', '<p>' + select_item + '</p>'));
-      } else {
-         return(show(action, info(action, text), 'doaction'));
+   } else {
+      var ids  = $('input[name="post[]"]');
+      for (var i = 0; i < ids.length; i++) {
+         if (ids[i].checked) {
+            var id = ids[i].getAttribute('id').substr(10);
+            list += (list.length ? ',' : '') + id;
+            text += (action_count++ ? '<br/>' : '') + $('#usi-popup-delete-' + id).attr('usi-popup-info');
+         }
       }
-} // multi();
+   }
+   trace('scan:action_count=' + action_count);
+   if (!action_count) {
+      return(show('error', '<p>' + select_item + '</p>'));
+   } else {
+      return(show(action, info(action, text), 'doaction'));
+   }
+} // scan();
 
 function show(action, body, invoke) {
 
@@ -191,55 +194,54 @@ function show(action, body, invoke) {
 
 } // show();
 
+function trace(text) {
+// alert(text);
+// console.log(text);
+} // trace();
+
 // Close Popup with cancel/close/delete/ok button;
-$('[usi-popup-close]').click(() => close());
+$('[usi-popup-close]').click(function() { close('[usi-popup-close]'); });
 
 // Close with outside click;
-$('[usi-popup-close-outside]').click(() => close())
-.children()
-.click(() => { return(false); });
+$('[usi-popup-close-outside]').click(function() { close('[usi-popup-close-outside]'); }).children().click(function() { return(false); });
 
 // Invoke popup via row action;
 $('[usi-popup-open]').click(
-   () => {
+   function() {
+      var id     = $(this).attr('id');
+      selector   = '#' + id;
+      label      = '$([usi-popup-open]).click(' + selector + '):';
+      trace(label + 'confirmed=' + (confirmed ? 'true' : 'false'));
       if (confirmed) { confirmed = false; return(true); }
       var action = $(this).attr('usi-popup-action');
       var body   = $(this).attr('usi-popup-info');
-      var id     = $(this).attr('id');
       return(show(action, info(action, body), id));
    }
 ); // Invoke popup via row action;
 
 // Invoke popup via bulk action;
 $('#doaction,#doaction2').click(
-   () => {
+   function() {
+      selector   = '#doaction,#doaction2';
+      trace('$(#doaction,#doaction2).click(' + selector + ')');
       if (confirmed) { confirmed = false; return(true); }
       var action = get_bulk_action();
       if ('select_bulk' == action) return(show('error', '<p>' + select_bulk + '</p>'));
-      return(multi(action));
+      return(scan(action));
    }
 ); // Invoke popup via bulk action;
 {$custom_invoke}
 // Execute action;
 $('#{$id}-work').click(
    function() {
-alert(1);
-confirmed = true;
-      $('#submit').trigger('click');
-alert(2);
-/*
-      var invoke = '#' + $(this).attr('usi-popup-invoke');
-alert('work:invoke=' + invoke);
-      confirmed  = true;
-      if ('#doaction' == invoke) {
-alert('work:1#doaction');
-         $('#submit').trigger('click');
-alert('work:2#doaction');
-//         $(invoke).trigger('click');
+      label = '$(#{$id}-work).click():';
+      trace(label + 'selector=' + selector);
+      if ('#doaction,#doaction2' == selector) {
+         confirmed = true;
+         $(selector).click();
       } else {
-         location.href = $(invoke).attr('href');
+         location.href = $(selector).attr('href');
       }
-*/
    }
 ); // Execute action;
 // END - {$id}
@@ -284,6 +286,7 @@ EOD;
    public static function column_cb($args) {
 
       $id_field = $args['id_field'] ?? null;
+      $indent   = $args['indent']   ?? null;
       $info     = $args['info']     ?? null;
       $post     = $args['post']     ?? null;
 
@@ -293,9 +296,13 @@ EOD;
          $id    = $args['id']       ?? null;
       }
 
-      return(
-         '<input class="usi-popup-checkbox" name="' . $id_field . '[' . $id . ']" type="checkbox" ' .
-         'usi-popup-id="' . $id . '" usi-popup-info="' . $info . '" value="' . $id .'" />'
+      return($indent
+         . '<input class="usi-popup-checkbox" name="' . $id_field . '[' . $id . ']" type="checkbox" '
+         . $indent
+         . 'usi-popup-id="' . $id . '" '
+         . $indent
+         . 'usi-popup-info="' . $info . '" value="' . $id .'" />'
+         . $indent
       );
 
    } // column_cb();
