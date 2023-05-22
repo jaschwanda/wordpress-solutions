@@ -23,7 +23,7 @@ This popup displays a confirmation message for a list of items in a WordPress ta
 
 class USI_WordPress_Solutions_Popup_Action {
 
-   const VERSION = '2.14.3 (2022-10-05)';
+   const VERSION = '2.14.10 (2023-05-22)';
 
    const HEIGHT_HEAD_FOOT = 93;
 

@@ -2,6 +2,9 @@
 
 WordPress-Solutions plugin changes are logged here using <a href="http://semver.org/">Semantic Versioning</a>.
 
+## 2.14.10 (2023-05-22) ##
+* Improved popup handling.
+
 ## 2.14.9 (2023-05-19) ##
 * Corrected minor typos and issue with plugin version display.
 
