@@ -174,7 +174,7 @@ function scan(action, selector) {
 
 function show(action, body, invoke) {
 
-   selector = invoke; 
+   selector = invoke;
 
    $('#{$id}-title').html('{$title}');
 
@@ -239,8 +239,8 @@ $('#{$id}-work').click(
    function() {
       label = '$(#{$id}-work).click():';
       trace(label + 'selector=' + selector);
-      if ('#doaction,#doaction2' == selector) {
-//      if ('#submit' == selector) {
+//      if ('#doaction,#doaction2' == selector) {
+      if (selector) {
          confirmed = true;
          $(selector).click();
       } else {
