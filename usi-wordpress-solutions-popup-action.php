@@ -99,7 +99,6 @@ class USI_WordPress_Solutions_Popup_Action {
             if (!empty($options['invoke'])) {
                $custom_invoke = PHP_EOL . '// Invoke popup via custom action;' . PHP_EOL;
                foreach ($options['invoke'] as $selector => $action) {
-                  usi::log('$selector=', $selector, ' $action=', $action);
                   $custom_invoke .= "$('$selector').click(function() { invoked_by = 'button'; return(scan('$action', '$selector')); });" . PHP_EOL;
                }
             }
@@ -199,7 +198,7 @@ function show(action, body, invoke) {
 } // show();
 
 function trace(text) {
-   alert(text);
+//   alert(text);
    console.log(text);
 } // trace();
 
@@ -220,7 +219,7 @@ $('[usi-popup-open]').click(
       if (confirmed) { confirmed = false; return(true); }
       var action = $(this).attr('usi-popup-action');
       var body   = $(this).attr('usi-popup-info');
-      return(show(action, info(action, body), id));
+      return(show(action, info(action, body), selector));
    }
 ); // Invoke popup via row action;
 
