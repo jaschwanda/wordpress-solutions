@@ -136,7 +136,7 @@ function multi() {
       if (confirmed) { confirmed = false; return(true); }
       var action = null;
       if ('standard' === '$method') {
-         action = bulk();
+         action = get_bulk_action();
          if ('select_bulk' == action) return(show('error', '<p>' + select_bulk + '</p>'));
       } else {
          action = 'delete';
