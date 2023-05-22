@@ -212,6 +212,7 @@ $('[usi-popup-close-outside]').click(function() { close('[usi-popup-close-outsid
 // Invoke popup via row action;
 $('[usi-popup-open]').click(
    function() {
+      invoked_by = 'link';
       var id     = $(this).attr('id');
       selector   = '#' + id;
       label      = '$([usi-popup-open]).click(' + selector + '):';
@@ -241,8 +242,6 @@ $('#{$id}-work').click(
    function() {
       label = '$(#{$id}-work).click():';
       trace(label + 'selector=' + selector + ' invoked_by=' + invoked_by);
-//      if ('#doaction,#doaction2' == selector) {
-//      if ('#submit' == selector) {
       if ('button' == invoked_by) {
          confirmed = true;
          $(selector).click();
