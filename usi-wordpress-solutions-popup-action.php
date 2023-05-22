@@ -75,7 +75,7 @@ class USI_WordPress_Solutions_Popup_Action {
 
       $cancel = $options['cancel']  ?? null;  // Cancel button text;
 
-      $method = $options['method']  ?? 'standard'; // Popup method [standard(WordPress list table)|custom(Application defined)];
+//      $method = $options['method']  ?? 'standard'; // Popup method [standard(WordPress list table)|custom(Application defined)];
 
       if (empty(self::$scripts[$id])) { // IF popup html not set;
 
@@ -235,6 +235,7 @@ $('#doaction,#doaction2').click(
       return(scan(action, selector));
    }
 ); // Invoke popup via bulk action;
+
 {$custom_invoke}
 // Execute action;
 $('#{$id}-work').click(
