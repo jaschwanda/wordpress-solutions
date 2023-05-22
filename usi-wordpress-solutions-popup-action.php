@@ -75,8 +75,6 @@ class USI_WordPress_Solutions_Popup_Action {
 
       $cancel = $options['cancel']  ?? null;  // Cancel button text;
 
-      $invoke = $options['invoke']  ?? '#doaction,#doaction2'; // Selector of item that invokes popup;
-
       $method = $options['method']  ?? 'standard'; // Popup method [standard(WordPress list table)|custom(Application defined)];
 
       if (empty(self::$scripts[$id])) { // IF popup html not set;
@@ -96,6 +94,15 @@ class USI_WordPress_Solutions_Popup_Action {
             $foot .= '};';
             $head .= '};';
             $work .= '};';
+
+            $custom_invoke = null;
+            if (!empty($options['invoke'])) {
+               $custom_invoke = PHP_EOL . '// Invoke popup via custom action;' . PHP_EOL;
+               foreach ($options['invoke'] as $selector => $action) {
+                  usi::log('$selector=', $selector, ' $action=', $action);
+                  $custom_invoke .= "$('$selector').click(() => { return(multi('$action'));});" . PHP_EOL;
+               }
+            }
 
             $select_bulk = "select_bulk = '" . ($options['errors']['select_bulk']  ?? 'Please select a bulk action before you click the Apply button.') . "'";
             $select_item = "select_item = '" . ($options['errors']['select_item']  ?? 'Please select some items before you click the Apply button.') . "'";
@@ -212,18 +219,18 @@ $('#doaction,#doaction2').click(
       return(multi(action));
    }
 ); // Invoke popup via bulk action;
-
-// Invoke popup via custom action;
-$('#submit').click(() => { return(multi('delete'));});
-$('#testme').click(() => { return(multi('test'));});
-
+{$custom_invoke}
 // Execute action;
 $('#{$id}-work').click(
    function() {
       var invoke = '#' + $(this).attr('usi-popup-invoke');
+console.log('work:invoke=' + invoke);
       confirmed  = true;
       if ('#doaction' == invoke) {
-         $(invoke).trigger('click');
+console.log('work:1#doaction');
+         $('#submit').trigger('click');
+console.log('work:2#doaction');
+//         $(invoke).trigger('click');
       } else {
          location.href = $(invoke).attr('href');
       }
