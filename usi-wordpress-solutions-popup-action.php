@@ -223,17 +223,23 @@ $('#doaction,#doaction2').click(
 // Execute action;
 $('#{$id}-work').click(
    function() {
+alert(1);
+confirmed = true;
+      $('#submit').trigger('click');
+alert(2);
+/*
       var invoke = '#' + $(this).attr('usi-popup-invoke');
-console.log('work:invoke=' + invoke);
+alert('work:invoke=' + invoke);
       confirmed  = true;
       if ('#doaction' == invoke) {
-console.log('work:1#doaction');
+alert('work:1#doaction');
          $('#submit').trigger('click');
-console.log('work:2#doaction');
+alert('work:2#doaction');
 //         $(invoke).trigger('click');
       } else {
          location.href = $(invoke).attr('href');
       }
+*/
    }
 ); // Execute action;
 // END - {$id}
