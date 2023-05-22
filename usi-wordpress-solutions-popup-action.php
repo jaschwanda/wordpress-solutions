@@ -100,7 +100,7 @@ class USI_WordPress_Solutions_Popup_Action {
                $custom_invoke = PHP_EOL . '// Invoke popup via custom action;' . PHP_EOL;
                foreach ($options['invoke'] as $selector => $action) {
                   usi::log('$selector=', $selector, ' $action=', $action);
-                  $custom_invoke .= "$('$selector').click(function() { return(scan('$action', '$selector')); });" . PHP_EOL;
+                  $custom_invoke .= "$('$selector').click(function() { invoked_by = 'button'; return(scan('$action', '$selector')); });" . PHP_EOL;
                }
             }
 
@@ -120,8 +120,9 @@ class USI_WordPress_Solutions_Popup_Action {
 
 {$height_head_foot}
 
-var confirmed = false;
-var selector  = null;
+var confirmed  = false;
+var selector   = null;
+var invoked_by = null;
 
 function close(selector) {
    trace('close:selector=' + selector);
@@ -174,7 +175,7 @@ function scan(action, selector) {
 
 function show(action, body, invoke) {
 
-//   selector = invoke;
+   selector = invoke;
 
    $('#{$id}-title').html('{$title}');
 
@@ -198,7 +199,7 @@ function show(action, body, invoke) {
 } // show();
 
 function trace(text) {
-// alert(text);
+   alert(text);
    console.log(text);
 } // trace();
 
@@ -225,6 +226,7 @@ $('[usi-popup-open]').click(
 // Invoke popup via bulk action;
 $('#doaction,#doaction2').click(
    function() {
+      invoked_by = 'button';
       selector   = '#doaction,#doaction2';
       trace('$(#doaction,#doaction2).click(' + selector + ')');
       if (confirmed) { confirmed = false; return(true); }
@@ -238,8 +240,10 @@ $('#doaction,#doaction2').click(
 $('#{$id}-work').click(
    function() {
       label = '$(#{$id}-work).click():';
-      trace(label + 'selector=' + selector);
-      if ('#doaction,#doaction2' == selector) {
+      trace(label + 'selector=' + selector + ' invoked_by=' + invoked_by);
+//      if ('#doaction,#doaction2' == selector) {
+//      if ('#submit' == selector) {
+      if ('button' == invoked_by) {
          confirmed = true;
          $(selector).click();
       } else {
