@@ -75,8 +75,6 @@ class USI_WordPress_Solutions_Popup_Action {
 
       $cancel = $options['cancel']  ?? null;  // Cancel button text;
 
-//      $method = $options['method']  ?? 'standard'; // Popup method [standard(WordPress list table)|custom(Application defined)];
-
       if (empty(self::$scripts[$id])) { // IF popup html not set;
 
          if (empty(self::$scripts[0])) { // IF popup javascript not set;
@@ -95,11 +93,45 @@ class USI_WordPress_Solutions_Popup_Action {
             $head .= '};';
             $work .= '};';
 
-            $custom_invoke = null;
+            $popup_invoke = null;
+            if (empty($options['invoke'])) {
+               $popup_invoke = <<<EOD
+// Invoke popup via row action;
+$('[usi-popup-open]').click(
+   function() {
+      invoked_by = 'link';
+      var id     = $(this).attr('id');
+      selector   = '#' + id;
+      label      = '$([usi-popup-open]).click(' + selector + '):';
+      trace(label + 'confirmed=' + (confirmed ? 'true' : 'false'));
+      if (confirmed) { confirmed = false; return(true); }
+      var action = $(this).attr('usi-popup-action');
+      var body   = $(this).attr('usi-popup-info');
+      return(show(action, info(action, body), selector));
+   }
+); // Invoke popup via row action;
+
+// Invoke popup via bulk action;
+$('#doaction,#doaction2').click(
+   function() {
+      invoked_by = 'button';
+      selector   = '#doaction,#doaction2';
+      trace('$(#doaction,#doaction2).click(' + selector + ')');
+      if (confirmed) { confirmed = false; return(true); }
+      var action = get_bulk_action();
+      if ('select_bulk' == action) return(show('error', '<p>' + select_bulk + '</p>'));
+      return(scan(action, selector));
+   }
+); // Invoke popup via bulk action;
+
+
+EOD;
+            }
+
             if (!empty($options['invoke'])) {
-               $custom_invoke = PHP_EOL . '// Invoke popup via custom action;' . PHP_EOL;
+               $popup_invoke .= '// Invoke popup via custom action;' . PHP_EOL;
                foreach ($options['invoke'] as $selector => $action) {
-                  $custom_invoke .= "$('$selector').click(function() { invoked_by = 'button'; return(scan('$action', '$selector')); });" . PHP_EOL;
+                  $popup_invoke .= "$('$selector').click(function() { invoked_by = 'button'; return(scan('$action', '$selector')); });" . PHP_EOL;
                }
             }
 
@@ -173,28 +205,19 @@ function scan(action, selector) {
 } // scan();
 
 function show(action, body, invoke) {
-
    selector = invoke;
-
    $('#{$id}-title').html('{$title}');
-
    $('#{$id}-body').html('<div style="padding:0 15px 0 15px;">' + body + '</div>');
-
    if ('error' === action) {
       $('#{$id}-work').html('').hide();
    } else {
       $('#{$id}-work').html(work[action]).show().attr('usi-popup-invoke', invoke);
       $('#{$id}-close').html('{$cancel}');
    }
-
    $('#{$id}').fadeIn(300);
-
    var height = $('#{$id}-body').height();
-
    if (height <= ${max_body}) $('#{$id}-wrap').height((height + height_head_foot) + 'px');
-
    return(false);
-
 } // show();
 
 function trace(text) {
@@ -208,35 +231,7 @@ $('[usi-popup-close]').click(function() { close('[usi-popup-close]'); });
 // Close with outside click;
 $('[usi-popup-close-outside]').click(function() { close('[usi-popup-close-outside]'); }).children().click(function() { return(false); });
 
-// Invoke popup via row action;
-$('[usi-popup-open]').click(
-   function() {
-      invoked_by = 'link';
-      var id     = $(this).attr('id');
-      selector   = '#' + id;
-      label      = '$([usi-popup-open]).click(' + selector + '):';
-      trace(label + 'confirmed=' + (confirmed ? 'true' : 'false'));
-      if (confirmed) { confirmed = false; return(true); }
-      var action = $(this).attr('usi-popup-action');
-      var body   = $(this).attr('usi-popup-info');
-      return(show(action, info(action, body), selector));
-   }
-); // Invoke popup via row action;
-
-// Invoke popup via bulk action;
-$('#doaction,#doaction2').click(
-   function() {
-      invoked_by = 'button';
-      selector   = '#doaction,#doaction2';
-      trace('$(#doaction,#doaction2).click(' + selector + ')');
-      if (confirmed) { confirmed = false; return(true); }
-      var action = get_bulk_action();
-      if ('select_bulk' == action) return(show('error', '<p>' + select_bulk + '</p>'));
-      return(scan(action, selector));
-   }
-); // Invoke popup via bulk action;
-
-{$custom_invoke}
+{$popup_invoke}
 // Execute action;
 $('#{$id}-work').click(
    function() {
