@@ -73,13 +73,15 @@ class USI_WordPress_Solutions_Popup_Action {
          }
       }
 
-      $cancel = !empty($options['cancel']) ? $options['cancel']  : null;
-      $close  = !empty($options['close'] ) ? $options['close']   : null;
-      $ok     = !empty($options['ok']    ) ? $options['ok']      : null;
+      $cancel = $options['cancel']  ?? null;  // Cancel button text;
+
+      $invoke = $options['invoke']  ?? '#doaction,#doaction2'; // Selector of item that invokes popup;
+
+      $method = $options['method']  ?? 'standard'; // Popup method [standard(WordPress list table)|custom(Application defined)];
 
       if (empty(self::$scripts[$id])) { // IF popup html not set;
 
-         if (empty(self::$scripts[0])) { // IF popup javaascript not set;
+         if (empty(self::$scripts[0])) { // IF popup javascript not set;
 
             $divider = USI_WordPress_Solutions_Static::divider(0, $id);
 
@@ -95,8 +97,8 @@ class USI_WordPress_Solutions_Popup_Action {
             $head .= '};';
             $work .= '};';
 
-            $select_bulk = "select_bulk = '" . (!empty($options['errors']['select_bulk']) ? $options['errors']['select_bulk']  : 'Please select a bulk action before you click the Apply button.') . "'";
-            $select_item = "select_item = '" . (!empty($options['errors']['select_item']) ? $options['errors']['select_item']  : 'Please select some items before you click the Apply button.') . "'";
+            $select_bulk = "select_bulk = '" . ($options['errors']['select_bulk']  ?? 'Please select a bulk action before you click the Apply button.') . "'";
+            $select_item = "select_item = '" . ($options['errors']['select_item']  ?? 'Please select some items before you click the Apply button.') . "'";
 
             $height_head_foot = 'const height_head_foot = ' . self::HEIGHT_HEAD_FOOT . ';';
 
@@ -117,9 +119,55 @@ function close() {
    $('#{$id}').fadeOut(300);
 } // close();
 
+// Get WordPress list bulk action;
+function get_bulk_action() {
+   var top = $('#bulk-action-selector-top').val();
+   if (-1 != top) return(top);
+   var bot = $('#bulk-action-selector-bottom').val();
+   if (-1 != bot) return(bot);
+   return('select_bulk');
+} // get_bulk_action();
+
 function info(action, body) {
    return('<p>' + head[action] + '</p>' + body + '<p>' + foot[action] + '</p>');
 } // info();
+
+function multi() {
+      if (confirmed) { confirmed = false; return(true); }
+      var action = null;
+      if ('standard' === '$method') {
+         action = bulk();
+         if ('select_bulk' == action) return(show('error', '<p>' + select_bulk + '</p>'));
+      } else {
+         action = 'delete';
+      }
+      var ids  = $('.usi-popup-checkbox');
+      var list = '';
+      var text = '';
+      var action_count = 0;
+      if (ids.length) {
+         for (var i = 0; i < ids.length; i++) {
+            if (ids[i].checked) {
+               list += (list.length ? ',' : '') + ids[i].getAttribute('usi-popup-id');
+               text += (action_count++ ? '<br/>' : '') + ids[i].getAttribute('usi-popup-info');
+            }
+         }
+      } else {
+         var ids  = $('input[name="post[]"]');
+         for (var i = 0; i < ids.length; i++) {
+            if (ids[i].checked) {
+               var id = ids[i].getAttribute('id').substr(10);
+               list += (list.length ? ',' : '') + id;
+               text += (action_count++ ? '<br/>' : '') + $('#usi-popup-delete-' + id).attr('usi-popup-info');
+            }
+         }
+      }
+      if (!action_count) {
+         return(show('error', '<p>' + select_item + '</p>'));
+      } else {
+         return(show(action, info(action, text), 'doaction'));
+      }
+} // multi();
 
 function show(action, body, invoke) {
 
@@ -164,45 +212,9 @@ $('[usi-popup-open]').click(
 ); // Invoke popup via row action;
 
 // Invoke popup via bulk action;
-$('#doaction,#doaction2').click(
+$('{$invoke}').click(
    () => {
-      if (confirmed) { confirmed = false; return(true); }
-      var action = null;
-      var bot    = $('#bulk-action-selector-bottom').val();
-      var top    = $('#bulk-action-selector-top').val();
-      if (-1 != top) {
-         action = top;
-      } else if (-1 != bot) {
-         action = bot;
-      } else {
-         return(show('error', '<p>' + select_bulk + '</p>'));
-      }
-      var ids  = $('.usi-popup-checkbox');
-      var list = '';
-      var text = '';
-      var delete_count = 0;
-      if (ids.length) {
-         for (var i = 0; i < ids.length; i++) {
-            if (ids[i].checked) {
-               list += (list.length ? ',' : '') + ids[i].getAttribute('usi-popup-id');
-               text += (delete_count++ ? '<br/>' : '') + ids[i].getAttribute('usi-popup-info');
-            }
-         }
-      } else {
-         var ids  = $('input[name="post[]"]');
-         for (var i = 0; i < ids.length; i++) {
-            if (ids[i].checked) {
-               var id = ids[i].getAttribute('id').substr(10);
-               list += (list.length ? ',' : '') + id;
-               text += (delete_count++ ? '<br/>' : '') + $('#usi-popup-delete-' + id).attr('usi-popup-info');
-            }
-         }
-      }
-      if (!delete_count) {
-         return(show('error', '<p>' + select_item + '</p>'));
-      } else {
-         return(show(action, info(action, text), 'doaction'));
-      }
+      return(multi());
    }
 ); // Invoke popup via bulk action;
 
@@ -224,7 +236,7 @@ EOD;
 
             USI_WordPress_Solutions::admin_footer_jquery(self::$scripts[0]);
 
-         } // ENDIF popup javaascript not set;
+         } // ENDIF popup javascript not set;
 
          $divider = USI_WordPress_Solutions_Static::divider(0, $id);
 
@@ -237,7 +249,7 @@ EOD;
     <div id="{$id}-head" style="background:#fcfcfc; border-bottom:1px solid #ddd; height:29px;">
       <div id="{$id}-title" style="float:left; font-weight:600; line-height:29px; overflow:hidden; padding:0 29px 0 10px; text-overflow:ellipsis; white-space: nowrap; width:calc(100%-39px);"></div>
         <button type="button" style="background:#fcfcfc; border:solid 1px #00a0d2; color:#00a0d2; cursor:pointer; height:29px; position:absolute; right:0; top:0;" usi-popup-action="close" usi-popup-close="{$id}" >
-          <span class="screen-reader-text">{$close}</span>
+          <span class="screen-reader-text">{$cancel}</span>
           <span class="dashicons dashicons-no"></span>
         </button>
     </div><!--{$id}-head-->
@@ -245,7 +257,7 @@ EOD;
     <div id="{$id}-foot">
       <div style="display:inline-block; height:13px; width:15px;"></div>
       <span class="button" id="{$id}-work" style="display:none; margin:15px 5px 0 0;"></span>
-      <span class="button" id="{$id}-close" style="margin:15px 0 0 0;" usi-popup-close="{$id}">{$ok}</span>
+      <span class="button" id="{$id}-close" style="margin:15px 0 0 0;" usi-popup-close="{$idl}">{$cancel}</span>
     </div><!--{$id}-foot-->
   </div><!--{$id}-wrap-->
 </div>
@@ -259,14 +271,14 @@ EOD;
 
    public static function column_cb($args) {
 
-      $id_field = !empty($args['id_field']) ? $args['id_field'] : null;
-      $info     = !empty($args['info'])     ? $args['info']     : null;
-      $post     = !empty($args['post'])     ? $args['post']     : null;
+      $id_field = $args['id_field'] ?? null;
+      $info     = $args['info']     ?? null;
+      $post     = $args['post']     ?? null;
 
       if ($post) {
          $id    = $post->ID;
       } else {
-         $id    = !empty($args['id'])       ? $args['id']       : null;
+         $id    = $args['id']       ?? null;
       }
 
       return(
