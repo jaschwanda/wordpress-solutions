@@ -132,15 +132,7 @@ function info(action, body) {
    return('<p>' + head[action] + '</p>' + body + '<p>' + foot[action] + '</p>');
 } // info();
 
-function multi() {
-      if (confirmed) { confirmed = false; return(true); }
-      var action = null;
-      if ('standard' === '$method') {
-         action = get_bulk_action();
-         if ('select_bulk' == action) return(show('error', '<p>' + select_bulk + '</p>'));
-      } else {
-         action = 'delete';
-      }
+function multi(action) {
       var ids  = $('.usi-popup-checkbox');
       var list = '';
       var text = '';
@@ -168,6 +160,37 @@ function multi() {
          return(show(action, info(action, text), 'doaction'));
       }
 } // multi();
+
+function multi2() {
+      if (confirmed) { confirmed = false; return(true); }
+      var action = 'delete';
+      var ids  = $('.usi-popup-checkbox');
+      var list = '';
+      var text = '';
+      var action_count = 0;
+      if (ids.length) {
+         for (var i = 0; i < ids.length; i++) {
+            if (ids[i].checked) {
+               list += (list.length ? ',' : '') + ids[i].getAttribute('usi-popup-id');
+               text += (action_count++ ? '<br/>' : '') + ids[i].getAttribute('usi-popup-info');
+            }
+         }
+      } else {
+         var ids  = $('input[name="post[]"]');
+         for (var i = 0; i < ids.length; i++) {
+            if (ids[i].checked) {
+               var id = ids[i].getAttribute('id').substr(10);
+               list += (list.length ? ',' : '') + id;
+               text += (action_count++ ? '<br/>' : '') + $('#usi-popup-delete-' + id).attr('usi-popup-info');
+            }
+         }
+      }
+      if (!action_count) {
+         return(show('error', '<p>' + select_item + '</p>'));
+      } else {
+         return(show(action, info(action, text), 'doaction'));
+      }
+} // multi2();
 
 function show(action, body, invoke) {
 
@@ -212,11 +235,21 @@ $('[usi-popup-open]').click(
 ); // Invoke popup via row action;
 
 // Invoke popup via bulk action;
-$('{$invoke}').click(
+$('#doaction,#doaction2').click(
    () => {
+      if (confirmed) { confirmed = false; return(true); }
+      var action = get_bulk_action();
+      if ('select_bulk' == action) return(show('error', '<p>' + select_bulk + '</p>'));
       return(multi());
    }
 ); // Invoke popup via bulk action;
+
+// Invoke popup via custom action;
+$('{$invoke}').click(
+   () => {
+      return(multi2());
+   }
+); // Invoke popup via custom action;
 
 // Execute action;
 $('#{$id}-work').click(
