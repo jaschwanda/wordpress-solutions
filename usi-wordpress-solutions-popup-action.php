@@ -257,7 +257,7 @@ EOD;
     <div id="{$id}-foot">
       <div style="display:inline-block; height:13px; width:15px;"></div>
       <span class="button" id="{$id}-work" style="display:none; margin:15px 5px 0 0;"></span>
-      <span class="button" id="{$id}-close" style="margin:15px 0 0 0;" usi-popup-close="{$idl}">{$cancel}</span>
+      <span class="button" id="{$id}-close" style="margin:15px 0 0 0;" usi-popup-close="{$id}">{$cancel}</span>
     </div><!--{$id}-foot-->
   </div><!--{$id}-wrap-->
 </div>
