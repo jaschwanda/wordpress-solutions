@@ -964,9 +964,7 @@ class USI_WordPress_Solutions_Settings {
       $wrap_submit   = !empty($options['wrap_submit']);
 
       $submit_text   = null;
-//usi::log('$this=', $this);
-//$trace = debug_backtrace();
-//usi::log('$trace=', $trace, '\n$options=', $options);
+
       if (!empty($this->sections) && ($section = reset($this->sections))) {
          if (isset($section['options']['grid'])) self::set_grid($section['options']['grid']);
       }
@@ -1218,7 +1216,6 @@ class USI_WordPress_Solutions_Settings {
    } // section_render();
 
    function sections() { // Should be over ridden by extending class;
-usi::log();
       return(null);
    } // sections();
 
