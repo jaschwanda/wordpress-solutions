@@ -36,7 +36,6 @@ Copyright (c) 2020 by Jim Schwanda.
 // https://dev.to/lucagrandicelli/why-isadmin-is-totally-unsafe-for-your-wordpress-development-1le1
 
 require_once('usi-wordpress-solutions-diagnostics.php');
-require_once('usi-wordpress-solutions-log.php');
 
 final class USI_WordPress_Solutions {
 

@@ -21,8 +21,6 @@ This class is the start of a form design class and it must be included by the ch
 
 */
 
-require_once('usi-wordpress-solutions-log.php');
-
 class USI_WordPress_Solutions_Settings_Layout {
 
    const VERSION = '2.14.1 (2022-08-10)';
