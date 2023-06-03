@@ -471,32 +471,47 @@ class USI_WordPress_Solutions_Settings_Settings extends USI_WordPress_Solutions_
          ), // illumination;
 
          'limits-values' => array(
-            'title' => 'Limits and Values',
+            'title' => 'Constants, Limits and Values',
             'not_tabbed' => 'diagnostics',
             'settings' => array(
-               'php-memory-limit' => array(
+               'php-memory-limit' => [
                   'html' => ini_get('memory_limit'),
                   'label' => 'PHP memory_limit',
                   'notes' => 'The maximum amount of memory in bytes that an individual script is allowed to allocate.',
                   'type' => 'html', 
-               ),
-               'disable-wp-cron' => array(
+               ],
+               'disable-wp-cron' => [
                   'html' => defined('DISABLE_WP_CRON') ? (DISABLE_WP_CRON ? 'TRUE' : 'false') : 'undefined',
                   'label' => 'DISABLE_WP_CRON',
                   'notes' => 'When true the standard WordPress cron handling is disabled.',
                   'type' => 'html', 
-               ),
-               'wp-memory-limit' => array(
+               ],
+               'wp-memory-limit' => [
                   'html' => defined('WP_MEMORY_LIMIT') ? WP_MEMORY_LIMIT : 'undefined',
                   'label' => 'WP_MEMORY_LIMIT',
                   'notes' => 'The maximum amount of memory that can be consumed by PHP.',
                   'type' => 'html', 
-               ),
+               ],
+               'ABSPATH' => [
+                  'html' => defined('ABSPATH') ? ABSPATH : 'undefined',
+                  'label' => 'ABSPATH',
+                  'type' => 'html', 
+               ],
+               'UPLOADS' => [
+                  'html' => defined('UPLOADS') ? UPLOADS : 'undefined',
+                  'label' => 'UPLOADS',
+                  'type' => 'html', 
+               ],
+               'WP_CONTENT_URL' => [
+                  'html' => defined('WP_CONTENT_URL') ? WP_CONTENT_URL : 'undefined',
+                  'label' => 'WP_CONTENT_URL',
+                  'type' => 'html', 
+               ],
             ),
          ), // limits-values;
 
          'debug-values' => array(
-            'title' => 'Debuging Options',
+            'title' => 'Debug Options',
             'not_tabbed' => 'diagnostics',
             'settings' => array(
                'wp-debug' => array(
