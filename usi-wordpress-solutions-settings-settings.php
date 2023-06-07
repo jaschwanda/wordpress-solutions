@@ -444,31 +444,31 @@ class USI_WordPress_Solutions_Settings_Settings extends USI_WordPress_Solutions_
             )
          ),
 
-         'illumination' => array(
+         'illumination' => [
             'title' => 'Illumination',
             'not_tabbed' => 'diagnostics',
-            'settings' => array(
-               'info-php' => array(
+            'settings' => [
+               'info-php' => [
                   'type' => 'html', 
                   'html' => $phpinfo_anchor,
                   'label' => 'Information - PHP',
-               ),
-               'info-site' => array(
+               ],
+               'info-site' => [
                   'type' => 'html', 
                   'html' => '<a href="' . admin_url('site-health.php?tab=debug') . '">Site Health - Info</a>',
                   'label' => 'Information - Site',
-               ),
-               'active-users' => array(
+               ],
+               'active-users' => [
                   'type' => 'html', 
                   'html' => '<a href="admin.php?page=usi-wordpress-solutions-user-sessions">Users Logged In</a>',
                   'label' => 'Users Currently Logged In',
-               ),
-               'visible-grid' => array(
+               ],
+               'visible-grid' => [
                   'type' => 'checkbox', 
                   'label' => 'Visable Grid Borders',
-               ),
-            ),
-         ), // illumination;
+               ],
+            ],
+         ], // illumination;
 
          'limits-values' => array(
             'title' => 'Limits and Values',
