@@ -125,13 +125,14 @@ EOD;
           <span class="screen-reader-text">{$close}</span>
           <span class="dashicons dashicons-no"></span>
         </button>
+      </div><!--{$id}-title-->
     </div><!--{$id}-head-->
     <div id="{$id}-body" style="border-bottom:1px solid #ddd;"></div>
     <div id="{$id}-foot">
       <span class="button" style="margin:15px 0 0 15px;" usi-popup-action="close" usi-popup-close="{$id}">{$close}</span>
     </div><!--{$id}-foot-->
   </div><!--{$id}-wrap-->
-</div>
+</div><!--{$id}-->
 $divider
 EOD;
          USI_WordPress_Solutions::admin_footer_script(self::$scripts[$id]);
