@@ -15,7 +15,7 @@ Requires at least: 5.0
 Requires PHP:      7.0.0
 Tested up to:      5.3.2
 Text Domain:       usi-wordpress-solutions
-Version:           2.14.10
+Version:           2.14.11
 */
 
 /*
@@ -39,7 +39,7 @@ require_once('usi-wordpress-solutions-diagnostics.php');
 
 final class USI_WordPress_Solutions {
 
-   const VERSION = '2.14.10 (2023-05-22)';
+   const VERSION = '2.14.11 (2023-06-20)';
 
    const NAME       = 'WordPress-Solutions';
    const PREFIX     = 'usi-wordpress';
@@ -56,6 +56,7 @@ final class USI_WordPress_Solutions {
    const DEBUG_UPDATE   = 0x17000080;
    const DEBUG_XFER     = 0x17000100;
 
+   private static $emails = 0;
    private static $jquery = null;
    private static $script = null;
 
@@ -104,9 +105,30 @@ final class USI_WordPress_Solutions {
 
       }
 
-      add_action('admin_print_footer_scripts', array($this, 'action_admin_print_footer_scripts'));
+      add_action('admin_print_footer_scripts', [$this, 'action_admin_print_footer_scripts']);
+
+      add_shortcode('cloak', [__CLASS__, 'shortcode_email']);
 
    } // __construct();
+
+   function action_wp_footer() {
+      echo PHP_EOL . '    <script>'
+      . 'function usi_link_validate(e){'
+      . "function a(o){while(o&&('a'!=o.nodeName.toLowerCase())){o=o.parentNode;}return(o);}"
+      . 'function c(i){return(String.fromCharCode(i));}'
+      . "function r(s){return(s.split('').map(c=>String.fromCharCode(c.charCodeAt(0)+(c.toLowerCase()<'n'?13:-13))).join(''));}"
+      . 'e.preventDefault();'
+      . 'let o=a(e.target);'
+      . "let d=o.href.substring(8).replace(new RegExp('[\/]+$'),'');"
+      . "let s=o.getAttribute('title');"
+      . "let t=o.getAttribute('target');"
+      . "window.location.href=c(109)+c(97)+c(105)+c(108)+c(116)+c(111)+c(58)+r(t)+c(64)+d+(s?'?subject='+s:'');"
+      . 'return(false);'
+      . '}'
+      . '</script>' 
+      . PHP_EOL
+      ;
+   } // action_wp_footer();
 
    public function action_admin_print_footer_scripts() {
 
@@ -139,6 +161,38 @@ final class USI_WordPress_Solutions {
       self::$script .= PHP_EOL . $script;
 
    } // admin_footer_script();
+
+   public static function shortcode_email($attr, $content = null) {
+      if (!self::$emails++) add_action('wp_footer', [__CLASS__, 'action_wp_footer'], 20);
+      $class   = empty($attr['class'])   ? null : ' class="' . $attr['class']   . '"';
+      $id      = empty($attr['id'])      ? null : ' id="'    . $attr['id']      . '"';
+      $style   = empty($attr['style'])   ? null : ' style="' . $attr['style']   . '"';
+      $title   = empty($attr['subject']) ? null : ' title="' . $attr['subject'] . '"';
+      $email   = $attr['email']   ?? null;
+      $encode  = function($string) {
+         $html = '';
+         $size = strlen($string);
+         $seed = max(3, $size / 3);
+         for ($ith = 0; $ith < $size; $ith++) {
+            $code  = '&#' . ord($string[$ith]) . ';';
+            $html .= $code . ($ith % $seed ? '' : '<i style="display:none;">' . $code . '</i>');
+         }
+         return($html);
+      };
+      list($target, $domain) = explode('@', $email);
+      $offset     = false;
+      if (empty($content)) {
+         $content = '{cloak}';
+         $offset  = 0;
+      } else {
+         $offset  = strpos($content, '{cloak}');
+      }
+      if (false !== $offset) {
+         $cloaked = $encode($target) . '&#64;' . $encode($domain);
+         $content = substr_replace($content, $cloaked, $offset, 7);
+      }
+      return('<a' . $id . $class . ' href="https://' . $domain . '" onclick="usi_link_validate(event);"' . $style . ' target="' . str_rot13($target) . '"' . $title . '>' . $content . '</a>');
+   } // shortcode_email();
 
 } // Class USI_WordPress_Solutions;
 

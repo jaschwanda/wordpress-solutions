@@ -121,11 +121,10 @@ EOD;
   <div id="{$id}-wrap" style="background:#ffffff; box-sizing:border-box; left:50%; position:relative; top:50%; transform:translate(-50%,-50%); {$size}">
     <div id="{$id}-head" style="background:#fcfcfc; border-bottom:1px solid #ddd; height:29px;">
       <div id="{$id}-title" style="float:left; font-weight:600; line-height:29px; overflow:hidden; padding:0 29px 0 10px; text-overflow:ellipsis; white-space: nowrap; width:calc(100%-39px);"></div>
-        <button type="button" style="background:#fcfcfc; border:solid 1px #00a0d2; color:#00a0d2; cursor:pointer; height:29px; position:absolute; right:0; top:0;" usi-popup-action="close" usi-popup-close="{$id}" >
-          <span class="screen-reader-text">{$close}</span>
-          <span class="dashicons dashicons-no"></span>
-        </button>
-      </div><!--{$id}-title-->
+      <button type="button" style="background:#fcfcfc; border:solid 1px #00a0d2; color:#00a0d2; cursor:pointer; height:29px; position:absolute; right:0; top:0;" usi-popup-action="close" usi-popup-close="{$id}" >
+        <span class="screen-reader-text">{$close}</span>
+        <span class="dashicons dashicons-no"></span>
+      </button>
     </div><!--{$id}-head-->
     <div id="{$id}-body" style="border-bottom:1px solid #ddd;"></div>
     <div id="{$id}-foot">
@@ -133,7 +132,7 @@ EOD;
     </div><!--{$id}-foot-->
   </div><!--{$id}-wrap-->
 </div><!--{$id}-->
-$divider
+{$divider}
 EOD;
          USI_WordPress_Solutions::admin_footer_script(self::$scripts[$id]);
 
