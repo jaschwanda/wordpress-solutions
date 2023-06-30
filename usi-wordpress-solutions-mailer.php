@@ -8,7 +8,7 @@ require_once(ABSPATH . WPINC . '/PHPMailer/SMTP.php');
 
 class USI_WordPress_Solutions_Mailer extends PHPMailer\PHPMailer\PHPMailer {
 
-   const VERSION = '2.14.1 (2022-08-10)';
+   const VERSION = '2.15.0 (2023-06-30)';
 
    protected static $debug = null;
 

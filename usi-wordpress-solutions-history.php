@@ -12,14 +12,14 @@ warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Gen
 You should have received a copy of the GNU General Public License along with WordPress-Solutions. If not, see 
 https://github.com/jaschwanda/wordpress-solutions/blob/master/LICENSE.md
 
-Copyright (c) 2020 by Jim Schwanda.
+Copyright (c) 2023 by Jim Schwanda.
 */
 
 require_once('usi-wordpress-solutions.php');
 
 final class USI_WordPress_Solutions_History {
 
-   const VERSION = '2.14.1 (2022-08-10)';
+   const VERSION = '2.15.0 (2023-06-30)';
 
    private static $pre_post_update_data = null;
    private static $pre_post_update_id   = 0;

@@ -6,7 +6,7 @@ require_once('usi-wordpress-solutions-versions-all.php');
 
 class USI_WordPress_Solutions_Versions_Show {
 
-   const VERSION = '2.14.1 (2022-08-10)';
+   const VERSION = '2.15.0 (2023-06-30)';
 
    public static function parse($expression) {
 

@@ -15,7 +15,7 @@ Requires at least: 5.0
 Requires PHP:      7.0.0
 Tested up to:      5.3.2
 Text Domain:       usi-wordpress-solutions
-Version:           2.14.11
+Version:           2.15.0
 */
 
 /*
@@ -28,7 +28,7 @@ warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Gen
 You should have received a copy of the GNU General Public License along with WordPress-Solutions. If not, see 
 https://github.com/jaschwanda/wordpress-solutions/blob/master/LICENSE.md
 
-Copyright (c) 2020 by Jim Schwanda.
+Copyright (c) 2023 by Jim Schwanda.
 */
 
 // Settings pages do not have to add admin notices on success, custom settings pages do;
@@ -39,7 +39,7 @@ require_once('usi-wordpress-solutions-diagnostics.php');
 
 final class USI_WordPress_Solutions {
 
-   const VERSION = '2.14.11 (2023-06-20)';
+   const VERSION = '2.15.0 (2023-06-30)';
 
    const NAME       = 'WordPress-Solutions';
    const PREFIX     = 'usi-wordpress';

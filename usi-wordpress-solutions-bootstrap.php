@@ -10,10 +10,10 @@ warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Gen
 You should have received a copy of the GNU General Public License along with WordPress-Solutions. If not, see 
 https://github.com/jaschwanda/wordpress-solutions/blob/master/LICENSE.md
 
-Copyright (c) 2020 by Jim Schwanda.
+Copyright (c) 2023 by Jim Schwanda.
 */
 
-/* const VERSION = '2.14.1 (2022-08-10)'; */
+/* const VERSION = '2.15.0 (2023-06-30)'; */
 
 require_once(explode('wp-content', $_SERVER['SCRIPT_FILENAME'])[0] . 'wp-load.php');
 

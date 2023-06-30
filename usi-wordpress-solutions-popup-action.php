@@ -12,7 +12,7 @@ warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Gen
 You should have received a copy of the GNU General Public License along with WordPress-Solutions. If not, see 
 https://github.com/jaschwanda/wordpress-solutions/blob/master/LICENSE.md
 
-Copyright (c) 2020 by Jim Schwanda.
+Copyright (c) 2023 by Jim Schwanda.
 */
 
 /*
@@ -23,7 +23,7 @@ This popup displays a confirmation message for a list of items in a WordPress ta
 
 class USI_WordPress_Solutions_Popup_Action {
 
-   const VERSION = '2.14.10 (2023-05-22)';
+   const VERSION = '2.15.0 (2023-06-30)';
 
    const HEIGHT_HEAD_FOOT = 93;
 

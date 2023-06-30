@@ -6,7 +6,7 @@ class USI_Dbs_Exception extends Exception { } // Class USI_Dbs_Exception;
 
 final class USI {
 
-   const VERSION = '2.14.1 (2022-08-10)';
+   const VERSION = '2.15.0 (2023-06-30)';
 
    private static $info   = null;
    private static $mysqli = null;
