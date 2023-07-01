@@ -8,7 +8,7 @@ require_once(ABSPATH . WPINC . '/PHPMailer/SMTP.php');
 
 class USI_WordPress_Solutions_Mailer extends PHPMailer\PHPMailer\PHPMailer {
 
-   const VERSION = '2.15.0 (2023-06-30)';
+   const VERSION = '2.15.1 (2023-06-30)';
 
    protected static $debug = null;
 
@@ -71,9 +71,9 @@ class USI_WordPress_Solutions_Mailer extends PHPMailer\PHPMailer\PHPMailer {
             'f-class' => 'regular-text', 
             'label' => 'Security',
             'options' => [
-               [ 'none', 'none' ], 
-               [ 'ssl', 'SSL' ],
-               [ 'tls', 'TLS' ],
+               ['none', 'none'], 
+               ['ssl', 'SSL'],
+               ['tls', 'TLS'],
             ],
             'type' => 'select', 
             'notes' => 'Select if your SMTP server requires SSL or TLS.',
@@ -95,11 +95,11 @@ class USI_WordPress_Solutions_Mailer extends PHPMailer\PHPMailer\PHPMailer {
             'f-class' => 'regular-text', 
             'label' => 'Debug',
             'options' => [
-               [ '0', 'none' ],
-               [ '1', 'level 1: Client' ],
-               [ '2', 'level 2: Client and Server' ],
-               [ '3', 'level 3: Client, Server, and Connection' ],
-               [ '4', 'level 4: Low-Level Information' ],
+               ['0', 'none'],
+               ['1', 'level 1: Client'],
+               ['2', 'level 2: Client and Server'],
+               ['3', 'level 3: Client, Server, and Connection'],
+               ['4', 'level 4: Low-Level Information'],
             ],
             'type' => 'select', 
             'notes' => 'Select to get dignositcs on your SMTP operations.',
@@ -117,7 +117,7 @@ class USI_WordPress_Solutions_Mailer extends PHPMailer\PHPMailer\PHPMailer {
 
       if (!self::$pass++) {
          self::$log = USI_WordPress_Solutions_Diagnostics::get_log(USI_WordPress_Solutions::$options);
-         register_shutdown_function([ __CLASS__, 'dequeue' ]);
+         register_shutdown_function([__CLASS__, 'dequeue']);
       }
 
       parent::__construct();
@@ -175,7 +175,7 @@ class USI_WordPress_Solutions_Mailer extends PHPMailer\PHPMailer\PHPMailer {
    } // queue();
  
    public static function settings($that) {
-      self::$settings['header_callback'] = [ $that, 'sections_header', '      <p>WordPress is not configured to send emails by default, however, this plugin provides configuration of the PHPMailer system to send messages and support advanced transport features.</p>' ];
+      self::$settings['header_callback'] = [$that, 'sections_header', '      <p>WordPress is not configured to send emails by default, however, this plugin provides configuration of the PHPMailer system to send messages and support advanced transport features.</p>'];
       self::$settings['settings']['username']['readonly'] = 
       self::$settings['settings']['password']['readonly'] = empty($that->options['php-mailer']['smtp-auth']);
       return(self::$settings);
@@ -187,6 +187,6 @@ class USI_WordPress_Solutions_Mailer extends PHPMailer\PHPMailer\PHPMailer {
 
 } // class USI_WordPress_Solutions_Mailer;
 
-add_action('phpmailer_init', [ 'USI_WordPress_Solutions_Mailer', 'action_phpmailer_init' ], 10, 1);
+add_action('phpmailer_init', ['USI_WordPress_Solutions_Mailer', 'action_phpmailer_init'], 10, 1);
 
 // --------------------------------------------------------------------------------------------------------------------------- // ?>

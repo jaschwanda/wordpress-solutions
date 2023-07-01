@@ -73,12 +73,6 @@ final class USI_WordPress_Solutions {
          $defaults['preferences']['menu-sort']     = 'no';
          self::$options = get_option(self::PREFIX . '-options', $defaults);
       }
-      if (!empty(self::$options['admin-options']['history'])) {
-         require_once('usi-wordpress-solutions-history.php');
-      }
-      if (!empty(self::$options['admin-options']['mailer'])) {
-         require_once('usi-wordpress-solutions-mailer.php');
-      }
 
       $log  = USI_WordPress_Solutions_Diagnostics::get_log(self::$options);
 

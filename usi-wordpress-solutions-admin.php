@@ -36,9 +36,16 @@ final class USI_WordPress_Solutions_Admin {
 
          if (!defined('WP_UNINSTALL_PLUGIN')) {
             add_action('init', 'add_thickbox');
+            if (!empty(USI_WordPress_Solutions::$options['admin-options']['history'])) {
+               require_once('usi-wordpress-solutions-history.php');
+            }
+            if (!empty(self::$options['admin-options']['mailer'])) {
+               require_once('usi-wordpress-solutions-mailer.php');
+            }
             require_once('usi-wordpress-solutions-install.php');
             require_once('usi-wordpress-solutions-settings-settings.php');
          }
+
 
          add_action('admin_print_footer_scripts', [__CLASS__, 'action_admin_print_footer_scripts']);
 
