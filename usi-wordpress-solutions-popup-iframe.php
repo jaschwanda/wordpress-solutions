@@ -17,7 +17,7 @@ Copyright (c) 2023 by Jim Schwanda.
 
 class USI_WordPress_Solutions_Popup_Iframe {
 
-   const VERSION = '2.15.0 (2023-06-30)';
+   const VERSION = '2.15.1 (2023-06-30)';
 
    private static $attributes = array();
    private static $scripts    = array();
@@ -109,7 +109,7 @@ $('[usi-popup-open]').click(
 
 EOD;
 
-            USI_WordPress_Solutions::admin_footer_jquery(self::$scripts[0]);
+            USI_WordPress_Solutions_Admin::admin_footer_jquery(self::$scripts[0]);
 
          } // ENDIF popup javaascript not set;
 
@@ -134,7 +134,7 @@ EOD;
 </div><!--{$id}-->
 {$divider}
 EOD;
-         USI_WordPress_Solutions::admin_footer_script(self::$scripts[$id]);
+         USI_WordPress_Solutions_Admin::admin_footer_script(self::$scripts[$id]);
 
       }  // ENDIF popup html not set;
 

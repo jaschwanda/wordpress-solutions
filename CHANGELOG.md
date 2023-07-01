@@ -2,6 +2,9 @@
 
 WordPress-Solutions plugin changes are logged here using <a href="http://semver.org/">Semantic Versioning</a>.
 
+## 2.15.1 (2023-06-30) ##
+* Removed admin functions from main file and put into admin file.
+
 ## 2.15.0 (2023-06-30) ##
 * Set all versions numbers to same version.
 

@@ -19,13 +19,11 @@ require_once('usi-wordpress-solutions-capabilities.php');
 require_once('usi-wordpress-solutions-diagnostics.php');
 require_once('usi-wordpress-solutions-popup-iframe.php');
 require_once('usi-wordpress-solutions-settings.php');
-require_once('usi-wordpress-solutions-settings-layout.php');
-require_once('usi-wordpress-solutions-updates.php');
 require_once('usi-wordpress-solutions-versions.php');
 
 class USI_WordPress_Solutions_Settings_Settings extends USI_WordPress_Solutions_Settings {
 
-   const VERSION = '2.15.0 (2023-06-30)';
+   const VERSION = '2.15.1 (2023-06-30)';
 
    protected $debug     = 0;
    protected $is_tabbed = true;
@@ -35,14 +33,14 @@ class USI_WordPress_Solutions_Settings_Settings extends USI_WordPress_Solutions_
       $this->debug = USI_WordPress_Solutions_Diagnostics::get_log(USI_WordPress_Solutions::$options);
 
       parent::__construct(
-         array(
+         [
             'name' => USI_WordPress_Solutions::NAME, 
             'prefix' => USI_WordPress_Solutions::PREFIX, 
             'text_domain' => USI_WordPress_Solutions::TEXTDOMAIN,
             'options' => USI_WordPress_Solutions::$options,
             'capabilities' => USI_WordPress_Solutions::$capabilities,
             'file' => str_replace('-settings', '', __FILE__), // Plugin main file, this initializes capabilities on plugin activation;
-         )
+         ]
       );
 
    } // __construct();
@@ -69,6 +67,8 @@ class USI_WordPress_Solutions_Settings_Settings extends USI_WordPress_Solutions_
       $input = parent::fields_sanitize($input);
 
       $log   = (USI_WordPress_Solutions::DEBUG_XFER == (USI_WordPress_Solutions::DEBUG_XFER & $this->debug));
+
+      $input['preferences']['e-mail-cloak'] = sanitize_key($input['preferences']['e-mail-cloak']);
 
       $pcre_backtrack_limit = ini_get('pcre.backtrack_limit');
 
@@ -98,12 +98,12 @@ class USI_WordPress_Solutions_Settings_Settings extends USI_WordPress_Solutions_
             $type  = $input['xfer']['post-type'];
 
             $parent_post = get_posts(
-               $args = array(
+               $args = [
                   'numberposts' => 1,
                   'post_status' => 'publish',
                   'post_type' => $type,
                   'title' => $title,
-               )
+               ]
             );
 
             if ($log) usi::log('$args=', $args, '\n$post_parent=', $parent_post);
@@ -111,12 +111,12 @@ class USI_WordPress_Solutions_Settings_Settings extends USI_WordPress_Solutions_
             if (!empty($parent_post[0]->ID)) {
 
                $posts = get_posts(
-                  $args = array(
+                  $args = [
                      'numberposts' => -1,
                      'post_parent' => $parent_post[0]->ID,
                      'post_status' => 'publish',
                      'post_type' => $type,
-                  )
+                  ]
                );
 
                if ($log) usi::log('$args=', $args, '\n$posts=', $posts);
@@ -241,27 +241,27 @@ class USI_WordPress_Solutions_Settings_Settings extends USI_WordPress_Solutions_
       $transfer_label = __('Transfer', USI_WordPress_Solutions::TEXTDOMAIN);
 
       USI_WordPress_Solutions_Popup_Iframe::build(
-         array(
+         [
             'close'  => __('Close', USI_WordPress_Solutions::TEXTDOMAIN),
             'height' => '640px',
             'id'     => 'usi-popup-phpinfo',
             'width'  => '980px',
-         )
+         ]
       );
 
       $phpinfo_anchor = USI_WordPress_Solutions_Popup_Iframe::link(
-         array(
+         [
             'id'     => 'usi-popup-phpinfo',
             'iframe' => plugins_url(null, __FILE__) . '/usi-wordpress-solutions-phpinfo-scan.php',
-            'link'   => array('text' => 'phpinfo()'),
+            'link'   => ['text' => 'phpinfo()'],
             'tip'    => __('Display PHP information', USI_WordPress_Solutions::TEXTDOMAIN),
             'title'  => 'phpinfo()',
-         )
+         ]
       );
 
       $current         = error_reporting();
 
-      $error_constants = array(
+      $error_constants = [
          'E_ALL' => E_ALL,
          'E_COMPILE_ERROR' => E_COMPILE_ERROR,
          'E_COMPILE_WARNING' => E_COMPILE_WARNING,
@@ -278,7 +278,7 @@ class USI_WordPress_Solutions_Settings_Settings extends USI_WordPress_Solutions_
          'E_USER_NOTICE' => E_USER_NOTICE,
          'E_USER_WARNING' => E_USER_WARNING,
          'E_WARNING' => E_WARNING,
-      );
+      ];
 
       $php_reporting   = '0x' . strtoupper(dechex($current)) . ' = ';
       $separator       = '';
@@ -302,146 +302,147 @@ class USI_WordPress_Solutions_Settings_Settings extends USI_WordPress_Solutions_
 
       $skip_phpmailer       = empty($this->options['admin-options']['mailer']);
 
-      $sections = array(
+      $sections = [
 
-         'preferences' => array(
-         'header_callback' => array($this, 'sections_header', '    <p>' . __('The WordPress-Solutions plugin is used by many Universal Solutions plugins and themes to simplify the ' .
-         'implementation of WordPress functionality. Additionally, you can place all of the Universal Solutions settings pages ' .
-         'at the end of the Settings sub-menu, or you can sort the Settings sub-menu alphabetically or not at all.', 
-          USI_WordPress_Solutions::TEXTDOMAIN) . '</p>' . PHP_EOL),
+         'preferences' => [
+            'header_callback' => [$this, 'sections_header', '    <p>' . __('The WordPress-Solutions plugin is used by many Universal Solutions plugins and themes to simplify the ' .
+            'implementation of WordPress functionality. Additionally, you can place all of the Universal Solutions settings pages ' .
+            'at the end of the Settings sub-menu, or you can sort the Settings sub-menu alphabetically or not at all.', 
+             USI_WordPress_Solutions::TEXTDOMAIN) . '</p>' . PHP_EOL],
             'label' => __('Preferences', USI_WordPress_Solutions::TEXTDOMAIN), 
             'localize_labels' => 'yes',
             'localize_notes' => 3, // <p class="description">__()</p>;
-            'settings' => array(
-               'menu-sort' => array(
+            'settings' => [
+               'menu-sort' => [
                   'type' => 'radio', 
                   'label' => 'Settings Menu Sort Option',
-                  'choices' => array(
-                     array(
+                  'choices' => [
+                     [
                         'value' => 'none', 
                         'label' => true, 
                         'notes' => __('No sorting', USI_WordPress_Solutions::TEXTDOMAIN), 
                         'suffix' => '<br/>',
-                     ),
-                     array(
+                     ],
+                     [
                         'value' => 'alpha', 
                         'label' => true, 
                         'notes' => __('Alphabetical sorting selection', USI_WordPress_Solutions::TEXTDOMAIN), 
                         'suffix' => '<br/>',
-                     ),
-                     array(
+                     ],
+                     [
                         'value' => 'usi', 
                         'label' => true, 
                         'notes' => __('Sort Universal Solutions settings and move to end of menu', USI_WordPress_Solutions::TEXTDOMAIN), 
-                     ),
-                  ),
+                     ],
+                  ],
                   'notes' => 'Defaults to <b>No sorting</b>.',
-               ), // menu-sort;
-               'admin-notice' => array(
+               ], // menu-sort;
+               'admin-notice' => [
                   'f-class' => 'large-text', 
                   'rows' => 2,
                   'type' => 'textarea', 
                   'label' => 'Admin Notice',
-               ),
-            ),
-         ), // preferences;
+               ],
+               'e-mail-cloak' => [
+                  'f-class' => 'regular-text', 
+                  'label' => 'Cloaking Shortcode Identifier',
+                  'notes' => __('Shortcode to use for e-mail cloaking, cloaking is disabled if not given.', USI_WordPress_Solutions::TEXTDOMAIN), 
+               ],
+            ],
+         ], // preferences;
 
-         'admin-options' => array(
+         'admin-options' => [
             'title' => __('Administrator Options', USI_WordPress_Solutions::TEXTDOMAIN),
             'not_tabbed' => 'preferences',
-            'settings' => array(
-               'history' => array(
+            'settings' => [
+               'history' => [
                   'type' => 'checkbox', 
                   'label' => 'Enable Historian',
                   'notes' => 'The system historian records user, configuration and update events in the system database.',
-               ),
-               'mailer' => array(
+               ],
+               'mailer' => [
                   'type' => 'checkbox', 
                   'label' => 'Enable PHPMailer',
                   'notes' => 'Enables the PHPMailer functionality included with WordPress, a new tab will appear if checked.',
-               ),
-               'impersonate' => array(
+               ],
+               'impersonate' => [
                   'type' => 'checkbox', 
                   'label' => 'Enable User Switching',
                   'notes' => 'Enables administrators to impersonate another WordPress user.',
-               ),
-               'pass-reset' => array(
+               ],
+               'pass-reset' => [
                   'type' => 'checkbox', 
                   'label' => 'Remove Password Reset',
                   'notes' => 'Remove the password reset link option from the row actions in the user display.',
-               ),
-               'options_php' => array(
+               ],
+               'options_php' => [
                   'type' => 'html', 
                   'html' => '<a href="options.php" title="Semi-secret settings on options.php page">options.php</a>',
                   'label' => 'Semi-Secret Settings',
-               ),
-            ),
-         ), // admin-options;
+               ],
+            ],
+         ], // admin-options;
 
-         'admin-limits' => array(
+         'admin-limits' => [
             'title' => __('Other Options and Limits', USI_WordPress_Solutions::TEXTDOMAIN),
             'not_tabbed' => 'preferences',
-            'settings' => array(
-               'mpdf-version' => array(
+            'settings' => [
+               'mpdf-version' => [
                   'f-class' => 'regular-text', 
                   'type' => 'text', 
                   'label' => 'mPDF Version',
                   'notes' => '8.1.4 or null for default. Repository found at https://github.com/mpdf/mpdf .',
-               ),
-               'mpdf-pcre-limit' => array(
+               ],
+               'mpdf-pcre-limit' => [
                   'f-class' => 'regular-text', 
                   'label' => 'pcre.backtrack_limit',
                   'notes' => 'This option only affects the <i>pcre.backtrack_limit</i> when doing a PDF download, the current system wide limit is ' . $pcre_backtrack_limit . '.',
                   'type' => 'number', 
                   'value' => $mpdf_pcre_limit, 
-               ),
-            ),
-         ), // admin-limits;
+               ],
+            ],
+         ], // admin-limits;
 
          'capabilities' => new USI_WordPress_Solutions_Capabilities($this),
 
          'diagnostics' => new USI_WordPress_Solutions_Diagnostics($this, 
-            array(
-               'DEBUG_INIT' => array(
+            [
+               'DEBUG_INIT' => [
                   'value' => USI_WordPress_Solutions::DEBUG_INIT,
                   'notes' => 'Log USI_WordPress_Solutions_Settings::action_admin_init() method.',
-               ),
-               'DEBUG_MAILDEQU' => array(
+               ],
+               'DEBUG_MAILDEQU' => [
                   'value' => USI_WordPress_Solutions::DEBUG_MAILDEQU,
                   'notes' => 'Log USI_WordPress_Solutions_Mailer::dequeu() method.',
                   'skip'  => $skip_phpmailer,
-               ),
-               'DEBUG_MAILINIT' => array(
+               ],
+               'DEBUG_MAILINIT' => [
                   'value' => USI_WordPress_Solutions::DEBUG_MAILINIT,
                   'notes' => 'Log USI_WordPress_Solutions_Mailer::__construct() method.',
                   'skip'  => $skip_phpmailer,
-               ),
-               'DEBUG_OPTIONS' => array(
+               ],
+               'DEBUG_OPTIONS' => [
                   'value' => USI_WordPress_Solutions::DEBUG_OPTIONS,
                   'notes' => 'Log USI_WordPress_Solutions::$options.',
-               ),
-               'DEBUG_PDF' => array(
+               ],
+               'DEBUG_PDF' => [
                   'value' => USI_WordPress_Solutions::DEBUG_PDF,
                   'notes' => 'Log USI_WordPress_Solutions_PDF operations.',
-               ),
-               'DEBUG_RENDER' => array(
+               ],
+               'DEBUG_RENDER' => [
                   'value' => USI_WordPress_Solutions::DEBUG_RENDER,
                   'notes' => 'Log USI_WordPress_Solutions_Settings::fields_render() method.',
-               ),
-               'DEBUG_SMTP' => array(
+               ],
+               'DEBUG_SMTP' => [
                   'value' => USI_WordPress_Solutions::DEBUG_SMTP,
                   'notes' => 'Log DEBUG_SMTP smtp operations.',
                   'skip'  => $skip_phpmailer,
-               ),
-               'DEBUG_UPDATE' => array(
-                  'value' => USI_WordPress_Solutions::DEBUG_UPDATE,
-                  'notes' => 'Log USI_WordPress_Solutions_Update methods.',
-               ),
-               'DEBUG_XFER' => array(
+               ],
+               'DEBUG_XFER' => [
                   'value' => USI_WordPress_Solutions::DEBUG_XFER,
                   'notes' => 'Log USI_WordPress_Solutions xport functionality.',
-               ),
-            )
+               ],
+            ]
          ),
 
          'illumination' => [
@@ -470,10 +471,10 @@ class USI_WordPress_Solutions_Settings_Settings extends USI_WordPress_Solutions_
             ],
          ], // illumination;
 
-         'limits-values' => array(
+         'limits-values' => [
             'title' => 'Constants, Limits and Values',
             'not_tabbed' => 'diagnostics',
-            'settings' => array(
+            'settings' => [
                'php-memory-limit' => [
                   'html' => ini_get('memory_limit'),
                   'label' => 'PHP memory_limit',
@@ -507,125 +508,123 @@ class USI_WordPress_Solutions_Settings_Settings extends USI_WordPress_Solutions_
                   'label' => 'WP_CONTENT_URL',
                   'type' => 'html', 
                ],
-            ),
-         ), // limits-values;
+            ],
+         ], // limits-values;
 
-         'debug-values' => array(
+         'debug-values' => [
             'title' => 'Debug Options',
             'not_tabbed' => 'diagnostics',
-            'settings' => array(
-               'wp-debug' => array(
+            'settings' => [
+               'wp-debug' => [
                   'html' => defined('WP_DEBUG') ? (WP_DEBUG ? 'TRUE' : 'false') : 'undefined',
                   'label' => 'WP_DEBUG',
                   'notes' => 'When true triggers "debug" mode throughout WordPress.',
                   'type' => 'html', 
-               ),
-               'wp-debug-log' => array(
+               ],
+               'wp-debug-log' => [
                   'html' => defined('WP_DEBUG_LOG') ? (WP_DEBUG_LOG ? 'TRUE' : 'false') : 'undefined',
                   'label' => 'WP_DEBUG_LOG',
                   'notes' => 'When true and when WP_DEBUG_DISPLAY is false, WordPress writes errors to the <i>debug.log</i> file inside the <i>wp-content</i> folder.',
                   'type' => 'html', 
-               ),
-               'wp-debug-display' => array(
+               ],
+               'wp-debug-display' => [
                   'html' => defined('WP_DEBUG_DISPLAY') ? (WP_DEBUG_DISPLAY ? 'TRUE' : 'false') : 'undefined',
                   'label' => 'WP_DEBUG_DISPLAY',
                   'notes' => 'When true WordPress shows errors and warnings on the page as they are generated.',
                   'type' => 'html', 
-               ),
-               'wp-script-debug' => array(
+               ],
+               'wp-script-debug' => [
                   'html' => defined('SCRIPT_DEBUG') ? (SCRIPT_DEBUG ? 'TRUE' : 'false') : 'undefined',
                   'label' => 'SCRIPT_DEBUG',
                   'notes' => 'When true WordPress loads the full version of .CSS and .JS files, otherwise the minified versions are loaded.',
                   'type' => 'html', 
-               ),
-               'php-report' => array(
+               ],
+               'php-report' => [
                   'type' => 'html', 
                   'html' => $php_reporting,
                   'label' => 'Error Reporting',
-               ),
-            ),
-         ), // limits-values;
+               ],
+            ],
+         ], // limits-values;
 
          'php-mailer' => 'placeholder',
 
          'php-mailer-test' => 'placeholder',
 
-         'updates' => new USI_WordPress_Solutions_Updates($this),
-
-         'versions' => array(
+         'versions' => [
             'label' => __('Versions', USI_WordPress_Solutions::TEXTDOMAIN), 
-            'footer_callback' => array($this, 'sections_footer', 'Execute Versions'),
+            'footer_callback' => [$this, 'sections_footer', 'Execute Versions'],
             'localize_labels' => 'yes',
             'localize_notes' => 3, // <p class="description">__()</p>;
-            'settings' => array(
-               'mode' => array(
+            'settings' => [
+               'mode' => [
                   'f-class' => 'large-text', 
                   'label' => 'Select Functionality',
-                  'options' => array(
-                     array(0 => 'compare', 1 => 'Compare version information'),
-                     array(0 => 'export', 1 => 'Export current version information'),
-                     array(0 => 'import', 1 => 'Import source version information'),
-                  ),
+                  'options' => [
+                     [0 => 'compare', 1 => 'Compare version information'],
+                     [0 => 'export', 1 => 'Export current version information'],
+                     [0 => 'import', 1 => 'Import source version information']
+                  ],
                   'type' => 'select', 
-               ),
-            ),
-         ), // versions;
+               ],
+            ],
+         ], // versions;
 
-         'xfer' => array(
+         'xfer' => [
             'label' => $transfer_label, 
-            'header_callback' => array($this, 'sections_header', '    <p>' . __('Transfer and document post content and plugin options.', USI_WordPress_Solutions::TEXTDOMAIN) . '</p>' . PHP_EOL),
-            'footer_callback' => array($this, 'sections_footer', $transfer_label),
+            'header_callback' => [$this, 'sections_header', '    <p>' . __('Transfer and document post content and plugin options.', USI_WordPress_Solutions::TEXTDOMAIN) . '</p>' . PHP_EOL],
+            'footer_callback' => [$this, 'sections_footer', $transfer_label],
             'localize_labels' => 'yes',
             'localize_notes' => 3, // <p class="description">__()</p>;
-            'settings' => array(
-               'post-type' => array(
+            'settings' => [
+               'post-type' => [
                   'f-class' => 'regular-text', 
                   'type' => 'text', 
                   'label' => 'Post Type',
-               ),
-               'parent-title' => array(
+               ],
+               'parent-title' => [
                   'f-class' => 'large-text', 
                   'type' => 'text', 
                   'label' => 'Parent Post Title',
-               ),
-               'content' => array(
+               ],
+               'content' => [
                   'f-class' => 'large-text', 
                   'rows' => 6,
                   'type' => 'textarea', 
                   'label' => 'Post Content',
                   'notes' => 'Both the above <b>Post Type</b> and <b>Parent Post Title</b> fields must be given to transfer post content.',
-               ),
-               'options' => array(
+               ],
+               'options' => [
                   'f-class' => 'large-text', 
                   'rows' => 6,
                   'type' => 'textarea', 
                   'label' => 'Plugin Options',
-               ),
-               'export-import' => array(
+               ],
+               'export-import' => [
                   'type' => 'radio', 
-                  'choices' => array(
-                     array(
+                  'choices' => [
+                     [
                         'value' => 'export', 
                         'label' => true, 
                         'notes' => __('Extract the values for the keys listed in the above <b>Plugin Options</b> box.', USI_WordPress_Solutions::TEXTDOMAIN), 
                         'suffix' => '<br/>',
-                     ),
-                     array(
+                     ],
+                     [
                         'value' => 'import', 
                         'label' => true, 
                         'notes' => __('Insert the values for the keys listed in the above <b>Plugin Options</b> box.', USI_WordPress_Solutions::TEXTDOMAIN), 
-                     ),
-                  ),
-               ),
-               'pretty-print' => array(
+                     ],
+                  ],
+               ],
+               'pretty-print' => [
                   'type' => 'checkbox', 
                   'prefix' => '<label>',
                   'suffix' => 'Pretty print the JSON string in the above <b>Plugin Options</b> box.</label>',
-               ),
-            ),
-         ), // xport;
+               ],
+            ],
+         ], // xport;
 
-      );
+      ];
 
       if ($skip_phpmailer) {
          unset($sections['php-mailer']);
@@ -639,30 +638,30 @@ class USI_WordPress_Solutions_Settings_Settings extends USI_WordPress_Solutions_
       } else if ('compare' == $this->options['versions']['mode']) {
          require_once('usi-wordpress-solutions-versions-show.php');
          $import = !empty($this->options['versions']['import']) ? $this->options['versions']['import'] : null;
-         $sections['versions']['settings']['compare'] = array(
+         $sections['versions']['settings']['compare'] = [
             'html' => USI_WordPress_Solutions_Versions_Show::show($import),
             'type' => 'html', 
-         );
-         $sections['versions']['settings']['import'] = array(
+         ];
+         $sections['versions']['settings']['import'] = [
             'type' => 'hidden', 
-         );
+         ];
       } else if ('export' == $this->options['versions']['mode']) {
-         $sections['versions']['settings']['export'] = array(
+         $sections['versions']['settings']['export'] = [
             'f-class' => 'large-text', 
             'rows' => 16,
             'type' => 'textarea', 
             'label' => 'Export Current Installation',
-         );
-         $sections['versions']['settings']['import'] = array(
+         ];
+         $sections['versions']['settings']['import'] = [
             'type' => 'hidden', 
-         );
+         ];
       } else if ('import' == $this->options['versions']['mode']) {
-         $sections['versions']['settings']['import'] = array(
+         $sections['versions']['settings']['import'] = [
             'f-class' => 'large-text', 
             'rows' => 16,
             'type' => 'textarea', 
             'label' => 'Import Source Installation',
-         );
+         ];
       }
 
       return($sections);

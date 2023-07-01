@@ -23,7 +23,7 @@ This popup displays a confirmation message for a list of items in a WordPress ta
 
 class USI_WordPress_Solutions_Popup_Action {
 
-   const VERSION = '2.15.0 (2023-06-30)';
+   const VERSION = '2.15.1 (2023-06-30)';
 
    const HEIGHT_HEAD_FOOT = 93;
 
@@ -251,7 +251,7 @@ $('#{$id}-work').click(
 
 EOD;
 
-            USI_WordPress_Solutions::admin_footer_jquery(self::$scripts[0]);
+            USI_WordPress_Solutions_Admin::admin_footer_jquery(self::$scripts[0]);
 
          } // ENDIF popup javascript not set;
 
@@ -280,7 +280,7 @@ EOD;
 </div>
 $divider
 EOD;
-         USI_WordPress_Solutions::admin_footer_script(self::$scripts[$id]);
+         USI_WordPress_Solutions_Admin::admin_footer_script(self::$scripts[$id]);
 
       }  // ENDIF popup html not set;
 

@@ -25,7 +25,7 @@ require_once('usi-wordpress-solutions-versions.php');
 
 class USI_WordPress_Solutions_Settings {
 
-   const VERSION = '2.15.0 (2023-06-30)';
+   const VERSION = '2.15.1 (2023-06-30)';
 
    private static $current_user_id = -1; 
    private static $grid            = false;
@@ -195,7 +195,7 @@ class USI_WordPress_Solutions_Settings {
 
       if ($this->jquery) {
 
-         USI_WordPress_Solutions::admin_footer_jquery($this->jquery);
+         USI_WordPress_Solutions_Admin::admin_footer_jquery($this->jquery);
 
          $this->jquery = null;
       }

@@ -15,7 +15,7 @@ Requires at least: 5.0
 Requires PHP:      7.0.0
 Tested up to:      5.3.2
 Text Domain:       usi-wordpress-solutions
-Version:           2.15.0
+Version:           2.15.1
 */
 
 /*
@@ -28,7 +28,7 @@ warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Gen
 You should have received a copy of the GNU General Public License along with WordPress-Solutions. If not, see 
 https://github.com/jaschwanda/wordpress-solutions/blob/master/LICENSE.md
 
-Copyright (c) 2023 by Jim Schwanda.
+Copyright (c) 2020 by Jim Schwanda.
 */
 
 // Settings pages do not have to add admin notices on success, custom settings pages do;
@@ -39,7 +39,7 @@ require_once('usi-wordpress-solutions-diagnostics.php');
 
 final class USI_WordPress_Solutions {
 
-   const VERSION = '2.15.0 (2023-06-30)';
+   const VERSION = '2.15.1 (2023-06-30)';
 
    const NAME       = 'WordPress-Solutions';
    const PREFIX     = 'usi-wordpress';
@@ -53,26 +53,24 @@ final class USI_WordPress_Solutions {
    const DEBUG_PDF      = 0x17000010;
    const DEBUG_RENDER   = 0x17000020;
    const DEBUG_SMTP     = 0x17000040;
-   const DEBUG_UPDATE   = 0x17000080;
-   const DEBUG_XFER     = 0x17000100;
+   const DEBUG_XFER     = 0x17000080;
 
    private static $emails = 0;
-   private static $jquery = null;
-   private static $script = null;
 
-   public static $capabilities = array(
+   public static $capabilities = [
       'impersonate-user' => 'Impersonate User|administrator',
-   );
+   ];
 
-   public static $options = array();
+   public static $options = [];
 
    function __construct() {
 
       if (empty(self::$options)) {
-         $defaults['admin-options']['history']     = false;
-         $defaults['admin-options']['mailer']      = false;
-         $defaults['preferences']['menu-sort']     = 'no';
+         $defaults['admin-options']['history']     =
+         $defaults['admin-options']['mailer']      =
          $defaults['illumination']['visible-grid'] = false;
+         $defaults['preferences']['e-mail-cloak']  = '';
+         $defaults['preferences']['menu-sort']     = 'no';
          self::$options = get_option(self::PREFIX . '-options', $defaults);
       }
       if (!empty(self::$options['admin-options']['history'])) {
@@ -87,27 +85,12 @@ final class USI_WordPress_Solutions {
       if (self::DEBUG_OPTIONS == (self::DEBUG_OPTIONS & $log)) usi::log('$options=', self::$options);
 
       if (is_admin()) {
-
-         global $pagenow;
-         if ('admin.php' == $pagenow) {
-            require_once('usi-wordpress-solutions-user-sessions.php');
-         }
-
-         if (!defined('WP_UNINSTALL_PLUGIN')) {
-            add_action('init', 'add_thickbox');
-            require_once('usi-wordpress-solutions-install.php');
-            require_once('usi-wordpress-solutions-settings-settings.php');
-            if (!empty(USI_WordPress_Solutions::$options['updates']['git-update'])) {
-               require_once('usi-wordpress-solutions-update.php');
-               new USI_WordPress_Solutions_Update_GitHub(__FILE__, 'jaschwanda', 'wordpress-solutions', null, !empty(USI_WordPress_Solutions::$options['updates']['force-update']));
-            }
-         }
-
+         require_once('usi-wordpress-solutions-admin.php');
       }
 
-      add_action('admin_print_footer_scripts', [$this, 'action_admin_print_footer_scripts']);
-
-      add_shortcode('cloak', [__CLASS__, 'shortcode_email']);
+      if (!empty(self::$options['preferences']['e-mail-cloak'])) {
+         add_shortcode(self::$options['preferences']['e-mail-cloak'], [__CLASS__, 'shortcode_email']);
+      }
 
    } // __construct();
 
@@ -129,38 +112,6 @@ final class USI_WordPress_Solutions {
       . PHP_EOL
       ;
    } // action_wp_footer();
-
-   public function action_admin_print_footer_scripts() {
-
-      if (self::$script) echo self::$script;
-
-      if (self::$jquery) {
-
-         echo PHP_EOL
-         . '<script> ' . PHP_EOL
-         . 'jQuery(document).ready(' . PHP_EOL
-         . '   function($) {' . PHP_EOL
-         . str_replace(PHP_EOL, PHP_EOL . '      ', self::$jquery) . PHP_EOL
-         . '   } // function($);' . PHP_EOL
-         . '); // jQuery(document).ready(' . PHP_EOL
-         . '</script>' . PHP_EOL
-         ;
-
-      }
-
-   } // action_admin_print_footer_scripts();
-
-   public static function admin_footer_jquery($jquery) {
-
-      self::$jquery .= PHP_EOL . $jquery;
-
-   } // admin_footer_jquery();
-
-   public static function admin_footer_script($script) {
-
-      self::$script .= PHP_EOL . $script;
-
-   } // admin_footer_script();
 
    public static function shortcode_email($attr, $content = null) {
       if (!self::$emails++) add_action('wp_footer', [__CLASS__, 'action_wp_footer'], 20);
