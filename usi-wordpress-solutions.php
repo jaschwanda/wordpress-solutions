@@ -39,7 +39,7 @@ require_once('usi-wordpress-solutions-diagnostics.php');
 
 final class USI_WordPress_Solutions {
 
-   const VERSION = '2.15.1 (2023-06-30)';
+   const VERSION    = '2.15.1 (2023-06-30)';
 
    const NAME       = 'WordPress-Solutions';
    const PREFIX     = 'usi-wordpress';
@@ -63,7 +63,10 @@ final class USI_WordPress_Solutions {
 
    public static $options = [];
 
-   function __construct() {
+   private function __construct() {
+   } // __construct();
+
+   function _init() {
 
       if (empty(self::$options)) {
          $defaults['admin-options']['history']     =
@@ -86,7 +89,7 @@ final class USI_WordPress_Solutions {
          add_shortcode(self::$options['preferences']['e-mail-cloak'], [__CLASS__, 'shortcode_email']);
       }
 
-   } // __construct();
+   } // _init();
 
    function action_wp_footer() {
       echo PHP_EOL . '    <script>'
@@ -141,6 +144,6 @@ final class USI_WordPress_Solutions {
 
 } // Class USI_WordPress_Solutions;
 
-new USI_WordPress_Solutions();
+USI_WordPress_Solutions::_init();
 
 // --------------------------------------------------------------------------------------------------------------------------- // ?>
