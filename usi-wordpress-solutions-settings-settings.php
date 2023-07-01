@@ -17,6 +17,7 @@ Copyright (c) 2023 by Jim Schwanda.
 
 require_once('usi-wordpress-solutions-capabilities.php');
 require_once('usi-wordpress-solutions-diagnostics.php');
+require_once('usi-wordpress-solutions-mailer.php');
 require_once('usi-wordpress-solutions-popup-iframe.php');
 require_once('usi-wordpress-solutions-settings.php');
 require_once('usi-wordpress-solutions-versions.php');
