@@ -24,7 +24,7 @@ require_once('usi-wordpress-solutions-versions.php');
 
 class USI_WordPress_Solutions_Settings_Settings extends USI_WordPress_Solutions_Settings {
 
-   const VERSION = '2.15.1 (2023-06-30)';
+   const VERSION = '2.15.2 (2023-07-02)';
 
    protected $debug     = 0;
    protected $is_tabbed = true;
@@ -365,6 +365,11 @@ class USI_WordPress_Solutions_Settings_Settings extends USI_WordPress_Solutions_
                   'type' => 'checkbox', 
                   'label' => 'Enable PHPMailer',
                   'notes' => 'Enables the PHPMailer functionality included with WordPress, a new tab will appear if checked.',
+               ],
+               'visual-edit' => [
+                  'type' => 'checkbox', 
+                  'label' => 'Disable Visual Editing',
+                  'notes' => 'Disables visual editing in the classic editor.',
                ],
                'impersonate' => [
                   'type' => 'checkbox', 

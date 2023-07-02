@@ -15,7 +15,7 @@ Requires at least: 5.0
 Requires PHP:      7.0.0
 Tested up to:      5.3.2
 Text Domain:       usi-wordpress-solutions
-Version:           2.15.1
+Version:           2.15.2
 */
 
 /*
@@ -39,7 +39,7 @@ require_once('usi-wordpress-solutions-diagnostics.php');
 
 final class USI_WordPress_Solutions {
 
-   const VERSION    = '2.15.1 (2023-06-30)';
+   const VERSION    = '2.15.2 (2023-07-02)';
 
    const NAME       = 'WordPress-Solutions';
    const PREFIX     = 'usi-wordpress';
@@ -66,7 +66,7 @@ final class USI_WordPress_Solutions {
    private function __construct() {
    } // __construct();
 
-   function _init() {
+   public static function _init() {
 
       if (empty(self::$options)) {
          $defaults['admin-options']['history']     =
@@ -90,7 +90,7 @@ final class USI_WordPress_Solutions {
       }
 
    } // _init();
-
+ 
    function action_wp_footer() {
       echo PHP_EOL . '    <script>'
       . 'function usi_link_validate(e){'

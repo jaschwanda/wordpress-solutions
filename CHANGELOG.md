@@ -2,6 +2,9 @@
 
 WordPress-Solutions plugin changes are logged here using <a href="http://semver.org/">Semantic Versioning</a>.
 
+## 2.15.2 (2023-07-02) ##
+* Added disable visual editing in classic editor option.
+
 ## 2.15.1 (2023-06-30) ##
 * Removed admin functions from main file and put into admin file.
 

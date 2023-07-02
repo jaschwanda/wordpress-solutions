@@ -1,12 +1,12 @@
 <?php // ------------------------------------------------------------------------------------------------------------------------ //
 
-(defined('ABSPATH') || defined('USI_WP_CONFIG')) or die('Accesss not allowed.');
+(defined('ABSPATH') || (defined('DB_HOST') && defined('DB_NAME'))) or die('Accesss not allowed.');
 
 class USI_Dbs_Exception extends Exception { } // Class USI_Dbs_Exception;
 
 final class USI {
 
-   const VERSION = '2.15.0 (2023-06-30)';
+   const VERSION = '2.15.2 (2023-07-02)';
 
    private static $info   = null;
    private static $mysqli = null;

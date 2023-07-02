@@ -17,7 +17,7 @@ Copyright (c) 2020 by Jim Schwanda.
 
 final class USI_WordPress_Solutions_Admin {
 
-   const VERSION = '2.15.1 (2023-06-30)';
+   const VERSION = '2.15.2 (2023-07-02)';
 
    private static $jquery = null;
    private static $script = null;
@@ -46,8 +46,11 @@ final class USI_WordPress_Solutions_Admin {
             require_once('usi-wordpress-solutions-settings-settings.php');
          }
 
-
          add_action('admin_print_footer_scripts', [__CLASS__, 'action_admin_print_footer_scripts']);
+
+         if (!empty(USI_WordPress_Solutions::$options['admin-options']['visual-edit'])) {
+            add_filter('user_can_richedit', fn() => false);
+         }
 
       }
 
