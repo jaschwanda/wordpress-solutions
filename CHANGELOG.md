@@ -2,6 +2,9 @@
 
 WordPress-Solutions plugin changes are logged here using <a href="http://semver.org/">Semantic Versioning</a>.
 
+## 2.15.3 (2023-07-03) ##
+* Moved the usi::log() method out of the plugin and into it's own must-use plugin.
+
 ## 2.15.2 (2023-07-02) ##
 * Added disable visual editing in classic editor option.
 
