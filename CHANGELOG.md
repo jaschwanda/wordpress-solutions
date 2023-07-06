@@ -2,6 +2,9 @@
 
 WordPress-Solutions plugin changes are logged here using <a href="http://semver.org/">Semantic Versioning</a>.
 
+## 2.15.4 (2023-07-06) ##
+* Added common WordPress helper functions for returning filter values.
+
 ## 2.15.3 (2023-07-03) ##
 * Moved the usi::log() method out of the plugin and into it's own must-use plugin.
 
