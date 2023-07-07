@@ -24,7 +24,7 @@ require_once('usi-wordpress-solutions-versions.php');
 
 class USI_WordPress_Solutions_Settings_Settings extends USI_WordPress_Solutions_Settings {
 
-   const VERSION = '2.15.2 (2023-07-02)';
+   const VERSION = '2.15.5 (2023-07-07)';
 
    protected $debug     = 0;
    protected $is_tabbed = true;
@@ -601,6 +601,7 @@ class USI_WordPress_Solutions_Settings_Settings extends USI_WordPress_Solutions_
                   'notes' => 'Both the above <b>Post Type</b> and <b>Parent Post Title</b> fields must be given to transfer post content.',
                ],
                'options' => [
+                  'attr' => 'style="font-family:courier new;"',
                   'f-class' => 'large-text', 
                   'rows' => 6,
                   'type' => 'textarea', 

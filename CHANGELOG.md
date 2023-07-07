@@ -2,6 +2,9 @@
 
 WordPress-Solutions plugin changes are logged here using <a href="http://semver.org/">Semantic Versioning</a>.
 
+## 2.15.5 (2023-07-07) ##
+* Added styling to trasnfer page.
+
 ## 2.15.4 (2023-07-06) ##
 * Added common WordPress helper functions for returning filter values.
 
