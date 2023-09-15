@@ -17,7 +17,7 @@ Copyright (c) 2023 by Jim Schwanda.
 
 class USI_WordPress_Solutions_Popup_Iframe {
 
-   const VERSION = '2.16.0 (2023-09-15)'
+   const VERSION = '2.16.0 (2023-09-15)';
 
    private static $attributes = array();
    private static $scripts    = array();
