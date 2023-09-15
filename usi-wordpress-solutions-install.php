@@ -17,7 +17,7 @@ Copyright (c) 2023 by Jim Schwanda.
 
 final class USI_WordPress_Solutions_Install {
 
-   const VERSION = '2.15.0 (2023-06-30)';
+   const VERSION = '2.16.0 (2023-09-15)';
 
    const VERSION_DATA = '1.0';
 
@@ -26,8 +26,8 @@ final class USI_WordPress_Solutions_Install {
 
    static function init() {
       $file = str_replace('-install', '', __FILE__);
-      register_activation_hook($file, array(__CLASS__, 'hook_activation'));
-      register_deactivation_hook($file, array(__CLASS__, 'hook_deactivation'));
+      register_activation_hook($file, [__CLASS__, 'hook_activation']);
+      register_deactivation_hook($file, [__CLASS__, 'hook_deactivation']);
    } // init();
 
    static function hook_activation() {
@@ -81,7 +81,5 @@ final class USI_WordPress_Solutions_Install {
    } // hook_deactivation();
 
 } // Class USI_WordPress_Solutions_Install;
-
-USI_WordPress_Solutions_Install::init();
 
 // --------------------------------------------------------------------------------------------------------------------------- // ?>

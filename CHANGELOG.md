@@ -2,6 +2,10 @@
 
 WordPress-Solutions plugin changes are logged here using <a href="http://semver.org/">Semantic Versioning</a>.
 
+## 2.16.0 (2023-09-15) ##
+* Added autoloader for USI plugins.
+* Set all versions numbers to same version.
+
 ## 2.15.5 (2023-07-07) ##
 * Added styling to trasnfer page.
 

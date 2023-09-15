@@ -15,16 +15,9 @@ https://github.com/jaschwanda/wordpress-solutions/blob/master/LICENSE.md
 Copyright (c) 2023 by Jim Schwanda.
 */
 
-require_once('usi-wordpress-solutions-capabilities.php');
-require_once('usi-wordpress-solutions-diagnostics.php');
-require_once('usi-wordpress-solutions-mailer.php');
-require_once('usi-wordpress-solutions-popup-iframe.php');
-require_once('usi-wordpress-solutions-settings.php');
-require_once('usi-wordpress-solutions-versions.php');
-
 class USI_WordPress_Solutions_Settings_Settings extends USI_WordPress_Solutions_Settings {
 
-   const VERSION = '2.15.5 (2023-07-07)';
+   const VERSION = '2.16.0 (2023-09-15)';
 
    protected $debug     = 0;
    protected $is_tabbed = true;
@@ -80,7 +73,6 @@ class USI_WordPress_Solutions_Settings_Settings extends USI_WordPress_Solutions_
       if (!empty($_REQUEST['submit']) && ('Execute Versions' == $_REQUEST['submit'])) {
          if (!empty($input['versions']['mode'])) {
             if ('export' == $input['versions']['mode']) {
-               require_once('usi-wordpress-solutions-versions-all.php');
                $title   = sanitize_title(get_bloginfo('title'));
                $content = USI_WordPress_Solutions_Versions_All::versions($title, WP_CONTENT_DIR);
                $input['versions']['export'] = $content;
@@ -643,7 +635,6 @@ class USI_WordPress_Solutions_Settings_Settings extends USI_WordPress_Solutions_
 
       if (empty($this->options['versions']['mode'])) {
       } else if ('compare' == $this->options['versions']['mode']) {
-         require_once('usi-wordpress-solutions-versions-show.php');
          $import = !empty($this->options['versions']['import']) ? $this->options['versions']['import'] : null;
          $sections['versions']['settings']['compare'] = [
             'html' => USI_WordPress_Solutions_Versions_Show::show($import),
@@ -676,7 +667,5 @@ class USI_WordPress_Solutions_Settings_Settings extends USI_WordPress_Solutions_
    } // sections();
 
 } // Class USI_WordPress_Solutions_Settings_Settings;
-
-new USI_WordPress_Solutions_Settings_Settings();
 
 // --------------------------------------------------------------------------------------------------------------------------- // ?>

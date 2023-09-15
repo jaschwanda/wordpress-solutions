@@ -9,12 +9,9 @@ if (!class_exists('WP_List_Table')) {
    require_once(ABSPATH . 'wp-admin/includes/class-wp-list-table.php');
 }
 
-require_once('usi-wordpress-solutions-popup-action.php');
-require_once('usi-wordpress-solutions-static.php');
-
 class USI_WordPress_Solutions_User_Sessions extends WP_List_Table {
 
-   const VERSION = '2.15.0 (2023-06-30)';
+   const VERSION = '2.16.0 (2023-09-15)';
 
    public static function action_admin_head() {
 
@@ -241,11 +238,5 @@ class USI_WordPress_Solutions_User_Sessions extends WP_List_Table {
    } // table_data();
 
 } // USI_WordPress_Solutions_User_Sessions();
-
-if (!empty($_GET['page']) && ('usi-wordpress-solutions-user-sessions' == $_GET['page'])) {
-   add_action('admin_head', array('USI_WordPress_Solutions_User_Sessions', 'action_admin_head'));
-}
-
-add_action('admin_menu', array('USI_WordPress_Solutions_User_Sessions', 'action_admin_menu'));
 
 // --------------------------------------------------------------------------------------------------------------------------- // ?>

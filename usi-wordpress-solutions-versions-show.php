@@ -2,11 +2,9 @@
 
 defined('ABSPATH') or die('Accesss not allowed.');
 
-require_once('usi-wordpress-solutions-versions-all.php');
-
 class USI_WordPress_Solutions_Versions_Show {
 
-   const VERSION = '2.15.0 (2023-06-30)';
+   const VERSION = '2.16.0 (2023-09-15)';
 
    public static function parse($expression) {
 

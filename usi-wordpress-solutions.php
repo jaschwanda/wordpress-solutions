@@ -15,7 +15,7 @@ Requires at least: 5.0
 Requires PHP:      7.0.0
 Tested up to:      5.3.2
 Text Domain:       usi-wordpress-solutions
-Version:           2.15.5
+Version:           2.16.0
 */
 
 /*
@@ -35,11 +35,9 @@ Copyright (c) 2023 by Jim Schwanda.
 // Un-activated plugin builds settings page;
 // https://dev.to/lucagrandicelli/why-isadmin-is-totally-unsafe-for-your-wordpress-development-1le1
 
-require_once('usi-wordpress-solutions-diagnostics.php');
-
 final class USI_WordPress_Solutions {
 
-   const VERSION    = '2.15.5 (2023-07-07)';
+   const VERSION    = '2.16.0 (2023-09-15)';
 
    const NAME       = 'WordPress-Solutions';
    const PREFIX     = 'usi-wordpress';
@@ -81,9 +79,7 @@ final class USI_WordPress_Solutions {
 
       if (self::DEBUG_OPTIONS == (self::DEBUG_OPTIONS & $log)) usi::log('$options=', self::$options);
 
-      if (is_admin()) {
-         require_once('usi-wordpress-solutions-admin.php');
-      }
+      if (is_admin()) USI_WordPress_Solutions_Admin::_init();
 
       if (!empty(self::$options['preferences']['e-mail-cloak'])) {
          add_shortcode(self::$options['preferences']['e-mail-cloak'], [__CLASS__, 'shortcode_email']);

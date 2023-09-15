@@ -18,14 +18,10 @@ Copyright (c) 2023 by Jim Schwanda.
 // Reference: https://developer.wordpress.org/plugins/settings/using-settings-api/
 // Reference: https://digwp.com/2016/05/wordpress-admin-notices/
 
-require_once('usi-wordpress-solutions.php');
-require_once('usi-wordpress-solutions-history.php');
-require_once('usi-wordpress-solutions-static.php');
-require_once('usi-wordpress-solutions-versions.php');
 
 class USI_WordPress_Solutions_Settings {
 
-   const VERSION = '2.15.1 (2023-06-30)';
+   const VERSION = '2.16.0 (2023-09-15)';
 
    private static $current_user_id = -1; 
    private static $grid            = false;
@@ -928,7 +924,6 @@ class USI_WordPress_Solutions_Settings {
          check_admin_referer('activate-plugin_' . (isset($_REQUEST['plugin']) ? $_REQUEST['plugin'] : ''));
 
          if (!empty($this->capabilities)) {
-            require_once('usi-wordpress-solutions-capabilities.php');
             USI_WordPress_Solutions_Capabilities::init($this->prefix, $this->capabilities);
          }
 

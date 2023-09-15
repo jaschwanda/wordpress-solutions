@@ -17,12 +17,9 @@ Copyright (c) 2023 by Jim Schwanda.
 
 if (!defined('WP_UNINSTALL_PLUGIN')) exit;
 
-require_once('usi-wordpress-solutions-uninstall.php');
-require_once('usi-wordpress-solutions.php');
-
 final class USI_WordPress_Solutions_Uninstall_Uninstall {
 
-   const VERSION = '2.15.0 (2023-06-30)';
+   const VERSION = '2.16.0 (2023-09-15)';
 
    private function __construct() {
    } // __construct();

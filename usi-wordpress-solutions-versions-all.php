@@ -4,7 +4,7 @@ defined('ABSPATH') or die('Accesss not allowed.');
 
 class USI_WordPress_Solutions_Versions_All {
 
-   const VERSION = '2.15.0 (2023-06-30)';
+   const VERSION = '2.16.0 (2023-09-15)';
 
    private static function scan(& $lines, $level, $path, $parent = null) {
       $offset  = strrpos($path, DIRECTORY_SEPARATOR) + 1;

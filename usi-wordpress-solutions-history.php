@@ -15,11 +15,9 @@ https://github.com/jaschwanda/wordpress-solutions/blob/master/LICENSE.md
 Copyright (c) 2023 by Jim Schwanda.
 */
 
-require_once('usi-wordpress-solutions.php');
-
 final class USI_WordPress_Solutions_History {
 
-   const VERSION = '2.15.0 (2023-06-30)';
+   const VERSION = '2.16.0 (2023-09-15)';
 
    private static $pre_post_update_data = null;
    private static $pre_post_update_id   = 0;
@@ -160,7 +158,5 @@ final class USI_WordPress_Solutions_History {
    } // history();
 
 } // Class USI_WordPress_Solutions_History;
-
-USI_WordPress_Solutions_History::_init();
 
 // --------------------------------------------------------------------------------------------------------------------------- // ?>

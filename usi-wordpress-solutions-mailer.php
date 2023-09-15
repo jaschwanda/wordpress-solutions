@@ -8,7 +8,7 @@ require_once(ABSPATH . WPINC . '/PHPMailer/SMTP.php');
 
 class USI_WordPress_Solutions_Mailer extends PHPMailer\PHPMailer\PHPMailer {
 
-   const VERSION = '2.15.1 (2023-06-30)';
+   const VERSION = '2.16.0 (2023-09-15)';
 
    protected static $debug = null;
 
@@ -186,7 +186,5 @@ class USI_WordPress_Solutions_Mailer extends PHPMailer\PHPMailer\PHPMailer {
    } // test();
 
 } // class USI_WordPress_Solutions_Mailer;
-
-add_action('phpmailer_init', ['USI_WordPress_Solutions_Mailer', 'action_phpmailer_init'], 10, 1);
 
 // --------------------------------------------------------------------------------------------------------------------------- // ?>

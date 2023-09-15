@@ -17,7 +17,7 @@ Copyright (c) 2020 by Jim Schwanda.
 
 final class USI_WordPress_Solutions_Admin {
 
-   const VERSION = '2.15.4 (2023-07-06)';
+   const VERSION = '2.16.0 (2023-09-15)';
 
    private static $jquery = null;
    private static $script = null;
@@ -31,19 +31,22 @@ final class USI_WordPress_Solutions_Admin {
 
          global $pagenow;
          if ('admin.php' == $pagenow) {
-            require_once('usi-wordpress-solutions-user-sessions.php');
+            if (!empty($_GET['page']) && ('usi-wordpress-solutions-user-sessions' == $_GET['page'])) {
+               add_action('admin_head', ['USI_WordPress_Solutions_User_Sessions', 'action_admin_head']);
+            }
+            add_action('admin_menu', ['USI_WordPress_Solutions_User_Sessions', 'action_admin_menu']);
          }
 
          if (!defined('WP_UNINSTALL_PLUGIN')) {
             add_action('init', 'add_thickbox');
             if (!empty(USI_WordPress_Solutions::$options['admin-options']['history'])) {
-               require_once('usi-wordpress-solutions-history.php');
+               USI_WordPress_Solutions_History::_init();
             }
-            if (!empty(self::$options['admin-options']['mailer'])) {
-               require_once('usi-wordpress-solutions-mailer.php');
+            if (!empty(USI_WordPress_Solutions::$options['admin-options']['mailer'])) {
+               add_action('phpmailer_init', ['USI_WordPress_Solutions_Mailer', 'action_phpmailer_init'], 10, 1);
             }
-            require_once('usi-wordpress-solutions-install.php');
-            require_once('usi-wordpress-solutions-settings-settings.php');
+            USI_WordPress_Solutions_Install::init();
+            new USI_WordPress_Solutions_Settings_Settings();
          }
 
          add_action('admin_print_footer_scripts', [__CLASS__, 'action_admin_print_footer_scripts']);
@@ -89,7 +92,5 @@ final class USI_WordPress_Solutions_Admin {
    } // admin_footer_script();
 
 } // Class USI_WordPress_Solutions_Admin;
-
-USI_WordPress_Solutions_Admin::_init();
 
 // --------------------------------------------------------------------------------------------------------------------------- // ?>
