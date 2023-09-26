@@ -2,24 +2,11 @@
 
 defined('ABSPATH') or die('Accesss not allowed.');
 
-/*
-WordPress-Solutions is free software: you can redistribute it and/or modify it under the terms of the GNU General Public 
-License as published by the Free Software Foundation, either version 3 of the License, or any later version.
- 
-WordPress-Solutions is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied 
-warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.
- 
-You should have received a copy of the GNU General Public License along with WordPress-Solutions. If not, see 
-https://github.com/jaschwanda/wordpress-solutions/blob/master/LICENSE.md
-
-Copyright (c) 2023 by Jim Schwanda.
-*/
-
 // https://mpdf.github.io/
 
 class USI_WordPress_Solutions_PDF {
 
-   const VERSION = '2.16.0 (2023-09-15)';
+   const VERSION = '2.16.1 (2023-09-26)';
 
    public static $confidential = false;
 
@@ -84,7 +71,13 @@ class USI_WordPress_Solutions_PDF {
 
       try {
 
-         $mpdf = new \Mpdf\Mpdf();
+         $config = [];
+
+         if (!empty(USI_WordPress_Solutions::$options['admin-limits']['mpdf-temp-dir'])) {
+            $config['tempDir'] = USI_WordPress_Solutions::$options['admin-limits']['mpdf-temp-dir'];
+         }
+
+         $mpdf   = new \Mpdf\Mpdf($config);
 
          if(!$mpdf) throw new Exception('Cannot create PDF object.');
 

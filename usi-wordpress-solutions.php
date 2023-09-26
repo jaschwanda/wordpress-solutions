@@ -5,6 +5,7 @@ defined('ABSPATH') or die('Accesss not allowed.');
 /* 
 Author:            Jim Schwanda
 Author URI:        https://www.usi2solve.com/leader
+Copyright:         2023 by Jim Schwanda.
 Description:       The WordPress-Solutions plugin simplifys the implementation of WordPress functionality and is used by many Universal Solutions plugins and themes. The WordPress-Solutions plugin is developed and maintained by Universal Solutions.
 Donate link:       https://www.usi2solve.com/donate/wordpress-solutions
 License:           GPL-3.0
@@ -15,20 +16,8 @@ Requires at least: 5.0
 Requires PHP:      7.0.0
 Tested up to:      5.3.2
 Text Domain:       usi-wordpress-solutions
-Version:           2.16.0
-*/
-
-/*
-WordPress-Solutions is free software: you can redistribute it and/or modify it under the terms of the GNU General Public 
-License as published by the Free Software Foundation, either version 3 of the License, or any later version.
- 
-WordPress-Solutions is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied 
-warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.
- 
-You should have received a copy of the GNU General Public License along with WordPress-Solutions. If not, see 
-https://github.com/jaschwanda/wordpress-solutions/blob/master/LICENSE.md
-
-Copyright (c) 2023 by Jim Schwanda.
+Version:           2.16.1
+Warranty:          This software is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 */
 
 // Settings pages do not have to add admin notices on success, custom settings pages do;
@@ -37,7 +26,7 @@ Copyright (c) 2023 by Jim Schwanda.
 
 final class USI_WordPress_Solutions {
 
-   const VERSION    = '2.16.0 (2023-09-15)';
+   const VERSION    = '2.16.1 (2023-09-26)';
 
    const NAME       = 'WordPress-Solutions';
    const PREFIX     = 'usi-wordpress';
