@@ -273,7 +273,7 @@ class USI_WordPress_Solutions_Settings_Settings extends USI_WordPress_Solutions_
       $php_version = phpversion();
 
       if ('8' == $php_version[0]) {
-         $php_reporting    .= "<br/><br/>Some versions of WordPress running on PHP " . $php_version . " give a large number of deprecated errors, to surpess these errors and still enable debugging, add the following line to the wp-config.php file after the <span style=\"font-family:monospace;\">\"define( 'WP_DEBUG', false );\"</span> statement:<p style=\"font-family:monospace; padding-top:10px;\">error_reporting(E_ALL&~(E_DEPRECATED|E_USER_DEPRECATED));\$GLOBALS['wp_filter']=['enable_wp_debug_mode_checks'=>[10=>[['accepted_args'=>0,'function'=>function(){return(false);}]]]];</p>";
+         $php_reporting    .= "<br/><br/>Some versions of WordPress running on PHP " . $php_version . " give a large number of deprecated errors, to suppress these errors and still enable debugging, add the following line to the wp-config.php file after the <span style=\"font-family:monospace;\">\"define( 'WP_DEBUG', false );\"</span> statement:<p style=\"font-family:monospace; padding-top:10px;\">error_reporting(E_ALL&~(E_DEPRECATED|E_USER_DEPRECATED));\$GLOBALS['wp_filter']=['enable_wp_debug_mode_checks'=>[10=>[['accepted_args'=>0,'function'=>function(){return(false);}]]]];</p>";
       }
 
       $pcre_backtrack_limit = ini_get('pcre.backtrack_limit');
