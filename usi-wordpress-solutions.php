@@ -16,7 +16,7 @@ Requires at least: 5.0
 Requires PHP:      7.0.0
 Tested up to:      5.3.2
 Text Domain:       usi-wordpress-solutions
-Version:           2.16.1
+Version:           2.16.2
 Warranty:          This software is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 */
 
@@ -26,7 +26,7 @@ Warranty:          This software is distributed in the hope that it will be usef
 
 final class USI_WordPress_Solutions {
 
-   const VERSION    = '2.16.1 (2023-09-26)';
+   const VERSION    = '2.16.2 (2023-10-10)';
 
    const NAME       = 'WordPress-Solutions';
    const PREFIX     = 'usi-wordpress';
@@ -74,6 +74,10 @@ final class USI_WordPress_Solutions {
          add_shortcode(self::$options['preferences']['e-mail-cloak'], [__CLASS__, 'shortcode_email']);
       }
 
+      if (!empty(self::$options['preferences']['custom-code'])) {
+         add_shortcode(self::$options['preferences']['custom-code'], [__CLASS__, 'shortcode_custom']);
+      }
+
    } // _init();
  
    function action_wp_footer() {
@@ -95,6 +99,50 @@ final class USI_WordPress_Solutions {
       ;
    } // action_wp_footer();
 
+   public static function shortcode_custom($attr, $content = null) {
+
+      $class  = $attr['class']  ?? null;
+      $debug  = $attr['debug']  ?? false;
+      $method = $attr['method'] ?? null;
+      $print  = $attr['print']  ?? false;
+      $static = $attr['static'] ?? false;
+
+      try {
+
+         if (!method_exists($class, $method)) {
+
+            if (!class_exists($class)) {
+
+               if ($debug && $print) return '{Class ' . $class . ' does not exist}';
+
+            }
+
+            if ($debug && $print) return '{method ' . $method . '() does not exist on class ' . $class . '}';
+
+            return null;
+
+         } else if ($static) {
+
+            $output = $class::$method($attr, $content);
+
+         } else {
+
+            $object = new $class();
+
+            $output = $object->$method($attr, $content);
+
+         }
+ 
+         if ($print) return $output;
+
+      } catch (Exception $e) {
+
+      }
+
+      return null;
+
+   } // shortcode_custom();
+
    public static function shortcode_email($attr, $content = null) {
       if (!self::$emails++) add_action('wp_footer', [__CLASS__, 'action_wp_footer'], 20);
       $class   = empty($attr['class'])   ? null : ' class="' . $attr['class']   . '"';
@@ -110,7 +158,7 @@ final class USI_WordPress_Solutions {
             $code  = '&#' . ord($string[$ith]) . ';';
             $html .= $code . ($ith % $seed ? '' : '<i style="display:none;">' . $code . '</i>');
          }
-         return($html);
+         return $html;
       };
       list($target, $domain) = explode('@', $email);
       $offset     = false;
@@ -124,7 +172,7 @@ final class USI_WordPress_Solutions {
          $cloaked = $encode($target) . '&#64;' . $encode($domain);
          $content = substr_replace($content, $cloaked, $offset, 7);
       }
-      return('<a' . $id . $class . ' href="https://' . $domain . '" onclick="usi_link_validate(event);"' . $style . ' target="' . str_rot13($target) . '"' . $title . '>' . $content . '</a>');
+      return '<a' . $id . $class . ' href="https://' . $domain . '" onclick="usi_link_validate(event);"' . $style . ' target="' . str_rot13($target) . '"' . $title . '>' . $content . '</a>';
    } // shortcode_email();
 
 } // Class USI_WordPress_Solutions;

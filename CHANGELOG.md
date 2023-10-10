@@ -2,6 +2,9 @@
 
 WordPress-Solutions plugin changes are logged here using <a href="http://semver.org/">Semantic Versioning</a>.
 
+## 2.16.2 (2023-10-10) ##
+* Added custom code execution via short code.
+
 ## 2.16.1 (2023-09-26) ##
 * Added temp directory for mPDF.
 

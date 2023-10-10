@@ -4,7 +4,7 @@ defined('ABSPATH') or die('Accesss not allowed.');
 
 class USI_WordPress_Solutions_Settings_Settings extends USI_WordPress_Solutions_Settings {
 
-   const VERSION = '2.16.1 (2023-09-26)';
+   const VERSION = '2.16.2 (2023-10-10)';
 
    protected $debug     = 0;
    protected $is_tabbed = true;
@@ -38,7 +38,7 @@ class USI_WordPress_Solutions_Settings_Settings extends USI_WordPress_Solutions_
          $links[] = '<a href="https://www.usi2solve.com/donate/wordpress-solutions" target="_blank">' . 
             __('Donate', USI_WordPress_Solutions::TEXTDOMAIN) . '</a>';
       }
-      return($links);
+      return $links;
    } // filter_plugin_row_meta();
 
    function fields_sanitize($input) {
@@ -212,7 +212,7 @@ class USI_WordPress_Solutions_Settings_Settings extends USI_WordPress_Solutions_
 
       unset($input['xfer']['export-import']);
 
-      return($input);
+      return $input;
 
    } // fields_sanitize();
 
@@ -273,7 +273,7 @@ class USI_WordPress_Solutions_Settings_Settings extends USI_WordPress_Solutions_
       $php_version = phpversion();
 
       if ('8' == $php_version[0]) {
-         $php_reporting    .= "<br/><br/>Some versions of WordPress running on PHP " . $php_version . " give a large number of deprecated errors, to suppress these errors and still enable debugging, add the following line to the wp-config.php file after the <span style=\"font-family:monospace;\">\"define( 'WP_DEBUG', false );\"</span> statement:<p style=\"font-family:monospace; padding-top:10px;\">error_reporting(E_ALL&~(E_DEPRECATED|E_USER_DEPRECATED));\$GLOBALS['wp_filter']=['enable_wp_debug_mode_checks'=>[10=>[['accepted_args'=>0,'function'=>function(){return(false);}]]]];</p>";
+         $php_reporting    .= "<br/><br/>Some versions of WordPress running on PHP " . $php_version . " give a large number of deprecated errors, to suppress these errors and still enable debugging, add the following line to the wp-config.php file after the <span style=\"font-family:monospace;\">\"define( 'WP_DEBUG', false );\"</span> statement:<p style=\"font-family:monospace; padding-top:10px;\">error_reporting(E_ALL&~(E_DEPRECATED|E_USER_DEPRECATED));\$GLOBALS['wp_filter']=['enable_wp_debug_mode_checks'=>[10=>[['accepted_args'=>0,'function'=>function(){return false;}]]]];</p>";
       }
 
       $pcre_backtrack_limit = ini_get('pcre.backtrack_limit');
@@ -325,8 +325,13 @@ class USI_WordPress_Solutions_Settings_Settings extends USI_WordPress_Solutions_
                ],
                'e-mail-cloak' => [
                   'f-class' => 'regular-text', 
-                  'label' => 'Cloaking Shortcode Identifier',
+                  'label' => 'Cloaking Shortcode Tag',
                   'notes' => __('Shortcode to use for e-mail cloaking, cloaking is disabled if not given.', USI_WordPress_Solutions::TEXTDOMAIN), 
+               ],
+               'custom-code' => [
+                  'f-class' => 'regular-text', 
+                  'label' => 'Custom Code Shortcode Tag',
+                  'notes' => __('Shortcode to use for executing custom code.', USI_WordPress_Solutions::TEXTDOMAIN), 
                ],
             ],
          ], // preferences;
@@ -655,7 +660,7 @@ class USI_WordPress_Solutions_Settings_Settings extends USI_WordPress_Solutions_
          ];
       }
 
-      return($sections);
+      return $sections;
 
    } // sections();
 
