@@ -2,25 +2,12 @@
 
 defined('ABSPATH') or die('Accesss not allowed.');
 
-/*
-WordPress-Solutions is free software: you can redistribute it and/or modify it under the terms of the GNU General Public 
-License as published by the Free Software Foundation, either version 3 of the License, or any later version.
- 
-WordPress-Solutions is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied 
-warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.
- 
-You should have received a copy of the GNU General Public License along with WordPress-Solutions. If not, see 
-https://github.com/jaschwanda/wordpress-solutions/blob/master/LICENSE.md
-
-Copyright (c) 2023 by Jim Schwanda.
-*/
-
 class USI_WordPress_Solutions_Custom_Post {
 
-   const VERSION    = '2.16.0 (2023-09-15)';
+   const VERSION    = '2.16.3 (2023-11-27)';
 
    protected $autosave_disable = true;
-   protected $defaults = array();
+   protected $defaults = [];
    protected $log      = 0;
    protected $prefix   = 'usi-post';
    protected $type     = 'usi-post';
@@ -28,7 +15,7 @@ class USI_WordPress_Solutions_Custom_Post {
    function __construct() {
 
       // Fires after WordPress has finished loading but before any headers are sent;
-      add_action('init', array($this, '_init'), 1);
+      add_action('init', [$this, '_init'], 1);
 
    } // __construct();
 
@@ -42,9 +29,9 @@ class USI_WordPress_Solutions_Custom_Post {
 
       $this->log = USI_WordPress_Solutions_Diagnostics::get_log($options);
 
-      if ($this->autosave_disable) add_action('admin_enqueue_scripts', array($this, 'action_admin_enqueue_scripts'));
+      if ($this->autosave_disable) add_action('admin_enqueue_scripts', [$this, 'action_admin_enqueue_scripts']);
 
-      add_action('do_meta_boxes', array($this, 'action_do_meta_boxes'));
+      add_action('do_meta_boxes', [$this, 'action_do_meta_boxes']);
 
    } // _init();
 
@@ -58,8 +45,8 @@ class USI_WordPress_Solutions_Custom_Post {
    } // action_do_meta_boxes();
 
    public static function custom_capabilities($single, $plural) {
-      return(
-         array(
+      return
+         [
             'delete_post'            => $single . '_delete',
             'delete_posts'           => $plural . '_delete',
             'delete_others_posts'    => $plural . '_delete_others',
@@ -72,8 +59,8 @@ class USI_WordPress_Solutions_Custom_Post {
             'edit_published_posts'   => $plural . '_edit_published',
             'publish_posts'          => $plural . '_publish',
             'read_private_posts'     => $plural . '_read_private',
-         )
-      );
+         ]
+      ;
    } // custom_capabilities();
 
    public static function get_post_by(string $type, string $field, string $key, $output = OBJECT, $log = false) {
@@ -91,7 +78,7 @@ class USI_WordPress_Solutions_Custom_Post {
 
       if ($log) usi::log2('$sql=', $sql, '\n$post=', $post);
 
-      return($post);
+      return $post;
 
    } // get_post_by();
 
