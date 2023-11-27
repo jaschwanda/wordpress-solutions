@@ -2,19 +2,6 @@
 
 defined('ABSPATH') or die('Accesss not allowed.');
 
-/*
-WordPress-Solutions is free software: you can redistribute it and/or modify it under the terms of the GNU General Public 
-License as published by the Free Software Foundation, either version 3 of the License, or any later version.
- 
-WordPress-Solutions is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied 
-warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.
- 
-You should have received a copy of the GNU General Public License along with WordPress-Solutions. If not, see 
-https://github.com/jaschwanda/wordpress-solutions/blob/master/LICENSE.md
-
-Copyright (c) 2023 by Jim Schwanda.
-*/
-
 class USI_WordPress_Solutions_Static {
 
    const VERSION = '2.16.0 (2023-09-15)';
@@ -69,7 +56,7 @@ class USI_WordPress_Solutions_Static {
          }
       }
 
-      return($html . '</style>' . PHP_EOL);
+      return $html . '</style>' . PHP_EOL;
 
    } // column_style();
 
@@ -78,13 +65,13 @@ class USI_WordPress_Solutions_Static {
          $text    = ' ' . $text . ' ';
          $length += 2;
       }
-      return('<!--' . $text . str_repeat('-', 121 - $length - $indent) . '>' . PHP_EOL);
+      return '<!--' . $text . str_repeat('-', 121 - $length - $indent) . '>' . PHP_EOL;
    } // divider();
 
    public static function is_int($variable) {
-      if (is_integer($variable)) return($variable);
-      if (!is_string($variable) || !ctype_digit($variable)) return(false);
-      return(intval($variable));
+      if (is_integer($variable)) return $variable;
+      if (!is_string($variable) || !ctype_digit($variable)) return false;
+      return intval($variable);
    } // is_int();
 
    public static function remove_directory($directory) { 
@@ -120,7 +107,7 @@ class USI_WordPress_Solutions_Static {
    } // remove_directory();
 
    public static function url() {
-      return('http' . (is_ssl() ? 's' : '') . '://' . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI']);
+      return 'http' . (is_ssl() ? 's' : '') . '://' . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'];
    } // this_url();
 
 } // Class USI_WordPress_Solutions_Static;

@@ -3,19 +3,6 @@
 defined('ABSPATH') or die('Accesss not allowed.');
 
 /*
-WordPress-Solutions is free software: you can redistribute it and/or modify it under the terms of the GNU General Public 
-License as published by the Free Software Foundation, either version 3 of the License, or any later version.
- 
-WordPress-Solutions is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied 
-warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.
- 
-You should have received a copy of the GNU General Public License along with WordPress-Solutions. If not, see 
-https://github.com/jaschwanda/wordpress-solutions/blob/master/LICENSE.md
-
-Copyright (c) 2023 by Jim Schwanda.
-*/
-
-/*
 
 This popup displays a confirmation message for a list of items in a WordPress table.
 
@@ -104,10 +91,10 @@ $('[usi-popup-open]').click(
       selector   = '#' + id;
       label      = '$([usi-popup-open]).click(' + selector + '):';
       trace(label + 'confirmed=' + (confirmed ? 'true' : 'false'));
-      if (confirmed) { confirmed = false; return(true); }
+      if (confirmed) { confirmed = false; return true; }
       var action = $(this).attr('usi-popup-action');
       var body   = $(this).attr('usi-popup-info');
-      return(show(action, info(action, body), selector));
+      return show(action, info(action, body), selector);
    }
 ); // Invoke popup via row action;
 
@@ -117,10 +104,10 @@ $('#doaction,#doaction2').click(
       invoked_by = 'button';
       selector   = '#doaction,#doaction2';
       trace('$(#doaction,#doaction2).click(' + selector + ')');
-      if (confirmed) { confirmed = false; return(true); }
+      if (confirmed) { confirmed = false; return true; }
       var action = get_bulk_action();
-      if ('select_bulk' == action) return(show('error', '<p>' + select_bulk + '</p>'));
-      return(scan(action, selector));
+      if ('select_bulk' == action) return show('error', '<p>' + select_bulk + '</p>');
+      return scan(action, selector);
    }
 ); // Invoke popup via bulk action;
 
@@ -131,7 +118,7 @@ EOD;
             if (!empty($options['invoke'])) {
                $popup_invoke .= '// Invoke popup via custom action;' . PHP_EOL;
                foreach ($options['invoke'] as $selector => $action) {
-                  $popup_invoke .= "$('$selector').click(function() { invoked_by = 'button'; return(scan('$action', '$selector')); });" . PHP_EOL;
+                  $popup_invoke .= "$('$selector').click(function() { invoked_by = 'button'; return scan('$action', '$selector'); });" . PHP_EOL;
                }
             }
 
@@ -163,18 +150,18 @@ function close(selector) {
 // Get WordPress list bulk action;
 function get_bulk_action() {
    var top = $('#bulk-action-selector-top').val();
-   if (-1 != top) return(top);
+   if (-1 != top) return top;
    var bot = $('#bulk-action-selector-bottom').val();
-   if (-1 != bot) return(bot);
-   return('select_bulk');
+   if (-1 != bot) return bot;
+   return 'select_bulk';
 } // get_bulk_action();
 
 function info(action, body) {
-   return('<p>' + head[action] + '</p>' + body + '<p>' + foot[action] + '</p>');
+   return '<p>' + head[action] + '</p>' + body + '<p>' + foot[action] + '</p>';
 } // info();
 
 function scan(action, selector) {
-   if (confirmed) { confirmed = false; return(true); }
+   if (confirmed) { confirmed = false; return true; }
    var ids  = $('.usi-popup-checkbox');
    var list = '';
    var text = '';
@@ -198,9 +185,9 @@ function scan(action, selector) {
    }
    trace('scan:action_count=' + action_count);
    if (!action_count) {
-      return(show('error', '<p>' + select_item + '</p>'));
+      return show('error', '<p>' + select_item + '</p>');
    } else {
-      return(show(action, info(action, text), selector));
+      return show(action, info(action, text), selector);
    }
 } // scan();
 
@@ -217,7 +204,7 @@ function show(action, body, invoke) {
    $('#{$id}').fadeIn(300);
    var height = $('#{$id}-body').height();
    if (height <= ${max_body}) $('#{$id}-wrap').height((height + height_head_foot) + 'px');
-   return(false);
+   return false;
 } // show();
 
 function trace(text) {
@@ -229,7 +216,7 @@ function trace(text) {
 $('[usi-popup-close]').click(function() { close('[usi-popup-close]'); });
 
 // Close with outside click;
-$('[usi-popup-close-outside]').click(function() { close('[usi-popup-close-outside]'); }).children().click(function() { return(false); });
+$('[usi-popup-close-outside]').click(function() { close('[usi-popup-close-outside]'); }).children().click(function() { return false; });
 
 {$popup_invoke}
 // Execute action;
@@ -299,14 +286,14 @@ EOD;
          $id    = $args['id']       ?? null;
       }
 
-      return($indent
+      return $indent
          . '<input class="usi-popup-checkbox" name="' . $id_field . '[' . $id . ']" type="checkbox" '
          . $indent
          . 'usi-popup-id="' . $id . '" '
          . $indent
          . 'usi-popup-info="' . $info . '" value="' . $id .'" />'
          . $indent
-      );
+         ;
 
    } // column_cb();
 
@@ -371,10 +358,10 @@ EOD;
       );
       }
 
-      return(
+      return
          '<a id="usi-popup-' . $action . '-' . $id . '" href="' . $url . '" usi-popup-action="' . $action . 
          '" usi-popup-open="' . $id . '" usi-popup-info="' . $info . '">' . $text . '</a>'
-      );
+         ;
 
    } // row_action();
 
