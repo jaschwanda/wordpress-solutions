@@ -2,19 +2,6 @@
 
 defined('ABSPATH') or die('Accesss not allowed.');
 
-/*
-WordPress-Solutions is free software: you can redistribute it and/or modify it under the terms of the GNU General Public 
-License as published by the Free Software Foundation, either version 3 of the License, or any later version.
- 
-WordPress-Solutions is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied 
-warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.
- 
-You should have received a copy of the GNU General Public License along with WordPress-Solutions. If not, see 
-https://github.com/jaschwanda/wordpress-solutions/blob/master/LICENSE.md
-
-Copyright (c) 2023 by Jim Schwanda.
-*/
-
 // https://kinsta.com/blog/wordpress-user-roles/
 
 class USI_WordPress_Solutions_Capabilities {
@@ -34,7 +21,7 @@ class USI_WordPress_Solutions_Capabilities {
    private $prefix_select_user = null;
    private $text_domain = null;
    private $user = null;
-   private $user_roles = array();
+   private $user_roles = [];
    private $user_id = null;
 
    function __construct($parent) {
@@ -46,13 +33,13 @@ class USI_WordPress_Solutions_Capabilities {
       $this->roles        = $parent->roles();
       $this->text_domain  = $parent->text_domain();
 
-      $this->section      = array(
-         'fields_sanitize' => array($this, 'fields_sanitize'),
-         'footer_callback' => array($this, 'section_footer'),
-         'header_callback' => array($this, 'render_section'),
+      $this->section      = [
+         'fields_sanitize' => [$this, 'fields_sanitize'],
+         'footer_callback' => [$this, 'section_footer'],
+         'header_callback' => [$this, 'render_section'],
          'label' => __('Capabilities', $this->text_domain),
-         'settings' => array(),
-      );
+         'settings' => [],
+      ];
 
       // Get the role and selected user, if none given then get the last ones modified by the user;
 
@@ -77,7 +64,7 @@ class USI_WordPress_Solutions_Capabilities {
 
       $this->role = get_role($this->role_id);
       $this->user = new WP_User($this->user_id);
-      $this->user_roles = array();
+      $this->user_roles = [];
       if (!empty($this->user->roles) && is_array($this->user->roles)) {
          foreach ($this->user->roles as $role_id) {
             $this->user_roles[] = get_role($role_id);
@@ -109,23 +96,23 @@ class USI_WordPress_Solutions_Capabilities {
                if (!$has_cap) $has_cap = $this->user->has_cap($slug);
             } // ENDIF setting capabilities for a user;
             $parent->set_options('capabilities', $name, $has_cap);
-            $this->section['settings'][$name] = array(
+            $this->section['settings'][$name] = [
                'readonly' => $readonly, 
                'label' => explode('|', $capability)[0], 
                'notes' => $notes, 
                'type' => 'checkbox'
-            );
+            ];
          }
       }
 
    } // __construct();
 
    public static function capability_slug($prefix, $capability) {
-      return(strtolower(str_replace('-', '_', $prefix . '_' . $capability)));
+      return strtolower(str_replace('-', '_', $prefix . '_' . $capability));
    } // capability_slug();
 
    public static function current_user_can($prefix, $capability) {
-      return(current_user_can(self::capability_slug($prefix, $capability)));
+      return current_user_can(self::capability_slug($prefix, $capability));
    } // current_user_can();
 
    function fields_sanitize($input) {
@@ -154,7 +141,7 @@ class USI_WordPress_Solutions_Capabilities {
          }
       }
 
-      return($input);
+      return $input;
 
    } // fields_sanitize();
 
@@ -195,7 +182,7 @@ class USI_WordPress_Solutions_Capabilities {
       wp_dropdown_roles($this->role_id);
       echo PHP_EOL . '    </select>' . PHP_EOL;
       if ($this->prefix_select_user == $this->role_id) {
-         wp_dropdown_users(array('id' => $this->prefix . '-user-select', 'selected' => $this->user_id));
+         wp_dropdown_users(['id' => $this->prefix . '-user-select', 'selected' => $this->user_id]);
          $this->user = new WP_User($this->user_id);
          if (!empty($this->user->roles) && is_array($this->user->roles)) {
             global $wp_roles;
@@ -230,7 +217,7 @@ class USI_WordPress_Solutions_Capabilities {
          true, 
          $this->disable_save ? 'disabled' : null
       ); 
-      return(null);
+      return null;
    } // section_footer();
 
 } // Class USI_WordPress_Solutions_Capabilities;
