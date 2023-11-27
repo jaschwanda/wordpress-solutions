@@ -2,26 +2,13 @@
 
 defined('ABSPATH') or die('Accesss not allowed.');
 
-/*
-WordPress-Solutions is free software: you can redistribute it and/or modify it under the terms of the GNU General Public 
-License as published by the Free Software Foundation, either version 3 of the License, or any later version.
- 
-WordPress-Solutions is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied 
-warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.
- 
-You should have received a copy of the GNU General Public License along with WordPress-Solutions. If not, see 
-https://github.com/jaschwanda/wordpress-solutions/blob/master/LICENSE.md
-
-Copyright (c) 2023 by Jim Schwanda.
-*/
-
 // Reference: https://developer.wordpress.org/plugins/settings/using-settings-api/
 // Reference: https://digwp.com/2016/05/wordpress-admin-notices/
 
 
 class USI_WordPress_Solutions_Settings {
 
-   const VERSION = '2.16.0 (2023-09-15)';
+   const VERSION = '2.16.3 (2023-11-27)';
 
    private static $current_user_id = -1; 
    private static $grid            = false;
@@ -60,8 +47,8 @@ class USI_WordPress_Solutions_Settings {
    protected $render = 'page_render';
    protected $roles = null;
    protected $section_callback_offset = 0;
-   protected $section_callbacks = array();
-   protected $section_ids = array();
+   protected $section_callbacks = [];
+   protected $section_ids = [];
    protected $sections = null;
    protected $text_domain = null;
    protected $title = null;
@@ -87,7 +74,7 @@ class USI_WordPress_Solutions_Settings {
       if (!empty($config['roles']))        $this->roles        = $config['roles'];
       if (!empty($config['text_domain']))  $this->text_domain  = $config['text_domain'];
 
-      if (!empty($config['file'])) register_activation_hook($config['file'], array($this, 'hook_activation'));
+      if (!empty($config['file'])) register_activation_hook($config['file'], [$this, 'hook_activation']);
 
       $this->debug       = USI_WordPress_Solutions_Diagnostics::get_log(USI_WordPress_Solutions::$options);
 
@@ -101,9 +88,9 @@ class USI_WordPress_Solutions_Settings {
 
       if ('plugins.php' == $pagenow) {
 
-         if (empty($config['no_settings_link'])) add_filter('plugin_action_links', array($this, 'filter_plugin_action_links'), 10, 2);
+         if (empty($config['no_settings_link'])) add_filter('plugin_action_links', [$this, 'filter_plugin_action_links'], 10, 2);
 
-         $filter_plugin_row_meta = array($this, 'filter_plugin_row_meta');
+         $filter_plugin_row_meta = [$this, 'filter_plugin_row_meta'];
 
          if (is_callable($filter_plugin_row_meta)) add_filter('plugin_row_meta', $filter_plugin_row_meta, 10, 2);
 
@@ -118,10 +105,10 @@ class USI_WordPress_Solutions_Settings {
             }
          }
 
-         add_action('admin_head', array($this, 'action_admin_head'));
-         add_action('admin_init', array($this, 'action_admin_init'));
+         add_action('admin_head', [$this, 'action_admin_head']);
+         add_action('admin_init', [$this, 'action_admin_init']);
 
-         add_action('admin_enqueue_scripts', array($this, 'action_admin_enqueue_scripts'));
+         add_action('admin_enqueue_scripts', [$this, 'action_admin_enqueue_scripts']);
 
       } else if (!empty(USI_WordPress_Solutions::$options['illumination']['visible-grid'])) {
 
@@ -130,20 +117,20 @@ class USI_WordPress_Solutions_Settings {
          case 'user-edit.php': 
          case 'user-new.php': 
          case 'users.php': 
-            add_action('admin_head', array($this, 'action_admin_head'));
+            add_action('admin_head', [$this, 'action_admin_head']);
             break;
          }
 
       }
 
-      add_action('admin_menu', array($this, 'action_admin_menu'));
-      add_action('init', array(__CLASS__, 'action_init'));
+      add_action('admin_menu', [$this, 'action_admin_menu']);
+      add_action('init', [__CLASS__, 'action_init']);
 
       // Add notices for custom options pages, WordPress does settings pages automatically;
-      if ('menu' == $this->page) add_action('admin_notices', array($this, 'action_admin_notices'));
+      if ('menu' == $this->page) add_action('admin_notices', [$this, 'action_admin_notices']);
 
       // In case you get the "options page not found" error, fiddle with this;
-      // add_filter('whitelist_options', array($this, 'filter_whitelist_options'), 11, 1);
+      // add_filter('whitelist_options', [$this, 'filter_whitelist_options'], 11, 1);
 
    } // __construct();
 
@@ -239,7 +226,7 @@ class USI_WordPress_Solutions_Settings {
             add_settings_section(
                $section_id, // Section id;
                !$this->is_tabbed && !empty($section['label']) ? $section['label'] : (!empty($section['title']) ? $section['title'] : ''), // Section title;
-               array($this, 'section_render'), // Render section callback;
+               [$this, 'section_render'], // Render section callback;
                $this->page_slug // Settings page menu slug;
             );
 
@@ -392,7 +379,7 @@ class USI_WordPress_Solutions_Settings {
 
    public function capabilities() { 
 
-      return($this->capabilities); 
+      return $this->capabilities;
 
    } // capabilities();
 
@@ -545,7 +532,7 @@ class USI_WordPress_Solutions_Settings {
 
    public static function esc_tiny($value) {
 
-      return(str_replace([ '&lt;', '&gt;', '&quot;' ], [ '<', '>', '"' ], $value));
+      return str_replace([ '&lt;', '&gt;', '&quot;' ], [ '<', '>', '"' ], $value);
 
    } // esc_tiny();
 
@@ -570,12 +557,12 @@ class USI_WordPress_Solutions_Settings {
    } // fields_render();
 
    public static function fields_render_select($attributes, $rows, $value = null) {
-      // Where $rows = array(array(1st-value, '1st-option'), array(2nd-value, '2nd-option'), ... )
+      // Where $rows = [[1st-value, '1st-option'), [2nd-value, '2nd-option'], ... ]
       $html = '<select' . $attributes . '>';
       foreach ($rows as $row) {
          $html .= '<option ' . ($row[0] === $value ? 'selected ' : '') . 'value="' . $row[0] . '">' . $row[1] . '</option>';
       }
-      return($html . '</select>');
+      return $html . '</select>';
    } // fields_render_select();
 
    // Static version so that other classes can use this rendering function;
@@ -782,7 +769,7 @@ class USI_WordPress_Solutions_Settings {
       USI_WordPress_Solutions_History::history(get_current_user_id(), 'code', 
          'Updated <' . $this->name . '> settings', 0, $input);
 
-      return($input);
+      return $input;
 
    } // fields_sanitize();
 
@@ -809,7 +796,7 @@ class USI_WordPress_Solutions_Settings {
       foreach ($names as $index => $value) {
          $submenu['options-general.php'][$keys[$index]] = $options[$index];
       }
-      return($menu_order);
+      return $menu_order;
    } // filter_menu_order();
 
    function filter_plugin_action_links($links, $file) {
@@ -817,7 +804,7 @@ class USI_WordPress_Solutions_Settings {
          $links[] = '<a href="' . get_bloginfo('wpurl') . '/wp-admin/options-general.php?page=' . 
             $this->page_slug . '">' . __('Settings', $this->text_domain) . '</a>';
       }
-      return($links);
+      return $links;
    } // filter_plugin_action_links();
 
    public static function filter_user_row_actions(array $actions, WP_User $user) {
@@ -847,7 +834,7 @@ class USI_WordPress_Solutions_Settings {
 
       if (self::$remove_password) unset($actions['resetpassword']);
 
-      return($actions);
+      return $actions;
 
    } // filter_user_row_actions();
 
@@ -855,7 +842,7 @@ class USI_WordPress_Solutions_Settings {
 // public function filter_whitelist_options($whitelist_options) {
 //     $whitelist_options[settings][0] = 'options';
 //     usi::log('$whitelist_options=', $whitelist_options);
-//     return($whitelist_options);
+//     return $whitelist_options;
 // } // filter_whitelist_options();
 
    function free_render() {
@@ -905,15 +892,15 @@ class USI_WordPress_Solutions_Settings {
    private static function get_value($args) {
 
       // IF value not empty then return it;
-      if (!empty($args['value'])) return($args['value']);
+      if (!empty($args['value'])) return $args['value'];
 
       // Now we have to decide to return a "zero" or a "null";
       $type = $args['type'] ?? 'text';
-      if ('hidden' == $type) return(isset($args['value']) ? $args['value'] : null);
-      if ('money'  == $type) return(0);
-      if ('number' == $type) return(0);
+      if ('hidden' == $type) return isset($args['value']) ? $args['value'] : null;
+      if ('money'  == $type) return 0;
+      if ('number' == $type) return 0;
 
-      return(null);
+      return null;
 
    } // get_value();
 
@@ -933,13 +920,13 @@ class USI_WordPress_Solutions_Settings {
 
    public function name() { 
 
-      return($this->name); 
+      return $this->name;
 
    } // name();
 
    public function options() { 
 
-      return($this->options); 
+      return $this->options;
 
    } // options();
 
@@ -1067,15 +1054,15 @@ class USI_WordPress_Solutions_Settings {
    } // page_render();
 
    public static function page_slug($prefix) {
-      return($prefix . '-settings');
+      return $prefix . '-settings';
    } // page_slug();
 
    public function prefix() { 
-      return($this->prefix); 
+      return $this->prefix;
    } // prefix();
 
    public function roles() { 
-      return($this->roles); 
+      return $this->roles;
    } // roles();
 
    function sections_load() {
@@ -1211,13 +1198,13 @@ class USI_WordPress_Solutions_Settings {
    } // section_render();
 
    function sections() { // Should be over ridden by extending class;
-      return(null);
+      return null;
    } // sections();
 
    function sections_footer($params) {
       echo '    '; // Add spacer to line things up;
       submit_button(__($params, $this->text_domain), 'primary', 'submit', true); 
-      return(null);
+      return null;
    } // sections_footer();
 
    function sections_header($html) {
@@ -1233,7 +1220,7 @@ class USI_WordPress_Solutions_Settings {
    } // set_options();
 
    public function text_domain() { 
-      return($this->text_domain); 
+      return $this->text_domain;
    } // text_domain();
 
 } // Class USI_WordPress_Solutions_Settings;

@@ -16,7 +16,7 @@ Requires at least: 5.0
 Requires PHP:      7.0.0
 Tested up to:      5.3.2
 Text Domain:       usi-wordpress-solutions
-Version:           2.16.2
+Version:           2.16.3
 Warranty:          This software is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 */
 
@@ -26,7 +26,7 @@ Warranty:          This software is distributed in the hope that it will be usef
 
 final class USI_WordPress_Solutions {
 
-   const VERSION    = '2.16.2 (2023-10-10)';
+   const VERSION    = '2.16.3 (2023-11-27)';
 
    const NAME       = 'WordPress-Solutions';
    const PREFIX     = 'usi-wordpress';

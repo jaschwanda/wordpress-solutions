@@ -4,7 +4,7 @@ defined('ABSPATH') or die('Accesss not allowed.');
 
 class USI_WordPress_Solutions_Settings_Settings extends USI_WordPress_Solutions_Settings {
 
-   const VERSION = '2.16.2 (2023-10-10)';
+   const VERSION = '2.16.3 (2023-11-27)';
 
    protected $debug     = 0;
    protected $is_tabbed = true;

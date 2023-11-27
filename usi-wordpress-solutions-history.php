@@ -2,22 +2,9 @@
 
 defined('ABSPATH') or die('Accesss not allowed.');
 
-/*
-WordPress-Solutions is free software: you can redistribute it and/or modify it under the terms of the GNU General Public 
-License as published by the Free Software Foundation, either version 3 of the License, or any later version.
- 
-WordPress-Solutions is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied 
-warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.
- 
-You should have received a copy of the GNU General Public License along with WordPress-Solutions. If not, see 
-https://github.com/jaschwanda/wordpress-solutions/blob/master/LICENSE.md
-
-Copyright (c) 2023 by Jim Schwanda.
-*/
-
 final class USI_WordPress_Solutions_History {
 
-   const VERSION = '2.16.0 (2023-09-15)';
+   const VERSION = '2.16.3 (2023-11-27)';
 
    private static $pre_post_update_data = null;
    private static $pre_post_update_id   = 0;
@@ -32,15 +19,15 @@ final class USI_WordPress_Solutions_History {
 
       if (!empty(USI_WordPress_Solutions::$options['admin-options']['history'])) {
 
-         add_action('delete_post', array(__CLASS__, 'action_delete_post'));
-         add_action('delete_user', array(__CLASS__, 'action_delete_user'), 10, 2);
-         add_action('edit_user_profile_update', array(__CLASS__, 'action_profile_update'));
-         add_action('pre_post_update', array(__CLASS__, 'action_pre_post_update'), 110, 2);
-         add_action('user_register', array(__CLASS__, 'action_user_register'), 10, 2);
-         add_action('wp_insert_post', array(__CLASS__, 'action_wp_insert_post'), 10, 3);
-         add_action('wp_login', array(__CLASS__, 'action_wp_login'), 10, 3);
+         add_action('delete_post', [__CLASS__, 'action_delete_post']);
+         add_action('delete_user', [__CLASS__, 'action_delete_user'], 10, 2);
+         add_action('edit_user_profile_update', [__CLASS__, 'action_profile_update']);
+         add_action('pre_post_update', [__CLASS__, 'action_pre_post_update'], 110, 2);
+         add_action('user_register', [__CLASS__, 'action_user_register'], 10, 2);
+         add_action('wp_insert_post', [__CLASS__, 'action_wp_insert_post'], 10, 3);
+         add_action('wp_login', [__CLASS__, 'action_wp_login'], 10, 3);
 
-         add_filter('logout_redirect', array(__CLASS__, 'filter_logout_redirect'), 10, 3);
+         add_filter('logout_redirect', [__CLASS__, 'filter_logout_redirect'], 10, 3);
 
       }
 
@@ -96,16 +83,16 @@ final class USI_WordPress_Solutions_History {
          global $wpdb;
          $results = $wpdb->update(
             $wpdb->prefix . 'USI_history', 
-            array(
+            [
                'action' => 'Added ' . $post->post_type . ' <' . $title . '>',
                'data' => print_r($source, true),
-            ), 
-            array(
+            ], 
+            [
                'target_id' => $post_id,
                'action' => 'Added ' . $post->post_type . ' <Auto Draft>',
-            ),
-            array('%s', '%s'),
-            array('%d', '%s')
+            ],
+            ['%s', '%s'],
+            ['%d', '%s']
          );
 
       } else { // ELSE not auto-draft update;
@@ -133,11 +120,11 @@ final class USI_WordPress_Solutions_History {
 
    public static function filter_logout_redirect($redirect_to, $requested_redirect_to, $user) {
       self::history($user->ID, 'user', 'User <' . $user->data->display_name . '> logged out from ' . self::from(), $user->ID);
-      return($redirect_to);
+      return $redirect_to;
    } // filter_logout_redirect();
 
    private static function from() {
-      return(!empty($_SERVER['HTTP_X_FORWARDED_FOR']) ? $_SERVER['HTTP_X_FORWARDED_FOR'] : $_SERVER['REMOTE_ADDR']);
+      return !empty($_SERVER['HTTP_X_FORWARDED_FOR']) ? $_SERVER['HTTP_X_FORWARDED_FOR'] : $_SERVER['REMOTE_ADDR'];
    } // from();
 
    public static function history($user_id, $type, $action, $target_id = 0, $data = null) {
@@ -148,8 +135,8 @@ final class USI_WordPress_Solutions_History {
          if (is_array($data) || is_object($data)) $data = substr(print_r($data, true), 0, 65535);
          if (false === $wpdb->insert(
             $wpdb->prefix . 'USI_history', 
-            array('user_id' => $user_id, 'type' => $type, 'action' => $action, 'target_id' => $target_id, 'data' => $data),
-            array('%d', '%s', '%s', '%d', '%s'))) {
+            ['user_id' => $user_id, 'type' => $type, 'action' => $action, 'target_id' => $target_id, 'data' => $data],
+            ['%d', '%s', '%s', '%d', '%s'])) {
             usi::log2('last-error=', $wpdb->last_error);
          }
 
