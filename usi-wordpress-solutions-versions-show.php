@@ -12,7 +12,7 @@ class USI_WordPress_Solutions_Versions_Show {
 
       $package = null;
 
-      $site    = array();
+      $site    = [];
 
       foreach ($lines as $line) {
 
@@ -32,7 +32,7 @@ class USI_WordPress_Solutions_Versions_Show {
 
       }
 
-      return($site);
+      return $site;
 
    } // parse();
 
@@ -45,10 +45,10 @@ class USI_WordPress_Solutions_Versions_Show {
       if ($import_expression) {
          $import_site = self::parse($import_expression);
          $first_title = $import_site['title'];
-         $sites       = array($first_title => $import_site, $site['title'] => $site);
+         $sites       = [$first_title => $import_site, $site['title'] => $site];
       } else {
          $first_title = $site['title'];
-         $sites       = array($first_title => $site);
+         $sites       = [$first_title => $site];
       }
 
       $html  = '<table border="1" cellpadding="2" style="margin:20px 0 0 -220px;">' . PHP_EOL . 
@@ -94,7 +94,7 @@ class USI_WordPress_Solutions_Versions_Show {
 
       }
 
-      return($html . '</table>' . PHP_EOL);
+      return $html . '</table>' . PHP_EOL;
 
    } // show();
 
