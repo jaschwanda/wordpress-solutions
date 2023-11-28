@@ -2,25 +2,12 @@
 
 defined('ABSPATH') or die('Accesss not allowed.');
 
-/*
-WordPress-Solutions is free software: you can redistribute it and/or modify it under the terms of the GNU General Public 
-License as published by the Free Software Foundation, either version 3 of the License, or any later version.
- 
-WordPress-Solutions is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied 
-warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.
- 
-You should have received a copy of the GNU General Public License along with WordPress-Solutions. If not, see 
-https://github.com/jaschwanda/wordpress-solutions/blob/master/LICENSE.md
-
-Copyright (c) 2023 by Jim Schwanda.
-*/
-
 class USI_WordPress_Solutions_Popup_Iframe {
 
    const VERSION = '2.16.0 (2023-09-15)';
 
-   private static $attributes = array();
-   private static $scripts    = array();
+   private static $attributes = [];
+   private static $scripts    = [];
 
    private function __construct() {
    } // __construct();
@@ -89,7 +76,7 @@ $('[usi-popup-close-outside]').click(
 .children()
 .click(
    function() {
-      return(false);
+      return false;
    }
 );
 
@@ -182,7 +169,7 @@ EOD;
          : null
          ;
 
-      return($invoke);
+      return $invoke;
 
    } // link();
 
