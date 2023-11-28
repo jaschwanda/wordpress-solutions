@@ -6,7 +6,7 @@ defined('ABSPATH') or die('Accesss not allowed.');
 // https://gist.github.com/paulund/7659452
 
 if (!class_exists('WP_List_Table')) {
-   require_once(ABSPATH . 'wp-admin/includes/class-wp-list-table.php');
+   require_once ABSPATH . 'wp-admin/includes/class-wp-list-table.php';
 }
 
 class USI_WordPress_Solutions_User_Sessions extends WP_List_Table {
@@ -15,14 +15,14 @@ class USI_WordPress_Solutions_User_Sessions extends WP_List_Table {
 
    public static function action_admin_head() {
 
-      $columns = array(
+      $columns = [
          'cb'      => 5, 
          'id'      => 5, 
          'user'    => 40, 
          'created' => 20, 
          'expires' => 20, 
          'ip'      => 10, 
-      );
+      ];
 
       echo USI_WordPress_Solutions_Static::column_style($columns, 'overflow:hidden; text-overflow:ellipsis; white-space:nowrap;');
 
@@ -43,19 +43,19 @@ class USI_WordPress_Solutions_User_Sessions extends WP_List_Table {
          'user-sessions',  // Menu title;
          'manage_options',  // Required capability;
          'usi-wordpress-solutions-user-sessions', // Menu slug;
-         array('USI_WordPress_Solutions_User_Sessions', 'render_list') // Invoking function;
+         ['USI_WordPress_Solutions_User_Sessions', 'render_list'] // Invoking function;
       );
 
    } // action_admin_menu();
 
    function column_cb($item) {
-      $args = array(
+      $args = [
          'id'       => $item->ID,
          'id_field' => 'ID',
          'info'     => $this->info($item),
-      );
+      ];
 
-      return(USI_WordPress_Solutions_Popup_Action::column_cb($args));
+      return USI_WordPress_Solutions_Popup_Action::column_cb($args);
 
     } // column_cb();
 
@@ -71,7 +71,7 @@ class USI_WordPress_Solutions_User_Sessions extends WP_List_Table {
          foreach ($session_tokens as $key => $value) {
             $html .= date('Y-m-d H:i:s', $value['login']) . '<br/>';
          }
-         return($html);
+         return $html;
 
       case 'expires':
 
@@ -79,7 +79,7 @@ class USI_WordPress_Solutions_User_Sessions extends WP_List_Table {
          foreach ($session_tokens as $key => $value) {
             $html .= date('Y-m-d H:i:s', $value['expiration']) . '<br/>';
          }
-         return($html);
+         return $html;
 
       case 'ip': 
 
@@ -87,13 +87,13 @@ class USI_WordPress_Solutions_User_Sessions extends WP_List_Table {
          foreach ($session_tokens as $key => $value) {
             $html .= $value['ip'] . '<br/>';
          }
-         return($html);
+         return $html;
 
       case 'id': 
 
          $session_tokens = $item->session_tokens;
 
-         return($item->ID);
+         return $item->ID;
 
       case 'user': 
 
@@ -117,9 +117,9 @@ class USI_WordPress_Solutions_User_Sessions extends WP_List_Table {
             $html .= $key . '<br/>';
          }
 
-         return($html . '</div>');
+         return $html . '</div>';
 
-      default: return(print_r($item, true));
+      default: return print_r($item, true);
 
       } 
 
@@ -127,40 +127,40 @@ class USI_WordPress_Solutions_User_Sessions extends WP_List_Table {
 
    function get_bulk_actions() {
 
-      return(array('kill' => __('Log user out', USI_WordPress_Solutions::TEXTDOMAIN)));
+      return ['kill' => __('Log user out', USI_WordPress_Solutions::TEXTDOMAIN)];
 
    } // get_bulk_actions();
 
    public function get_columns() {
 
-      return(
-         array(
+      return
+         [
             'cb'      => '<input type="checkbox" />',
             'id'      => 'ID',
             'user'    => 'User',
             'created' => 'Created',
             'expires' => 'Expires',
             'ip'      => 'Ip',
-         ) 
-      );
+         ] 
+         ;
 
    } // get_columns();
 
    public function get_hidden_columns() {
 
-      return(array());
+      return [];
 
    } // get_hidden_columns();
 
    public function get_sortable_columns() {
 
-      return(array());
+      return [];
 
    } // get_sortable_columns();
 
    function info($item) {
 
-      return(' &nbsp; &nbsp; ' . ' #' . $item->ID . ' &nbsp; &nbsp; due: ' . 'name');
+      return ' &nbsp; &nbsp; ' . ' #' . $item->ID . ' &nbsp; &nbsp; due: ' . 'name';
 
    } // info();
 
@@ -170,7 +170,7 @@ class USI_WordPress_Solutions_User_Sessions extends WP_List_Table {
       $hidden   = $this->get_hidden_columns();
       $sortable = $this->get_sortable_columns();
 
-      $this->_column_headers = array($columns, $hidden, $sortable);
+      $this->_column_headers = [$columns, $hidden, $sortable];
 
       $this->items = $this->table_data();
 
@@ -220,9 +220,9 @@ class USI_WordPress_Solutions_User_Sessions extends WP_List_Table {
 
    private function table_data() {
 
-      $active_users = array();
+      $active_users = [];
       $current_time = time();
-      $users        = get_users(array('meta_key' => 'session_tokens', 'meta_compare' => 'EXISTS'));
+      $users        = get_users(['meta_key' => 'session_tokens', 'meta_compare' => 'EXISTS']);
 
       foreach ($users as $user) {
          $session_tokens = get_user_meta($user->ID, 'session_tokens', true);
@@ -233,7 +233,7 @@ class USI_WordPress_Solutions_User_Sessions extends WP_List_Table {
          }
       }
 
-      return($active_users);
+      return $active_users;
 
    } // table_data();
 

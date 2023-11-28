@@ -2,19 +2,6 @@
 
 defined('ABSPATH') or die('Accesss not allowed.');
 
-/*
-WordPress-Solutions is free software: you can redistribute it and/or modify it under the terms of the GNU General Public 
-License as published by the Free Software Foundation, either version 3 of the License, or any later version.
- 
-WordPress-Solutions is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied 
-warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.
- 
-You should have received a copy of the GNU General Public License along with WordPress-Solutions. If not, see 
-https://github.com/jaschwanda/wordpress-solutions/blob/master/LICENSE.md
-
-Copyright (c) 2023 by Jim Schwanda.
-*/
-
 final class USI_WordPress_Solutions_Install {
 
    const VERSION = '2.16.0 (2023-09-15)';
@@ -38,7 +25,7 @@ final class USI_WordPress_Solutions_Install {
 
       check_admin_referer('activate-plugin_' . (isset($_REQUEST['plugin']) ? $_REQUEST['plugin'] : ''));
 
-      require_once(ABSPATH . 'wp-admin/includes/upgrade.php');
+      require_once ABSPATH . 'wp-admin/includes/upgrade.php';
 
       $user_id = get_current_user_id();
 
