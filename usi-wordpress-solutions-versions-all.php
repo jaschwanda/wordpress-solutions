@@ -10,10 +10,10 @@ class USI_WordPress_Solutions_Versions_All {
       $offset  = strrpos($path, DIRECTORY_SEPARATOR) + 1;
       $package = substr($path, $offset);
       $files   = scandir($path);
-      if (strpos($path, '.git')) return($lines);
+      if (strpos($path, '.git')) return $lines;
       if (3 == $level) {
          $prefix  = explode('-', $package);
-         if (('ru' != $prefix[0]) && ('theme' != $prefix[0]) && ('usi' != $prefix[0])) return($lines);
+         if (('ru' != $prefix[0]) && ('theme' != $prefix[0]) && ('usi' != $prefix[0])) return $lines;
       }
       foreach ($files as $file) {
          if ('.usi-ignore' == $file) break;
@@ -32,12 +32,12 @@ class USI_WordPress_Solutions_Versions_All {
             }
          }
       }
-      return($lines);
+      return $lines;
    } // scan();
 
    public static function versions($title, $path) {
       $lines = $title . PHP_EOL;
-      return(self::scan($lines, 1, $path) . PHP_EOL);
+      return self::scan($lines, 1, $path) . PHP_EOL;
    } // versions();
 
 } // USI_WordPress_Solutions_Versions_All();
