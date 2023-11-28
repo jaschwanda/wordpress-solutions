@@ -2,9 +2,9 @@
 
 defined('ABSPATH') or die('Accesss not allowed.');
 
-require_once(ABSPATH . WPINC . '/PHPMailer/Exception.php');
-require_once(ABSPATH . WPINC . '/PHPMailer/PHPMailer.php');
-require_once(ABSPATH . WPINC . '/PHPMailer/SMTP.php');
+require_once ABSPATH . WPINC . '/PHPMailer/Exception.php';
+require_once ABSPATH . WPINC . '/PHPMailer/PHPMailer.php';
+require_once ABSPATH . WPINC . '/PHPMailer/SMTP.php';
 
 class USI_WordPress_Solutions_Mailer extends PHPMailer\PHPMailer\PHPMailer {
 
@@ -178,11 +178,11 @@ class USI_WordPress_Solutions_Mailer extends PHPMailer\PHPMailer\PHPMailer {
       self::$settings['header_callback'] = [$that, 'sections_header', '      <p>WordPress is not configured to send emails by default, however, this plugin provides configuration of the PHPMailer system to send messages and support advanced transport features.</p>'];
       self::$settings['settings']['username']['readonly'] = 
       self::$settings['settings']['password']['readonly'] = empty($that->options['php-mailer']['smtp-auth']);
-      return(self::$settings);
+      return self::$settings;
    } // settings();
  
    public static function test() {
-      return(self::$test);
+      return self::$test;
    } // test();
 
 } // class USI_WordPress_Solutions_Mailer;
