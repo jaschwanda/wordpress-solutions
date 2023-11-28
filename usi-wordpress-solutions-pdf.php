@@ -57,10 +57,10 @@ class USI_WordPress_Solutions_PDF {
       switch ($version = USI_WordPress_Solutions::$options['admin-limits']['mpdf-version'] ?? null) {
       case '8.1.4': 
          self::$version = $version;
-         require_once(__DIR__ . '/mPDF-' . $version . '/vendor/autoload.php');
+         require_once __DIR__ . '/mPDF-' . $version . '/vendor/autoload.php';
          break;
       default:      
-         require_once(__DIR__ . '/mPDF/vendor/autoload.php');
+         require_once __DIR__ . '/mPDF/vendor/autoload.php';
       }
 
       $reporting_options = error_reporting(0);
@@ -163,7 +163,7 @@ class USI_WordPress_Solutions_PDF {
 
       // Return nothing otherwise the mPDF functions won't write out the PDF;
       // But we may want to return buffer for logging or debugging;
-      return(empty(self::$options['ob_start_return']) ? null : $buffer); 
+      return empty(self::$options['ob_start_return']) ? null : $buffer;
 
    } // ob_start_callback();
 
