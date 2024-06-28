@@ -12,9 +12,6 @@ License:           GPL-3.0
 License URI:       https://github.com/jaschwanda/wordpress-solutions/blob/master/LICENSE.md
 Plugin Name:       WordPress-Solutions
 Plugin URI:        https://github.com/jaschwanda/wordpress-solutions
-Requires at least: 5.0
-Requires PHP:      7.0.0
-Tested up to:      5.3.2
 Text Domain:       usi-wordpress-solutions
 Version:           2.16.3
 Warranty:          This software is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
@@ -80,7 +77,7 @@ final class USI_WordPress_Solutions {
 
    } // _init();
  
-   function action_wp_footer() {
+   public static function action_wp_footer() {
       echo PHP_EOL . '    <script>'
       . 'function usi_link_validate(e){'
       . "function a(o){while(o&&('a'!=o.nodeName.toLowerCase())){o=o.parentNode;}return(o);}"
@@ -144,12 +141,13 @@ final class USI_WordPress_Solutions {
    } // shortcode_custom();
 
    public static function shortcode_email($attr, $content = null) {
-      if (!self::$emails++) add_action('wp_footer', [__CLASS__, 'action_wp_footer'], 20);
+      $email   = $attr['email'] ?? null;
+      $parts   = explode('@', $email);
+      if (1   >= count($parts)) return '[' . self::$options['preferences']['e-mail-cloak'] . ' ' . implode(',', $attr) . ']';
       $class   = empty($attr['class'])   ? null : ' class="' . $attr['class']   . '"';
       $id      = empty($attr['id'])      ? null : ' id="'    . $attr['id']      . '"';
       $style   = empty($attr['style'])   ? null : ' style="' . $attr['style']   . '"';
       $title   = empty($attr['subject']) ? null : ' title="' . $attr['subject'] . '"';
-      $email   = $attr['email']   ?? null;
       $encode  = function($string) {
          $html = '';
          $size = strlen($string);
@@ -160,7 +158,8 @@ final class USI_WordPress_Solutions {
          }
          return $html;
       };
-      list($target, $domain) = explode('@', $email);
+      if (!self::$emails++) add_action('wp_footer', [__CLASS__, 'action_wp_footer'], 20);
+      list($target, $domain) = $parts;
       $offset     = false;
       if (empty($content)) {
          $content = '{cloak}';
@@ -173,6 +172,7 @@ final class USI_WordPress_Solutions {
          $content = substr_replace($content, $cloaked, $offset, 7);
       }
       return '<a' . $id . $class . ' href="https://' . $domain . '" onclick="usi_link_validate(event);"' . $style . ' target="' . str_rot13($target) . '"' . $title . '>' . $content . '</a>';
+
    } // shortcode_email();
 
 } // Class USI_WordPress_Solutions;
