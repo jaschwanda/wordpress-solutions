@@ -108,7 +108,7 @@ class USI_WordPress_Solutions_Capabilities {
    } // __construct();
 
    public static function capability_slug($prefix, $capability) {
-      return strtolower(str_replace('-', '_', $prefix . '_' . $capability));
+      return strtolower(str_replace('-', '_', $prefix . '_' . trim($capability, '-')));
    } // capability_slug();
 
    public static function current_user_can($prefix, $capability) {
@@ -116,6 +116,7 @@ class USI_WordPress_Solutions_Capabilities {
    } // current_user_can();
 
    function fields_sanitize($input) {
+
       if (!empty($this->capabilities)) {
          foreach ($this->capabilities as $name => $capability) {
             $slug = self::capability_slug($this->prefix, $name);
@@ -140,7 +141,6 @@ class USI_WordPress_Solutions_Capabilities {
             } // ENDIF setting capabilities for a user;
          }
       }
-
       return $input;
 
    } // fields_sanitize();
